@@ -9,12 +9,13 @@ public class trashbotBoot {
 
     public static void main(String[] args) throws FileNotFoundException  {
         Scanner reader = new Scanner(System.in);
-        File battleDat = new File("battle.dat");
         PrintWriter battleOut = new PrintWriter("battle.dat");
         battleOut.print("0\n0\n0");
         battleOut.close();
         System.out.print("Token: ");
         String token = reader.nextLine();
+        final String[] keywords = {"money", "cash", "$", "dollar", "pay", "currency", "cheddar", "dough", "moolah", "€",
+        "cent", "bank"};
 
         new DiscordApiBuilder().setToken(token).login().thenAccept(api -> {
 
@@ -23,13 +24,17 @@ public class trashbotBoot {
                     event.getChannel().sendMessage("I'm sorry!");
                 }
 
-                if (event.getMessage().getContent().toLowerCase().contains("money") || event.getMessage().getContent().toLowerCase().contains("cash")
-                        || event.getMessage().getContent().toLowerCase().contains("$") || event.getMessage().getContent().toLowerCase().contains("dollars")
-                        || event.getMessage().getContent().toLowerCase().contains("pay") || event.getMessage().getContent().toLowerCase().contains("currency")
-                        || event.getMessage().getContent().toLowerCase().contains("cheddar") || event.getMessage().getContent().toLowerCase().contains("dough")
-                        || event.getMessage().getContent().toLowerCase().contains("moolah") || event.getMessage().getContent().toLowerCase().contains("€")) {
-                    event.getMessage().addReaction("<:mrkrabs:451793501470982155>");
-                    event.getChannel().sendMessage("<:mrkrabs:451793501470982155>");
+                boolean contains = false;
+                for (int i = 0; i < keywords.length && !contains; i++) {
+                    if (event.getMessage().getContent().toLowerCase().contains(keywords[i])) {
+                        contains = true;
+                    }
+                }
+                if (contains) {
+                    // this line needs tweaking to fix, i would rather have reaction than message
+                    event.getMessage().addReaction(api.getCustomEmojiById("451793501470982155").get());
+                    // this line works
+                    // event.getChannel().sendMessage("<:mrkrabs:451793501470982155>");
                 }
 
                 if (event.getMessage().getContent().equals("!battle")) {
@@ -38,38 +43,22 @@ public class trashbotBoot {
                     int health = ((int)(Math.random() * 10) * 2) + 10;
                     int botHealth = ((int)(Math.random() * 10) * 2) + 10;
                     int choice = -1;
-                    PrintWriter battleOutBattle = null;
-                    try {
-                        battleOutBattle = new PrintWriter("battle.dat");
-                    } catch (FileNotFoundException e) {
-                        System.out.println("Something went wrong.");
-                        choice = 0;
-                    }
-                    battleOutBattle.print(health + "\n" + botHealth + "\n" + choice);
-                    battleOutBattle.close();
+                    writeToBattleDat(health, botHealth, choice);
 
-                    System.out.println("battle info should be printed to battle.dat");
-                    System.out.println(health);
-                    System.out.println(botHealth);
-                    System.out.println(choice);
+                    System.out.println("Battle started!");
                     if (choice != 0) {
                         event.getChannel().sendMessage("You have " + health + " health.");
                         botWait();
-                        event.getChannel().sendMessage("What do you do?\n > attack\n > heal\n > run");
+                        event.getChannel().sendMessage("I'm at " + botHealth + " health. What do you do?\n > attack\n > heal\n > run");
                     }
                 }
 
                 if (event.getMessage().getContent().toLowerCase().contains("!attack")) {
                     int damage = ((int)(Math.random() * 5) + 5);
-                    Scanner battleData = null;
-                    try {
-                        battleData = new Scanner(battleDat);
-                    } catch (FileNotFoundException e) {
-                        System.out.println("file not here, aye");
-                    }
-                    int health = Integer.parseInt(battleData.nextLine());
-                    int botHealth = Integer.parseInt(battleData.nextLine());
-                    int choice = Integer.parseInt(battleData.nextLine());
+                    int[] stats = readFromBattleDat();
+                    int health = stats[0];
+                    int botHealth = stats[1];
+                    int choice = stats[2];
                     if (choice != 0) {
                         event.getChannel().sendMessage("You attack for " + damage + " damage!");
                         botHealth -= damage;
@@ -78,31 +67,19 @@ public class trashbotBoot {
                         botWait();
                         event.getChannel().sendMessage("You were hit for " + damage + " damage, now at " + health + " health!");
                         botWait();
-                        event.getChannel().sendMessage("What do you do?\n > attack\n > heal\n > run");
+                        event.getChannel().sendMessage("I'm at " + botHealth + " health. What do you do?\n > attack\n > heal\n > run");
                     } else {
                         event.getChannel().sendMessage("A battle is not going on right now. Type ``!battle`` to start one!");
                     }
-                    PrintWriter battleOutAttack = null;
-                    try {
-                        battleOutAttack = new PrintWriter("battle.dat");
-                    } catch (FileNotFoundException e) {
-                        System.out.println("Something went wrong.");
-                    }
-                    battleOutAttack.print(health + "\n" + botHealth + "\n" + choice);
-                    battleOutAttack.close();
+                    writeToBattleDat(health, botHealth, choice);
                 }
 
                 if (event.getMessage().getContent().toLowerCase().contains("!heal")) {
                     int damage = ((int)(Math.random() * 5) + 5);
-                    Scanner battleData = null;
-                    try {
-                        battleData = new Scanner(battleDat);
-                    } catch (FileNotFoundException e) {
-                        System.out.println("file not here, aye");
-                    }
-                    int health = Integer.parseInt(battleData.nextLine());
-                    int botHealth = Integer.parseInt(battleData.nextLine());
-                    int choice = Integer.parseInt(battleData.nextLine());
+                    int[] stats = readFromBattleDat();
+                    int health = stats[0];
+                    int botHealth = stats[1];
+                    int choice = stats[2];
                     if (choice != 0) {
                         health -= damage;
                         event.getChannel().sendMessage("You were hit for " + damage + " damage, now at " + health + " health!");
@@ -111,60 +88,50 @@ public class trashbotBoot {
                         botWait();
                         event.getChannel().sendMessage("You heal yourself for " + heal + " health, now at " + health + " health!");
                         botWait();
-                        event.getChannel().sendMessage("What do you do?\n > attack\n > heal\n > run");
+                        event.getChannel().sendMessage("I'm at " + botHealth + " health. What do you do?\n > attack\n > heal\n > run");
                     } else {
                         event.getChannel().sendMessage("A battle is not going on right now. Type ``!battle`` to start one!");
                     }
-                    PrintWriter battleOutHeal = null;
-                    try {
-                        battleOutHeal = new PrintWriter("battle.dat");
-                    } catch (FileNotFoundException e) {
-                        System.out.println("Something went wrong.");
-                    }
-                    battleOutHeal.print(health + "\n" + botHealth + "\n" + choice);
-                    battleOutHeal.close();
+                    writeToBattleDat(health, botHealth, choice);
                 }
 
                 if (event.getMessage().getContent().toLowerCase().contains("!run")) {
                     int damage = ((int)(Math.random() * 5) + 5);
-                    Scanner battleData = null;
-                    try {
-                        battleData = new Scanner(battleDat);
-                    } catch (FileNotFoundException e) {
-                        System.out.println("file not here, aye");
-                    }
-                    int health = Integer.parseInt(battleData.nextLine());
-                    int botHealth = Integer.parseInt(battleData.nextLine());
-                    int choice = Integer.parseInt(battleData.nextLine());
+                    int[] stats = readFromBattleDat();
+                    int health = stats[0];
+                    int botHealth = stats[1];
+                    int choice = stats[2];
                     if (choice != 0) {
                         health -= damage;
                         event.getChannel().sendMessage("On your way out, you were hit for " + damage + " damage, leaving you at " + health + " health.");
                         choice = 0;
+                        System.out.println("Battle ended!");
+                        botWait();
+                        event.getChannel().sendMessage("I'm at " + botHealth + " health.");
                         botWait();
                         event.getChannel().sendMessage("Next time you come round here you better up your game, pussy bitch. <:restinpepperoni:412754423257890827>");
                     } else {
                         event.getChannel().sendMessage("A battle is not going on right now. Type ``!battle`` to start one!");
                     }
-                    PrintWriter battleOutRun = null;
-                    try {
-                        battleOutRun = new PrintWriter("battle.dat");
-                    } catch (FileNotFoundException e) {
-                        System.out.println("Something went wrong.");
-                    }
-                    battleOutRun.print(health + "\n" + botHealth + "\n" + choice);
-                    battleOutRun.close();
+                    writeToBattleDat(health, botHealth, choice);
                 }
 
                 if (event.getMessage().getContent().equalsIgnoreCase("/rule34")) {
-                    if ((int) (Math.random() * 10) == 1) {
+                    if ((int) (Math.random() * 4) == 1) {
                         botWaitLong();
                         event.getChannel().sendMessage("That's fucked.");
                     }
                 }
+
+                if (event.getMessage().getContent().toLowerCase().contains("!ban")) {
+                    event.getChannel().sendMessage(event.getMessage().getContent().substring(event.getMessage().getContent().indexOf("!ban") + 4) + " has been banned.");
+                }
+
             });
 
             // Print the invite url of your bot
-            System.out.println("You can invite the bot by using the following url: " + api.createBotInvite());
+            System.out.println("Boot success!");
+
 
         }).exceptionally(ExceptionLogger.get());
     }
@@ -179,9 +146,35 @@ public class trashbotBoot {
 
     private static void botWaitLong() {
         try {
-            Thread.sleep(2500);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             System.out.println("bot's broke, boss");
         }
+    }
+
+    private static void writeToBattleDat(int health, int botHealth, int choice) {
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter("battle.dat");
+        } catch (FileNotFoundException e) {
+            System.out.println("Something went wrong.");
+        }
+        out.print(health + "\n" + botHealth + "\n" + choice);
+        out.close();
+    }
+
+    private static int[] readFromBattleDat() {
+        File battleDat = new File("battle.dat");
+        Scanner battleData = null;
+        try {
+            battleData = new Scanner(battleDat);
+        } catch (FileNotFoundException e) {
+            System.out.println("file not here, aye");
+        }
+        int health = Integer.parseInt(battleData.nextLine());
+        int botHealth = Integer.parseInt(battleData.nextLine());
+        int choice = Integer.parseInt(battleData.nextLine());
+        int[] outArray = {health, botHealth, choice};
+        return outArray;
     }
 }
