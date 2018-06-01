@@ -3,9 +3,12 @@ import org.javacord.api.util.logging.ExceptionLogger;
 
 import java.io.*;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class trashbotBoot {
+
+    public static ArrayList<String> keywords = new ArrayList<String>();
 
     public static void main(String[] args) throws FileNotFoundException  {
         Scanner reader = new Scanner(System.in);
@@ -14,8 +17,12 @@ public class trashbotBoot {
         battleOut.close();
         System.out.print("Token: ");
         String token = reader.nextLine();
-        final String[] keywords = {"money", "cash", "$", "dollar", "pay", "currency", "cheddar", "dough", "moolah", "€",
-        "cent", "bank"};
+
+        File keywordsDat = new File("keywords.dat");
+        Scanner keywordsReader = new Scanner(keywordsDat);
+        while (keywordsReader.hasNextLine()) {
+            keywords.add(keywordsReader.nextLine());
+        }
 
         new DiscordApiBuilder().setToken(token).login().thenAccept(api -> {
 
@@ -25,16 +32,10 @@ public class trashbotBoot {
                 }
 
                 boolean contains = false;
-                for (int i = 0; i < keywords.length && !contains; i++) {
-                    if (event.getMessage().getContent().toLowerCase().contains(keywords[i])) {
-                        contains = true;
+                for(String keyword: keywords) {
+                    if (event.getMessage().getContent().toLowerCase().contains(keyword)) {
+                        event.getMessage().addReaction(api.getCustomEmojiById("451793501470982155").get());
                     }
-                }
-                if (contains) {
-                    // this line needs tweaking to fix, i would rather have reaction than message
-                    event.getMessage().addReaction(api.getCustomEmojiById("451793501470982155").get());
-                    // this line works
-                    // event.getChannel().sendMessage("<:mrkrabs:451793501470982155>");
                 }
 
                 if (event.getMessage().getContent().equals("!battle")) {
@@ -123,8 +124,15 @@ public class trashbotBoot {
                     }
                 }
 
-                if (event.getMessage().getContent().toLowerCase().contains("!ban")) {
-                    event.getChannel().sendMessage(event.getMessage().getContent().substring(event.getMessage().getContent().indexOf("!ban") + 4) + " has been banned.");
+                if (event.getMessage().getContent().toLowerCase().contains("!ban ")) {
+                    event.getChannel().sendMessage(event.getMessage().getContent().substring(event.getMessage().getContent().indexOf("!ban ") + 4) + " has been banned.");
+                }
+
+                if (event.getMessage().getContent().toLowerCase().startsWith("!add ")) {
+                    String newKeyword = event.getMessage().getContent().toLowerCase().substring(5);
+                    writeToKeywordsDat(newKeyword);
+                    keywords.add(newKeyword);
+                    event.getChannel().sendMessage("``" + newKeyword + "`` added as new keyword.");
                 }
 
             });
@@ -176,5 +184,19 @@ public class trashbotBoot {
         int choice = Integer.parseInt(battleData.nextLine());
         int[] outArray = {health, botHealth, choice};
         return outArray;
+    }
+
+    private static void writeToKeywordsDat(String add) {
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter("keywords.dat");
+        } catch (FileNotFoundException e) {
+            System.out.println("Something went wrong.");
+        }
+        for (String oldKeyword: keywords) {
+            out.println(oldKeyword);
+        }
+        out.println(add);
+        out.close();
     }
 }

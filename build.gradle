@@ -10,8 +10,6 @@ repositories {
 
 dependencies {
     compile 'de.btobastian.Javacord:javacord:v_3-SNAPSHOT'
-    compile 'org.slf4j:slf4j-api:1.7.24'
-    compile 'org.slf4j:slf4j-simple:1.7.24'
 }
 
 mainClassName = 'net.kautler.discord.bot.translator.TranslatorDiscordBot'
