@@ -1,3 +1,4 @@
+// Comment. dicks
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.util.logging.ExceptionLogger;
 
