@@ -1,9 +1,11 @@
+// Comment. dicks
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.util.logging.ExceptionLogger;
 
 import java.io.*;
 
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class trashbotBoot {
 
@@ -15,6 +17,19 @@ public class trashbotBoot {
         battleOut.close();
         System.out.print("Token: ");
         String token = reader.nextLine();
+        ArrayList<String> krabsReactionMesseges = new ArrayList<String>();
+        krabsReactionMesseges.add(" money")
+        krabsReactionMesseges.add("$")
+        krabsReactionMesseges.add(" cash ")
+        krabsReactionMesseges.add(" pay ")
+        krabsReactionMesseges.add(" cheddar ")
+        krabsReactionMesseges.add(" moolah ")
+        krabsReactionMesseges.add(" dollar")
+        krabsReactionMesseges.add(" currency ")
+        krabsReactionMesseges.add(" dough ")
+        krabsReactionMesseges.add("€")
+
+
 
         new DiscordApiBuilder().setToken(token).login().thenAccept(api -> {
 
@@ -23,13 +38,12 @@ public class trashbotBoot {
                     event.getChannel().sendMessage("I'm sorry!");
                 }
 
-                if (event.getMessage().getContent().toLowerCase().contains("money") || event.getMessage().getContent().toLowerCase().contains("cash")
-                        || event.getMessage().getContent().toLowerCase().contains("$") || event.getMessage().getContent().toLowerCase().contains("dollars")
-                        || event.getMessage().getContent().toLowerCase().contains("pay") || event.getMessage().getContent().toLowerCase().contains("currency")
-                        || event.getMessage().getContent().toLowerCase().contains("cheddar") || event.getMessage().getContent().toLowerCase().contains("dough")
-                        || event.getMessage().getContent().toLowerCase().contains("moolah") || event.getMessage().getContent().toLowerCase().contains("€")) {
-                    event.getMessage().addReaction("<:mrkrabs:451793501470982155>");
-                    event.getChannel().sendMessage("<:mrkrabs:451793501470982155>");
+
+                for (String reactionMessage: krabsReactionMesseges) {
+                    if (event.getMessage().getContent.toLowerCase.contains(reactionMessage)) {
+                        event.getMessage().addReaction("<:mrkrabs:451793501470982155>");
+                        event.getChannel().sendMessage("<:mrkrabs:451793501470982155>");
+                    }
                 }
 
                 if (event.getMessage().getContent().equals("!battle")) {
