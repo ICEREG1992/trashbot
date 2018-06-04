@@ -124,17 +124,62 @@ public class trashbotBoot {
                     }
                 }
 
-                if (event.getMessage().getContent().toLowerCase().contains("!ban ")) {
+
+                if (event.getMessage().getContent().toLowerCase().startsWith("!ban ")) {
                     event.getChannel().sendMessage(event.getMessage().getContent().substring(event.getMessage().getContent().indexOf("!ban ") + 4) + " has been banned.");
                 }
 
                 if (event.getMessage().getContent().toLowerCase().startsWith("!add ")) {
-                    String newKeyword = event.getMessage().getContent().toLowerCase().substring(5);
-                    writeToKeywordsDat(newKeyword);
-                    keywords.add(newKeyword);
-                    event.getChannel().sendMessage("``" + newKeyword + "`` added as new keyword.");
+                  
+                    String id = event.getMessage().getAuthor().getIdAsString();
+                    if (id.equals("132374584086364160") || id.equals("283785595728429057") || id.equals("392731013496700928")) {
+                        String newKeyword = event.getMessage().getContent().toLowerCase().substring(5);
+                        keywords.add(newKeyword);
+                        refreshKeywordsDat();
+                        event.getChannel().sendMessage("``" + newKeyword + "`` added as new keyword.");
+                    } else {
+                        event.getChannel().sendMessage("sorry pal, you need the blue keycard to use this command.");
+                    }
                 }
 
+                if (event.getMessage().getContent().toLowerCase().startsWith("!remove ")) {
+                    String id = event.getMessage().getAuthor().getIdAsString();
+                    if (id.equals("132374584086364160") || id.equals("283785595728429057") || id.equals("392731013496700928")) {
+                        String removeKeyword = event.getMessage().getContent().toLowerCase().substring(8);
+                        keywords.remove(removeKeyword);
+                        refreshKeywordsDat();
+                        event.getChannel().sendMessage("``" + removeKeyword + "`` has been removed from the keywords list.");
+                    } else {
+                        event.getChannel().sendMessage("sorry pal, you need the blue keycard to use this command.");
+                    }
+                }
+
+                if (event.getMessage().getContent().equalsIgnoreCase("!keywords")) {
+                    String out = "";
+                    for (String keyword: keywords) {
+                        out += keyword + " // ";
+                    }
+                    event.getChannel().sendMessage(out);
+                }
+
+                if (event.getMessage().getContent().contains("<@450507364768940034>") || event.getMessage().getContent().toLowerCase().contains("trashbot")) {
+                    event.getChannel().sendMessage("you called?");
+                }
+
+                if (event.getMessage().getContent().equalsIgnoreCase("shut the fuck up")) {
+                    event.getChannel().sendMessage("sorry.");
+                }
+
+                if (event.getMessage().getContent().equalsIgnoreCase("!blue keycard")) {
+                    event.getChannel().sendMessage("look, you don't have permission to use that command either, but I can give you the yellow keycard.");
+                }
+
+                if (event.getMessage().getContent().equalsIgnoreCase("!yellow keycard")) {
+                    event.getChannel().sendMessage("here ya go, pal, you now have the yellow keycard. go wild.");
+                }
+
+                if (event.getMessage().getContent().equals("look, man, i know sometimes it seems like i don't love you as much as i say i do, but i promise you, you're like a child to me. and i love and respect you so much. keep your chin up, man, alright? i appreciate you."))
+                    event.getChannel().sendMessage("hey look, it's alright, i get it. you do what you gotta do, i'll just be here. thanks for being my friend.");
             });
 
             // Print the invite url of your bot
@@ -186,7 +231,8 @@ public class trashbotBoot {
         return outArray;
     }
 
-    private static void writeToKeywordsDat(String add) {
+
+    private static void refreshKeywordsDat() {
         PrintWriter out = null;
         try {
             out = new PrintWriter("keywords.dat");
@@ -196,7 +242,6 @@ public class trashbotBoot {
         for (String oldKeyword: keywords) {
             out.println(oldKeyword);
         }
-        out.println(add);
         out.close();
     }
 }
