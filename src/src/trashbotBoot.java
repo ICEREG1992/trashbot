@@ -124,11 +124,13 @@ public class trashbotBoot {
                     }
                 }
 
+
                 if (event.getMessage().getContent().toLowerCase().startsWith("!ban ")) {
                     event.getChannel().sendMessage(event.getMessage().getContent().substring(event.getMessage().getContent().indexOf("!ban ") + 4) + " has been banned.");
                 }
 
                 if (event.getMessage().getContent().toLowerCase().startsWith("!add ")) {
+                  
                     String id = event.getMessage().getAuthor().getIdAsString();
                     if (id.equals("132374584086364160") || id.equals("283785595728429057") || id.equals("392731013496700928")) {
                         String newKeyword = event.getMessage().getContent().toLowerCase().substring(5);
@@ -228,6 +230,7 @@ public class trashbotBoot {
         int[] outArray = {health, botHealth, choice};
         return outArray;
     }
+
 
     private static void refreshKeywordsDat() {
         PrintWriter out = null;
