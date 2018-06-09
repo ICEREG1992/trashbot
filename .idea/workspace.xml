@@ -31,8 +31,8 @@
       <file leaf-file-name="trashbotBoot.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/src/trashbotBoot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
-              <caret line="179" column="67" lean-forward="true" selection-start-line="179" selection-start-column="67" selection-end-line="179" selection-end-column="67" />
+            <state relative-caret-position="2832">
+              <caret line="179" column="84" selection-start-line="179" selection-start-column="84" selection-end-line="179" selection-end-column="84" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#261#269#0" expanded="true" />
@@ -387,7 +387,6 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="1">
-    <option name="x" value="960" />
     <option name="width" value="960" />
     <option name="height" value="1040" />
   </component>
@@ -531,8 +530,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="960" y="0" width="960" height="1040" extended-state="1" />
-    <editor active="true" />
+    <frame x="0" y="0" width="960" height="1040" extended-state="1" />
     <layout>
       <window_info anchor="right" id="Palette" order="5" />
       <window_info anchor="bottom" id="TODO" order="11" />
@@ -543,7 +541,7 @@
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" />
       <window_info anchor="right" id="Maven Projects" order="4" />
       <window_info anchor="bottom" id="Version Control" order="2" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Run" order="7" visible="true" weight="0.14412417" />
+      <window_info active="true" anchor="bottom" id="Run" order="7" visible="true" weight="0.35144123" />
       <window_info anchor="bottom" id="Terminal" order="0" weight="0.32972974" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="0" />
@@ -671,8 +669,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/src/trashbotBoot.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="179" column="67" lean-forward="true" selection-start-line="179" selection-start-column="67" selection-end-line="179" selection-end-column="67" />
+        <state relative-caret-position="2832">
+          <caret line="179" column="84" selection-start-line="179" selection-start-column="84" selection-end-line="179" selection-end-column="84" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#261#269#0" expanded="true" />

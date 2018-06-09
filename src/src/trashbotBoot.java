@@ -31,7 +31,6 @@ public class trashbotBoot {
                     event.getChannel().sendMessage("I'm sorry!");
                 }
 
-                boolean contains = false;
                 for(String keyword: keywords) {
                     if (event.getMessage().getContent().toLowerCase().contains(keyword)) {
                         event.getMessage().addReaction(api.getCustomEmojiById("451793501470982155").get());
@@ -162,7 +161,9 @@ public class trashbotBoot {
                     event.getChannel().sendMessage(out);
                 }
 
-                if (event.getMessage().getContent().contains("<@450507364768940034>") || event.getMessage().getContent().toLowerCase().contains("trashbot")) {
+                if (event.getMessage().getContent().toLowerCase().contains("good work, trashbot")) {
+                    event.getChannel().sendMessage("thx man");
+                } else if (event.getMessage().getContent().contains("<@450507364768940034>") || event.getMessage().getContent().toLowerCase().contains("trashbot")) {
                     event.getChannel().sendMessage("you called?");
                 }
 
@@ -180,6 +181,15 @@ public class trashbotBoot {
 
                 if (event.getMessage().getContent().equals("look, man, i know sometimes it seems like i don't love you as much as i say i do, but i promise you, you're like a child to me. and i love and respect you so much. keep your chin up, man, alright? i appreciate you."))
                     event.getChannel().sendMessage("hey look, it's alright, i get it. you do what you gotta do, i'll just be here. thanks for being my friend.");
+
+                if (event.getMessage().getContent().contains("black")) {
+                    event.getChannel().sendMessage("why you gotta make it a race thing");
+                }
+
+                if (event.getMessage().getContent().equalsIgnoreCase("!nah u good"))
+                {
+                    event.getMessage().addReaction("👌");
+                }
             });
 
             // Print the invite url of your bot
