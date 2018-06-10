@@ -71,8 +71,6 @@ public class StupidInstantHumor {
             value = in.nextLine();
             in.nextLine();
             keyPhrases.put(key, value);
-            System.out.println(key);
-            System.out.println(value + "\n");
             key = in.nextLine();
         }
         in.close();
