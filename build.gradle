@@ -1,0 +1,20 @@
+apply plugin: 'application'
+apply plugin: 'idea'
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://jitpack.io'
+    }
+}
+
+dependencies {
+    compile 'de.btobastian.Javacord:javacord:v_3-SNAPSHOT'
+}
+
+mainClassName = 'net.kautler.discord.bot.translator.TranslatorDiscordBot'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+    options.incremental = true
+}

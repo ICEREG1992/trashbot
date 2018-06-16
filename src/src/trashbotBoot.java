@@ -1,28 +1,33 @@
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.message.Message;
 import org.javacord.api.util.logging.ExceptionLogger;
 
 import java.io.*;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class trashbotBoot {
     // The token that the bot uses to communicate with Discord
     private static String token = "";
 
-    private static AccessRestriction permissions = new AccessRestriction("permissions.dat");
+    private static AccessRestriction permissions = new AccessRestriction("data\\permissions.dat");
     private static BattleBot battleBot = new BattleBot("data\\battle.dat");
-    private static StupidInstantHumor stupidInstantHumor = new StupidInstantHumor("data\\stupidInstantHumorKeyPhrases.dat");
+    private static instantHumorEquals humorEquals = new instantHumorEquals("data\\instantHumorEqualsPhrases.dat");
+    private static instantHumorContains humorContains = new instantHumorContains("data\\instantHumorContainsPhrases.dat");
     private static EmojiReactions emojiReactions = new EmojiReactions("data\\emojisReactionData.dat");
+
+    private static final long selfID = 450507364768940034L;
 
     public static void main(String[] args) throws FileNotFoundException  {
         // Scanner object for reading system input
         Scanner reader = new Scanner(System.in);
 
-        stupidInstantHumor.prepareStupidInstantHumorKeyPhrases();
+        humorEquals.prepareInstantHumorEqualsKeyPhrases();
+        humorContains.prepareInstantHumorContainsKeyPhrases();
         battleBot.prepareBattleBot();
         emojiReactions.prepareEmojiReactions();
+        permissions.loadPermissions();
 
         //Prompts for the token
         System.out.print("Token: ");
@@ -31,30 +36,45 @@ public class trashbotBoot {
         new DiscordApiBuilder().setToken(token).login().thenAccept(api -> {
             api.addMessageCreateListener(event -> {
                 TextChannel channel = event.getChannel();
-                org.javacord.api.entity.message.Message message = event.getMessage();
+                Message message = event.getMessage();
                 String messageToString = message.getContent().toLowerCase();
 
-                // Send the event to the BattleBot object
-                battleBot.battle(event);
-                // Send the event to the stupidInstantHumorBot object
-                stupidInstantHumor.run(event);
-                // Send the event and api to the emojiReactions object
-                emojiReactions.run(event, api, permissions);
+                if (message.getAuthor().getId() != selfID) {
+                    // Send the event to the BattleBot object
+                    battleBot.battle(event);
+                    // Send the event to the humorEquals object
+                    humorEquals.run(event);
+                    // Send the event to the humorContains object
+                    humorContains.run(event);
+                    // Send the event and api to the emojiReactions object
+                    emojiReactions.run(event, api, permissions);
 
-                if (messageToString.startsWith("!ban ")) {
-                    channel.sendMessage(messageToString.substring(messageToString.indexOf("!ban ") + 4) + " has been banned.");
-                }
+                    if (messageToString.startsWith("!ban ")) {
+                        channel.sendMessage(messageToString.substring(messageToString.indexOf("!ban ") + 4) + " has been banned.");
+                    }
 
-                if (messageToString.equals("!blue keycard")) {
-                    channel.sendMessage("look, you don't have permission to use that command either, but I can give you the yellow keycard.");
-                }
+                    //!give <color> keycard <user>
+                    if (messageToString.startsWith("!give ")) {
+                        if (permissions.doesUserHaveAccess((String.valueOf(message.getAuthor().getId())), "blue")) {
+                            String keycardColorAndUser = messageToString.substring(6);
+                            String keycardColor = keycardColorAndUser.substring(0,keycardColorAndUser.indexOf(" "));
+                            String keycardUser = keycardColorAndUser.substring(keycardColorAndUser.indexOf("k")+10, keycardColorAndUser.length()-1);
+                            channel.sendMessage(permissions.addUser(keycardUser, keycardColor));
+                        }
 
-                if (messageToString.equals("!yellow keycard")) {
-                    channel.sendMessage("here ya go, pal, you now have the yellow keycard. go wild.");
+                    }
+
+                    if (messageToString.equals("!help")) {
+                        channel.sendMessage("**Hi!** I'm Trashbot. I'm a friendly guy and can do many things.\n\nHere are some commands:\n```!help\n!ban <user>\n!add <keyword> <emoji>\n!give <color> keycard <@user>\n!keywords <emoji>\n!karaoke <Song name> / <Artist name>\n!battle\n     !attack\n     !heal\n     !run\n!blue keycard\n!yellow keycard\n!fuck you\n!nah u good\n!buckbumble\n/rule34\n@trashbot\ntrashbot\ngood work, trashbot\nshut the fuck up\nliterally stop\n(literally anything involving money)\nblack```");
+                    }
+
+                    if (messageToString.startsWith("!keywords ")) {
+                        EmojiReactions.getKeywords(message);
+                    }
                 }
             });
 
-            // Print the invite url of your bot
+            // Print boot success
             System.out.println("Boot success!");
 
 

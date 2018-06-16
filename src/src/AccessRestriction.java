@@ -1,10 +1,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
+import java.io.PrintWriter;
+import java.util.*;
 
 public class AccessRestriction {
     private static File file;
@@ -17,7 +15,8 @@ public class AccessRestriction {
 
     public static String addUser(String userID, String accessLevel) {
         permissions.get(accessLevel).add(userID);
-        return "User " + userID + " added to permission " + accessLevel;
+        save();
+        return "User <@" + userID + "> added to permission " + accessLevel;
     }
 
     public static boolean doesUserHaveAccess(String id, String accessLevel) {
@@ -29,25 +28,25 @@ public class AccessRestriction {
     public static void loadPermissions() {
         Scanner in = null;
 
-        Set<String> users = new HashSet<>();
+        Set<String> users;
 
         try {
             in = new Scanner(file);
         } catch (FileNotFoundException e) {
-            System.out.println("File " + file + "not found: ");
+            System.out.println("File " + file + " not found: ");
         }
-
         String permissionLevel = in.nextLine();
 
         while(!permissionLevel.equals("***")) {
+            users = new HashSet<>();
             String user = in.nextLine();
 
             do {
-                users.clear();
                 users.add(user);
                 user = in.nextLine();
             } while (!user.equals(""));
             permissions.put(permissionLevel,users);
+            permissionLevel = in.nextLine();
         }
 
         System.out.println("Permissions successfully loaded.");
@@ -55,7 +54,24 @@ public class AccessRestriction {
 
     // TODO: Finish save() method
     public static String save() {
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter(file);
+        } catch (FileNotFoundException e) {
+            System.out.println("File " + file + " not found: ");
+        }
 
+        for (Map.Entry<String, Set<String>> permissionLevel : permissions.entrySet()) {
+            String level = permissionLevel.getKey();
+            Set<String> members = permissionLevel.getValue();
+            out.println(level);
+            for (String name : members) {
+                out.println(name);
+            }
+            out.println();
+        }
+        out.print("***");
+        out.close();
         return "New permissions data successfully saved.";
     }
 }

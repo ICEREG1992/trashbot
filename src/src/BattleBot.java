@@ -11,33 +11,33 @@ public class BattleBot {
         this.filename = filename;
     }
 
+    private int health = 0;
+    private int botHealth = 0;
+    private int choice = 0;
     public void battle(MessageCreateEvent event) {
         TextChannel channel = event.getChannel();
         org.javacord.api.entity.message.Message message = event.getMessage();
         String messageToString = message.getContent().toLowerCase();
 
         if (messageToString.equals("!battle")) {
-            channel.sendMessage("Let's fuckin fight then boi");
-            botWait();
-            int health = ((int)(Math.random() * 10) * 2) + 10;
-            int botHealth = ((int)(Math.random() * 10) * 2) + 10;
-            int choice = -1;
-            writeToBattleDat(health, botHealth, choice);
+            if (choice != -1) {
+                channel.sendMessage("Let's fuckin fight then boi");
+                botWait();
+                health = ((int) (Math.random() * 10) * 2) + 10;
+                botHealth = ((int) (Math.random() * 10) * 2) + 10;
+                choice = -1;
 
-            System.out.println("Battle started!");
-            if (choice != 0) {
+                System.out.println("Battle started!");
                 channel.sendMessage("You have " + health + " health.");
                 botWait();
                 channel.sendMessage("I'm at " + botHealth + " health. What do you do?\n > attack\n > heal\n > run");
+            } else {
+                channel.sendMessage("Whoa there, buddy. I'm already fighting someone.");
             }
         }
 
         if (messageToString.contains("!attack")) {
             int damage = ((int)(Math.random() * 5) + 5);
-            int[] stats = readFromBattleDat();
-            int health = stats[0];
-            int botHealth = stats[1];
-            int choice = stats[2];
             if (choice != 0) {
                 channel.sendMessage("You attack for " + damage + " damage!");
                 botHealth -= damage;
@@ -46,19 +46,24 @@ public class BattleBot {
                 botWait();
                 channel.sendMessage("You were hit for " + damage + " damage, now at " + health + " health!");
                 botWait();
-                channel.sendMessage("I'm at " + botHealth + " health. What do you do?\n > attack\n > heal\n > run");
+                if (health<=0) {
+                    channel.sendMessage("You fall to your bitch ass and die. Fuckin rest in pepperonis bro <:restinpepperoni:412754423257890827>");
+                    choice = 0;
+                    System.out.println("Battle ended!");
+                } else if (botHealth<=0) {
+                    channel.sendMessage("Oh shit, fuck, ow. You whooped my ass pretty hard. gg <:oof:418944392124956682>");
+                    choice = 0;
+                    System.out.println("Battle ended!");
+                } else {
+                    channel.sendMessage("I'm at " + botHealth + " health. What do you do?\n > attack\n > heal\n > run");
+                }
             } else {
                 channel.sendMessage("A battle is not going on right now. Type ``!battle`` to start one!");
             }
-            writeToBattleDat(health, botHealth, choice);
         }
 
         if (messageToString.contains("!heal")) {
             int damage = ((int)(Math.random() * 5) + 5);
-            int[] stats = readFromBattleDat();
-            int health = stats[0];
-            int botHealth = stats[1];
-            int choice = stats[2];
             if (choice != 0) {
                 health -= damage;
                 channel.sendMessage("You were hit for " + damage + " damage, now at " + health + " health!");
@@ -67,22 +72,30 @@ public class BattleBot {
                 botWait();
                 channel.sendMessage("You heal yourself for " + heal + " health, now at " + health + " health!");
                 botWait();
-                channel.sendMessage("I'm at " + botHealth + " health. What do you do?\n > attack\n > heal\n > run");
+                if (health<=0) {
+                    channel.sendMessage("You fall to your bitch ass and die. Fuckin rest in pepperonis bro <:restinpepperoni:412754423257890827>");
+                    choice = 0;
+                    System.out.println("Battle ended!");
+                } else if (botHealth<=0) {
+                    channel.sendMessage("Oh shit, fuck, ow. You whooped my ass pretty hard. gg <:oof:418944392124956682>");
+                    choice = 0;
+                    System.out.println("Battle ended!");
+                } else {
+                    channel.sendMessage("I'm at " + botHealth + " health. What do you do?\n > attack\n > heal\n > run");
+                }
             } else {
                 channel.sendMessage("A battle is not going on right now. Type ``!battle`` to start one!");
             }
-            writeToBattleDat(health, botHealth, choice);
         }
 
         if (messageToString.contains("!run")) {
             int damage = ((int)(Math.random() * 5) + 5);
-            int[] stats = readFromBattleDat();
-            int health = stats[0];
-            int botHealth = stats[1];
-            int choice = stats[2];
             if (choice != 0) {
                 health -= damage;
                 channel.sendMessage("On your way out, you were hit for " + damage + " damage, leaving you at " + health + " health.");
+                if (health<=0) {
+                    channel.sendMessage("You fall to your bitch ass and die. Fuckin rest in pepperonis bro <:restinpepperoni:412754423257890827>");
+                }
                 choice = 0;
                 System.out.println("Battle ended!");
                 botWait();
@@ -92,7 +105,6 @@ public class BattleBot {
             } else {
                 channel.sendMessage("A battle is not going on right now. Type ``!battle`` to start one!");
             }
-            writeToBattleDat(health, botHealth, choice);
         }
     }
 

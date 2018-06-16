@@ -8,13 +8,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class StupidInstantHumor {
+public class instantHumorEquals {
 
+    // hashmap to store <prompt phrase, reaction phrase>
     private static Map<String, String> keyPhrases = new HashMap<>();
 
     private static File file;
 
-    public StupidInstantHumor(String filename) {
+    public instantHumorEquals(String filename) {
         file = new File(filename);
     }
 
@@ -30,7 +31,8 @@ public class StupidInstantHumor {
                         botWaitLong();
                         channel.sendMessage("That's fucked.");
                     }
-                } else {
+                }
+                else {
                     channel.sendMessage(keyPhrases.get(keyPhrase));
                 }
             }
@@ -45,7 +47,7 @@ public class StupidInstantHumor {
         }
     }
 
-    public static void prepareStupidInstantHumorKeyPhrases() {
+    public static void prepareInstantHumorEqualsKeyPhrases() {
         // This boolean is to keep track of whether the content in the destination file contains any information.
         boolean hasAnyContent = true;
         Scanner in = null;
@@ -66,7 +68,7 @@ public class StupidInstantHumor {
             hasAnyContent = false;
         }
 
-        // Loops until it reaches the escape sequece
+        // Loops until it reaches the escape sequence
         while(hasAnyContent && !key.equals("***")) {
             value = in.nextLine();
             in.nextLine();

@@ -1,6 +1,7 @@
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.javacord.api.util.logging.ExceptionLogger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -106,7 +107,11 @@ public class EmojiReactions {
         for (ArrayList<String> keywords: emojisAndKeywords.keySet()) {
             for (String keyword: keywords) {
                 if (messageToString.contains(keyword)) {
-                    message.addReaction(api.getCustomEmojiById(EmojiParser.id(emojisAndKeywords.get(keywords))).get());
+                    try {
+                        message.addReaction(api.getCustomEmojiById(EmojiParser.id(emojisAndKeywords.get(keywords))).get());
+                    } catch (StringIndexOutOfBoundsException e){
+                        message.addReaction(emojisAndKeywords.get(keywords)).exceptionally(ExceptionLogger.get());
+                    }
                 }
             }
         }
@@ -148,14 +153,15 @@ public class EmojiReactions {
                                                                                                         //|
         String out = "";                                                                                //|
         ArrayList<String> commandNames = new ArrayList<>();                                             //|
-        commandNames.add("!emojiReactionKeywords"); //<----------------------------------------------------
+        commandNames.add("!keywords"); //<----------------------------------------------------
         commandNames.add("!add");
+        commandNames.add("!remove");
 
         for (String command: commandNames) {
             if (messageToString.contains(command)) {
                 switch (command) {
-                    case "!emojiReactionKeywords":
-                        out = getKeywords(event);
+                    case "!keywords":
+                        out = getKeywords(message);
                         break;
 
                     case "!add":
@@ -164,6 +170,7 @@ public class EmojiReactions {
 
                     case "!remove":
                         out = removeKeyword(event, permissions);
+                        break;
 
                     default:
                         out = "Command not recognized.";
@@ -175,14 +182,19 @@ public class EmojiReactions {
     }
 
     // Gets the keywords for an emoji
-    private static String getKeywords(MessageCreateEvent event) {
-        String message = event.getMessage().getContent();
-        String fullEmoji = EmojiParser.getFullEmoji(message);
-        String out = "Keywords for \\" + fullEmoji;
+    public static String getKeywords(org.javacord.api.entity.message.Message message) {
+        String messageToString = message.getContent().toLowerCase();
+        String fullEmoji;
+        try {
+            fullEmoji = EmojiParser.getFullEmoji(messageToString);
+        } catch (StringIndexOutOfBoundsException e) {
+            fullEmoji = messageToString.substring(messageToString.indexOf(" ") + 1);
+        }
+        String out = "__Keywords for \\" + fullEmoji + ":__";
 
-        String emojiID = EmojiParser.id(fullEmoji);
+        //String emojiID = EmojiParser.id(fullEmoji);
         for (ArrayList<String> keywords: emojisAndKeywords.keySet()) {
-            if(emojisAndKeywords.get(keywords).equals(emojiID)) {
+            if(emojisAndKeywords.get(keywords).equals(fullEmoji)) {
                 for (String keyword: keywords) {
                     out += "\n" + keyword;
                 }
@@ -197,30 +209,32 @@ public class EmojiReactions {
     private static String addKeyword(MessageCreateEvent event, AccessRestriction permissions) {
         String message = event.getMessage().getContent();
         String userID = event.getMessage().getAuthor().getIdAsString();
-
+        System.out.println(userID);
 
         if(permissions.doesUserHaveAccess(userID, "blue")) {
             String fullEmoji = EmojiParser.getFullEmoji(message);
             String emojiID = EmojiParser.id(fullEmoji);
 
             int keywordStart = message.indexOf("!add") + 5;
-            int keywordEnd = message.indexOf("\\") - 2;
+            int keywordEnd = message.indexOf("<") - 1;
 
             String newKeyWord = message.substring(keywordStart, keywordEnd);
 
             ArrayList<String> keywordsForThisEmoji = new ArrayList<>();
-
-            for (ArrayList<String> keywords: emojisAndKeywords.keySet()) {
-                if(emojisAndKeywords.get(keywords).equals(emojiID)) {
-                    keywordsForThisEmoji = keywords;
+            keywordsForThisEmoji.add(newKeyWord);
+            for (ArrayList<String> keys: emojisAndKeywords.keySet()) {
+                for (String key: keys){
+                    if(key.equals(emojiID)) {
+                        emojisAndKeywords.remove(key);
+                        emojisAndKeywords.put(keywordsForThisEmoji, key);
+                    }
                 }
             }
 
-            keywordsForThisEmoji.add(newKeyWord);
 
             return newKeyWord + " was added as a keyword for \\" + fullEmoji;
         } else {
-            return "You don't have the necessary permissions to use this command.";
+            return "You need the blue keycard to use that command.";
         }
     }
 
@@ -249,7 +263,7 @@ public class EmojiReactions {
 
             return "Successfully removed " + oldKeyword + " as a keyword for \\" + fullEmoji;
         } else {
-            return "You do not have the permissions required to use this command.";
+            return "You need the blue keycard to use that command.";
         }
     }
 
@@ -257,7 +271,7 @@ public class EmojiReactions {
 
     // Reads in all current emoji data
     public static void prepareEmojiReactions() {
-        ArrayList<String> keys = new ArrayList<>();
+        ArrayList<String> keys;
         String isMoreData = "";
         Scanner in = null;
         try {
@@ -269,7 +283,7 @@ public class EmojiReactions {
         do {
             String key = in.nextLine();
             String value = "";
-            keys.clear();
+            keys = new ArrayList<>();
             do {
                 keys.add(key);
                 key = in.nextLine();

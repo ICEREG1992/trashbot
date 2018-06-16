@@ -1,6 +1,6 @@
-import java.util.jar.JarException;
-
 public class EmojiParser {
+
+    // From "<:emojiName:emojiID>", returns just :emojiName:
     public static String name(String message) {
         String emojiName = "";
 
@@ -10,22 +10,22 @@ public class EmojiParser {
         String emojiNameWithId = fullEmoji.substring(indexOfFirstColon);
         int indexOfSecondColon = emojiNameWithId.indexOf(":");
 
-        emojiName = emojiNameWithId.substring(0, indexOfSecondColon);
+        emojiName = emojiNameWithId.substring(0, indexOfSecondColon+1);
 
         return emojiName;
     }
 
+    // From "<:emojiName:emojiID>", returns just emojiID
     public static String id(String message) {
         String emojiID = "";
 
         String fullEmoji = getFullEmoji(message);
 
         int indexOfFirstColon = fullEmoji.indexOf(":");
-        String emojiNameWithId = fullEmoji.substring(indexOfFirstColon);
+        String emojiNameWithId = fullEmoji.substring(indexOfFirstColon+1);
         int indexOfSecondColon = emojiNameWithId.indexOf(":");
 
-        emojiID = emojiNameWithId.substring(indexOfSecondColon - 1);
-
+        emojiID = emojiNameWithId.substring(indexOfSecondColon + 1, emojiNameWithId.length()-1);
         return emojiID;
     }
 

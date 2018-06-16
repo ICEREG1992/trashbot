@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/javacord.iml" filepath="$PROJECT_DIR$/.idea/modules/javacord.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/javacord_main.iml" filepath="$PROJECT_DIR$/.idea/modules/javacord_main.iml" group="javacord" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/javacord_test.iml" filepath="$PROJECT_DIR$/.idea/modules/javacord_test.iml" group="javacord" />
       <module fileurl="file://$PROJECT_DIR$/src/src.iml" filepath="$PROJECT_DIR$/src/src.iml" />
     </modules>
   </component>
