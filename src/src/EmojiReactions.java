@@ -5,6 +5,7 @@ import org.javacord.api.util.logging.ExceptionLogger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.*;
 
 /*
@@ -85,7 +86,7 @@ METHOD:
  */
 
 public class EmojiReactions {
-    private static Map<ArrayList<String>, String> emojisAndKeywords = new HashMap<>();
+    private static Map<String, ArrayList<String>> emojisAndKeywords = new HashMap<>();
     private static File file = null;
     private static AccessRestriction permissions = null;
 
@@ -104,13 +105,13 @@ public class EmojiReactions {
         org.javacord.api.entity.message.Message message = event.getMessage();
         String messageToString = message.getContent().toLowerCase();
 
-        for (ArrayList<String> keywords: emojisAndKeywords.keySet()) {
-            for (String keyword: keywords) {
+        for (String emoji: emojisAndKeywords.keySet()) {
+            for (String keyword: emojisAndKeywords.get(emoji)) {
                 if (messageToString.contains(keyword)) {
                     try {
-                        message.addReaction(api.getCustomEmojiById(EmojiParser.id(emojisAndKeywords.get(keywords))).get());
+                        message.addReaction(api.getCustomEmojiById(EmojiParser.id(emoji)).get());
                     } catch (StringIndexOutOfBoundsException e){
-                        message.addReaction(emojisAndKeywords.get(keywords)).exceptionally(ExceptionLogger.get());
+                        message.addReaction(emoji).exceptionally(ExceptionLogger.get());
                     }
                 }
             }
@@ -158,7 +159,7 @@ public class EmojiReactions {
         commandNames.add("!remove");
 
         for (String command: commandNames) {
-            if (messageToString.contains(command)) {
+            if (messageToString.startsWith(command)) {
                 switch (command) {
                     case "!keywords":
                         out = getKeywords(message);
@@ -184,18 +185,18 @@ public class EmojiReactions {
     // Gets the keywords for an emoji
     public static String getKeywords(org.javacord.api.entity.message.Message message) {
         String messageToString = message.getContent().toLowerCase();
-        String fullEmoji;
+        String messageEmoji;
         try {
-            fullEmoji = EmojiParser.getFullEmoji(messageToString);
+            messageEmoji = EmojiParser.getFullEmoji(messageToString);
         } catch (StringIndexOutOfBoundsException e) {
-            fullEmoji = messageToString.substring(messageToString.indexOf(" ") + 1);
+            messageEmoji = messageToString.substring(messageToString.indexOf(" ") + 1);
         }
-        String out = "__Keywords for \\" + fullEmoji + ":__";
+        String out = "__Keywords for \\" + messageEmoji + ":__";
 
         //String emojiID = EmojiParser.id(fullEmoji);
-        for (ArrayList<String> keywords: emojisAndKeywords.keySet()) {
-            if(emojisAndKeywords.get(keywords).equals(fullEmoji)) {
-                for (String keyword: keywords) {
+        for (String emoji: emojisAndKeywords.keySet()) {
+            if(emojisAndKeywords.get(emoji).equals(messageEmoji)) {
+                for (String keyword: emojisAndKeywords.get(emoji)) {
                     out += "\n" + keyword;
                 }
             }
@@ -213,25 +214,14 @@ public class EmojiReactions {
 
         if(permissions.doesUserHaveAccess(userID, "blue")) {
             String fullEmoji = EmojiParser.getFullEmoji(message);
-            String emojiID = EmojiParser.id(fullEmoji);
-
+            System.out.println(fullEmoji);
             int keywordStart = message.indexOf("!add") + 5;
             int keywordEnd = message.indexOf("<") - 1;
 
             String newKeyWord = message.substring(keywordStart, keywordEnd);
 
-            ArrayList<String> keywordsForThisEmoji = new ArrayList<>();
-            keywordsForThisEmoji.add(newKeyWord);
-            for (ArrayList<String> keys: emojisAndKeywords.keySet()) {
-                for (String key: keys){
-                    if(key.equals(emojiID)) {
-                        emojisAndKeywords.remove(key);
-                        emojisAndKeywords.put(keywordsForThisEmoji, key);
-                    }
-                }
-            }
-
-
+            emojisAndKeywords.get(fullEmoji).add(newKeyWord);
+            save();
             return newKeyWord + " was added as a keyword for \\" + fullEmoji;
         } else {
             return "You need the blue keycard to use that command.";
@@ -245,23 +235,16 @@ public class EmojiReactions {
         String userID = event.getMessage().getAuthor().getIdAsString();
 
         if(permissions.doesUserHaveAccess(userID, "blue")) {
-            int keywordStart = message.indexOf("!remove") + 5;
-            int keywordEnd = message.indexOf("\\") - 2;
-
-            String oldKeyword = message.substring(keywordStart, keywordEnd);
             String fullEmoji = EmojiParser.getFullEmoji(message);
 
-            ArrayList<String> keywordsForThisEmoji = new ArrayList<>();
+            int keywordStart = message.indexOf("!add") + 9;
+            int keywordEnd = message.indexOf("<") - 1;
 
-            for (ArrayList<String> keywords: emojisAndKeywords.keySet()) {
-                if(fullEmoji.equals(emojisAndKeywords.get(keywords))) {
-                    keywordsForThisEmoji = keywords;
-                }
-            }
+            String oldKeyWord = message.substring(keywordStart, keywordEnd);
 
-            keywordsForThisEmoji.remove(oldKeyword);
-
-            return "Successfully removed " + oldKeyword + " as a keyword for \\" + fullEmoji;
+            emojisAndKeywords.get(fullEmoji).remove(oldKeyWord);
+            save();
+            return "Successfully removed " + oldKeyWord + " as a keyword for \\" + fullEmoji;
         } else {
             return "You need the blue keycard to use that command.";
         }
@@ -271,7 +254,7 @@ public class EmojiReactions {
 
     // Reads in all current emoji data
     public static void prepareEmojiReactions() {
-        ArrayList<String> keys;
+        ArrayList<String> keywords;
         String isMoreData = "";
         Scanner in = null;
         try {
@@ -280,24 +263,37 @@ public class EmojiReactions {
             System.out.println("EmojiReactions was unable to locate the file: " + e);
         }
 
+        String keyword = "***";
+        String emoji = in.nextLine();
         do {
-            String key = in.nextLine();
-            String value = "";
-            keys = new ArrayList<>();
-            do {
-                keys.add(key);
-                key = in.nextLine();
-            } while (!key.equals(""));
-            value = in.nextLine();
-            emojisAndKeywords.put(keys,value);
-            isMoreData = in.nextLine();
-        } while (!isMoreData.equals("***"));
+            keywords = new ArrayList<>();
+            keyword = in.nextLine();
+            while (!keyword.equals("")) {
+                keywords.add(keyword);
+                keyword = in.nextLine();
+            }
+            emojisAndKeywords.put(emoji,keywords);
+            emoji = in.nextLine();
+        } while (!emoji.equals("***"));
     }
 
     // TODO: Finish the save() method
     // Saves all changes made to the emojiReactions keywords and such.
     public static String save() {
-
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter(file);
+        } catch (FileNotFoundException e) {
+            System.out.println("File " + file + " not found: ");
+        }
+        for (String emoji : emojisAndKeywords.keySet()) {
+            out.println(emoji);
+            for (String keyword : emojisAndKeywords.get(emoji)) {
+                out.println(keyword);
+            }
+            out.println();
+        }
+        out.println("***");
         return "New EmojiReaction data successfully saved.";
     }
 }

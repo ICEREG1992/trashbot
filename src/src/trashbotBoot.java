@@ -23,11 +23,11 @@ public class trashbotBoot {
         // Scanner object for reading system input
         Scanner reader = new Scanner(System.in);
 
-        humorEquals.prepareInstantHumorEqualsKeyPhrases();
-        humorContains.prepareInstantHumorContainsKeyPhrases();
-        battleBot.prepareBattleBot();
-        emojiReactions.prepareEmojiReactions();
-        permissions.loadPermissions();
+        instantHumorEquals.prepareInstantHumorEqualsKeyPhrases();
+        instantHumorContains.prepareInstantHumorContainsKeyPhrases();
+        BattleBot.prepareBattleBot();
+        EmojiReactions.prepareEmojiReactions();
+        AccessRestriction.loadPermissions();
 
         //Prompts for the token
         System.out.print("Token: ");
@@ -61,7 +61,6 @@ public class trashbotBoot {
                             String keycardUser = keycardColorAndUser.substring(keycardColorAndUser.indexOf("k")+10, keycardColorAndUser.length()-1);
                             channel.sendMessage(permissions.addUser(keycardUser, keycardColor));
                         }
-
                     }
 
                     if (messageToString.equals("!help")) {
@@ -76,7 +75,6 @@ public class trashbotBoot {
 
             // Print boot success
             System.out.println("Boot success!");
-
 
         }).exceptionally(ExceptionLogger.get());
     }

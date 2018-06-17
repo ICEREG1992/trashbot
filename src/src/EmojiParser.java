@@ -1,3 +1,6 @@
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class EmojiParser {
 
     // From "<:emojiName:emojiID>", returns just :emojiName:
@@ -31,15 +34,25 @@ public class EmojiParser {
 
     // Parses out the first emoji in a message and returns "<:emojiName:emojiID>"
     public static String getFullEmoji(String message) {
-        int emojiStart = message.indexOf("<");
-        int emojiEnd = message.indexOf(">") + 1;
 
         String fullEmoji = "";
-        if (emojiEnd == message.length()) {
-            fullEmoji = message.substring(emojiStart);
-        } else {
+        try {
+            int emojiStart = message.indexOf("<");
+            int emojiEnd = message.indexOf(">") + 1;
             fullEmoji = message.substring(emojiStart, emojiEnd);
+        } catch (StringIndexOutOfBoundsException e) {
+            Pattern pattern = Pattern.compile("[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]",
+                    Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(message);
+            if (matcher.find()) {
+                fullEmoji = matcher.group();
+            }
+            else {
+                System.out.println("Emoji not found.");
+                fullEmoji = "";
+            }
         }
+
 
         return fullEmoji;
     }
