@@ -20,6 +20,7 @@ public class instantHumorEquals {
     }
 
     public void run(MessageCreateEvent event) {
+        // Parse message here so you don't have to later
         TextChannel channel = event.getChannel();
         org.javacord.api.entity.message.Message message = event.getMessage();
         String messageToString = message.getContent().toLowerCase();

@@ -102,6 +102,7 @@ public class EmojiReactions {
 
     // Adds a reaction to a message
     public static void addReactionsToMessages(MessageCreateEvent event, DiscordApi api) {
+        // Parse message here so you don't have to later
         org.javacord.api.entity.message.Message message = event.getMessage();
         String messageToString = message.getContent().toLowerCase();
 
@@ -110,8 +111,8 @@ public class EmojiReactions {
                 if (messageToString.contains(keyword)) {
                     try {
                         message.addReaction(api.getCustomEmojiById(EmojiParser.id(emoji)).get());
-                    } catch (StringIndexOutOfBoundsException e){
-                        message.addReaction(emoji).exceptionally(ExceptionLogger.get());
+                    } catch (Exception e){
+                        message.addReaction(emoji);
                     }
                 }
             }
@@ -148,6 +149,7 @@ public class EmojiReactions {
      */                                                                                                 //|
                                                                                                         //|
     private static void checkForEmojiReactionCommands(MessageCreateEvent event, DiscordApi api) {       //|
+        // Parse message here so you don't have to later
         TextChannel channel = event.getChannel();                                                       //|
         org.javacord.api.entity.message.Message message = event.getMessage();                           //|
         String messageToString = message.getContent().toLowerCase();                                    //|
@@ -157,6 +159,7 @@ public class EmojiReactions {
         commandNames.add("!keywords"); //<----------------------------------------------------
         commandNames.add("!add");
         commandNames.add("!remove");
+        commandNames.add("!printall");
 
         for (String command: commandNames) {
             if (messageToString.startsWith(command)) {
@@ -174,7 +177,7 @@ public class EmojiReactions {
                         break;
 
                     default:
-                        out = "Command not recognized.";
+                        out = "Command not recognized."; // this line should never ever be reached
                         break;
                 }
             }
@@ -184,6 +187,7 @@ public class EmojiReactions {
 
     // Gets the keywords for an emoji
     public static String getKeywords(org.javacord.api.entity.message.Message message) {
+        // Parse message here so you don't have to later
         String messageToString = message.getContent().toLowerCase();
         String messageEmoji;
         try {
@@ -191,11 +195,11 @@ public class EmojiReactions {
         } catch (StringIndexOutOfBoundsException e) {
             messageEmoji = messageToString.substring(messageToString.indexOf(" ") + 1);
         }
-        String out = "__Keywords for \\" + messageEmoji + ":__";
+        String out = "__Keywords for " + messageEmoji + ":__";
 
         //String emojiID = EmojiParser.id(fullEmoji);
         for (String emoji: emojisAndKeywords.keySet()) {
-            if(emojisAndKeywords.get(emoji).equals(messageEmoji)) {
+            if(emoji.equals(messageEmoji)) {
                 for (String keyword: emojisAndKeywords.get(emoji)) {
                     out += "\n" + keyword;
                 }
@@ -208,15 +212,22 @@ public class EmojiReactions {
     // Adds a keyword to an emoji when the !add command is called.
     // Proper use:  !add keyword \<:customemoji:123456789012345678>
     private static String addKeyword(MessageCreateEvent event, AccessRestriction permissions) {
+        // Parse message here so you don't have to later
         String message = event.getMessage().getContent();
         String userID = event.getMessage().getAuthor().getIdAsString();
         System.out.println(userID);
 
         if(permissions.doesUserHaveAccess(userID, "blue")) {
             String fullEmoji = EmojiParser.getFullEmoji(message);
-            System.out.println(fullEmoji);
+
             int keywordStart = message.indexOf("!add") + 5;
-            int keywordEnd = message.indexOf("<") - 1;
+            int keywordEnd = message.indexOf(fullEmoji) - 1;
+
+            if (!emojisAndKeywords.containsKey(fullEmoji)) {
+                ArrayList<String> tempAddArray = new ArrayList<>();
+                emojisAndKeywords.put(fullEmoji, tempAddArray);
+                System.out.println("New Emoji Added: " + fullEmoji);
+            }
 
             String newKeyWord = message.substring(keywordStart, keywordEnd);
 
@@ -238,11 +249,15 @@ public class EmojiReactions {
             String fullEmoji = EmojiParser.getFullEmoji(message);
 
             int keywordStart = message.indexOf("!add") + 9;
-            int keywordEnd = message.indexOf("<") - 1;
+            int keywordEnd = message.indexOf(fullEmoji) - 1;
 
             String oldKeyWord = message.substring(keywordStart, keywordEnd);
 
             emojisAndKeywords.get(fullEmoji).remove(oldKeyWord);
+            if (emojisAndKeywords.get(fullEmoji).isEmpty()) {
+                emojisAndKeywords.remove(fullEmoji);
+                System.out.println("Emoji Removed -- No Keywords: " + fullEmoji);
+            }
             save();
             return "Successfully removed " + oldKeyWord + " as a keyword for \\" + fullEmoji;
         } else {
@@ -294,6 +309,7 @@ public class EmojiReactions {
             out.println();
         }
         out.println("***");
+        out.close();
         return "New EmojiReaction data successfully saved.";
     }
 }

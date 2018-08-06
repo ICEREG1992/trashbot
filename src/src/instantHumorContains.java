@@ -20,6 +20,7 @@ public class instantHumorContains {
     }
 
     public void run(MessageCreateEvent event) {
+        // Parse message here so you don't have to later
         TextChannel channel = event.getChannel();
         org.javacord.api.entity.message.Message message = event.getMessage();
         String messageToString = message.getContent().toLowerCase();
@@ -31,6 +32,19 @@ public class instantHumorContains {
                 } else {
                     channel.sendMessage(keyPhrases.get(keyPhrase));
                 }
+            }
+        }
+        if (messageToString.contains("black")) {
+            if (message.getServer().get().getId() == 141643881723723777L) {
+                if ((int) (Math.random() * 4) == 1) {
+                    System.out.println("random chance achieved");
+                    channel.sendMessage("why you gotta make it a race thing");
+                } else {
+                    System.out.println("no dice, with rice 9/10");
+                }
+            } else {
+                System.out.println("this channel is not the witness");
+                channel.sendMessage("why you gotta make it a race thing");
             }
         }
     }

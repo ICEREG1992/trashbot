@@ -19,6 +19,12 @@ public class AccessRestriction {
         return "User <@" + userID + "> added to permission " + accessLevel;
     }
 
+    public static String removeUser(String userID, String accessLevel) {
+        permissions.get(accessLevel).remove(userID);
+        save();
+        return "User <@" + userID + "> removed from permission " + accessLevel;
+    }
+
     public static boolean doesUserHaveAccess(String id, String accessLevel) {
         Set<String> users = permissions.get(accessLevel);
 

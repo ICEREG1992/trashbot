@@ -7,8 +7,7 @@ import java.util.Scanner;
 public class BattleBot {
     public static String filename;
 
-    public BattleBot(String filename) {
-        this.filename = filename;
+    public BattleBot() {
     }
 
     private int health = 0;
