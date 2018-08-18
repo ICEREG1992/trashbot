@@ -196,6 +196,8 @@ public class KaraokeBot {
         int bLength = b.length();
         if (a.charAt(0) == b.charAt(0) && a.charAt(aLength-1) == b.charAt(bLength-1)) {
             match = true;
+        } else if (a.length() > 1 && b.length() > 1 && a.charAt(0) == b.charAt(0) && a.charAt(1) == b.charAt(1)) {
+            match = true;
         }
         return match;
     }

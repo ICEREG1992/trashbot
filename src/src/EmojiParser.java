@@ -48,7 +48,7 @@ public class EmojiParser {
                 fullEmoji = matcher.group();
             }
             else {
-                System.out.println("Emoji not found.");
+                System.out.println("Emoji not found: " + fullEmoji);
                 fullEmoji = "";
             }
         }

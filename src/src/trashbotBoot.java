@@ -20,6 +20,7 @@ public class trashbotBoot {
     private static instantHumorContains humorContains = new instantHumorContains("data\\instantHumorContainsPhrases.dat");
     private static EmojiReactions emojiReactions = new EmojiReactions("data\\emojisReactionData.dat");
     private static KaraokeBot karaokeBot = new KaraokeBot("data\\lyrics.dat", permissions);
+    private static TodoModule todoModule = new TodoModule("data\\todoList.dat");
 
     // Trashbot's user ID; this should be changed
     private static final long selfID = 450507364768940034L;
@@ -33,6 +34,7 @@ public class trashbotBoot {
         instantHumorContains.prepareInstantHumorContainsKeyPhrases();
         EmojiReactions.prepareEmojiReactions();
         AccessRestriction.loadPermissions();
+        TodoModule.loadTodo();
 
         //Prompts for the token
         System.out.print("Token: ");
@@ -58,6 +60,8 @@ public class trashbotBoot {
                     emojiReactions.run(event, api, permissions);
                     // Send the event to the karaokeBot object
                     karaokeBot.karaoke(event);
+                    // Send the event to the todoList object
+                    todoModule.run(event);
 
                     // A bunch of non-standardized commands that cannot be contained within modules are here:
 
@@ -92,7 +96,7 @@ public class trashbotBoot {
 
                     // Help command, prints most commands to the channel where called.
                     if (messageToString.equals("!help")) {
-                        channel.sendMessage("**Hi!** I'm Trashbot. I'm a friendly guy and can do many things.\n\nHere are some commands:\n```!help\n!ban <user>\n!add <keyword> <emoji>\n!give <color> keycard <@user>\n!revoke <color> keycard <@user>\n!keywords <emoji>\n!karaoke <Song name> / <Artist name>\n!battle\n     !attack\n     !heal\n     !run\n!fuck you\n!nah u good\n!buckbumble\n/rule34\n@trashbot\ntrashbot\ngood work, trashbot\nshut the fuck up\nliterally stop\n(literally anything involving money)\nblack```");
+                        channel.sendMessage("**Hi!** I'm Trashbot. I'm a friendly guy and can do many things.\n\nHere are some commands:\n```!help\n!ban <user>\n!add <keyword> <emoji>\n!give <color> keycard <@user>\n!revoke <color> keycard <@user>\n!keywords <emoji>\n!karaoke <Song name> / <Artist name>\n!battle\n     !attack\n     !heal\n     !run\n!fuck you\nnah u good\n!buckbumble\n/rule34\n@trashbot\ntrashbot\ngood work, trashbot\nshut the fuck up\nliterally stop\n(literally anything involving money)\nblack```");
                     }
 
                     // I'm not actually sure if this is necessary.
@@ -107,8 +111,8 @@ public class trashbotBoot {
                 // Get a channel to send the welcome message to
                 if (event.getServer().getSystemChannel().isPresent()) {
                     channel = event.getServer().getSystemChannel().get();
-                } else if (event.getServer().getTextChannelsByNameIgnoreCase("General").size() > 0) { // if there's no default channel for welcome messages, choose a "general" channel
-                    channel = event.getServer().getTextChannelsByNameIgnoreCase("General").get(0);
+                } else if (event.getServer().getTextChannelsByNameIgnoreCase("general").size() > 0) { // if there's no default channel for welcome messages, choose a "general" channel
+                    channel = event.getServer().getTextChannelsByNameIgnoreCase("general").get(0);
                 } else if (event.getServer().getTextChannelsByNameIgnoreCase("off-topic").size() > 0) {
                     channel = event.getServer().getTextChannelsByNameIgnoreCase("off-topic").get(0);
                 } else if (event.getServer().getTextChannelsByNameIgnoreCase("casual").size() > 0) {
@@ -119,13 +123,20 @@ public class trashbotBoot {
                 }
 
                 String user = event.getUser().getDisplayName(event.getServer());
-                // This should be randomized in the future for extra fun
-                channel.sendMessage("Hey hey, " + user + ", welcome to the server.");
+                String[] welcomeMessages = {"Hey hey, " + user + ", welcome to the server.", "whoa hey lol " + user + " just joined",
+                "hey, was that the wind or did I just hear " + user + " come in?", "lol u bitches better watch out, " + user + "'s here and they're ready to fuck shit up aye",
+                "yo sup " + user, "hey what's kickin, " + user + "?"};
+                channel.sendMessage(pickString(welcomeMessages));
             });
         }).exceptionally(ExceptionLogger.get());
 
         // Print boot success
         System.out.println("Boot success!");
         // It's funny, this line prints even if the token doesn't go through and the whole program crashes on startup.
+    }
+
+    private static String pickString(String[] set) {
+        int rand = (int)(Math.random()*(set.length-1));
+        return set[rand];
     }
 }

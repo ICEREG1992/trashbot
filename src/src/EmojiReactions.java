@@ -8,87 +8,12 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.*;
 
-/*
-------------------------------------------------------------------------------------------------------------------------
-README: HOW TO ADD A NEW EMOJI THAT REACTS TO A MESSAGE
-------------------------------------------------------------------------------------------------------------------------
-
-There is currently 1 way to add a new emoji to the current list of emoji reactions. To demonstrate, an example of
-a custom emoji with the following properties will be added:
-
-Emoji: <:customemoji:123456789012345678>
-Keywords that we would like to trigger the Emoji: ["hi", "hello", "how are you", "what's your favorite color?"]
-
-
-METHOD:
------------------------
-1) Access the file that the emojiReadtion data is currently kept in.
-
-
-2) In the file, you will see data that looks something like this:
-
-   money
-   cash
-   $
-   dollar
-   pay
-   currency
-   cheddar
-   dough
-   moolah
-   €
-   cent
-   bank
-   dosh
-   check
-   ¥
-   dinero
-   oh yeah mr krabs
-
-   <:mrkrabs:451793501470982155>
-   ***
-
-
-3) To add to this list, insert the information 2 lines after the last emoji, but keep the "***" at the end of the file.
-
-   money
-   cash
-   $
-   dollar
-   pay
-   currency
-   cheddar
-   dough
-   moolah
-   €
-   cent
-   bank
-   dosh
-   check
-   ¥
-   dinero
-   oh yeah mr krabs
-
-   <:mrkrabs:451793501470982155>
-
-   hi
-   hello
-   How are you
-   what's your favorite color?
-
-   <:customemoji:123456789012345678>
-   ***
-
-
-4) Finished. The new emoji <:customemoji:123456789012345678> will now be added as a reaction to any message containing
-   the keywords "hi", "hello", "how are you", and "what's your favorite color".
-
- */
-
 public class EmojiReactions {
     private static Map<String, ArrayList<String>> emojisAndKeywords = new HashMap<>();
     private static File file = null;
     private static AccessRestriction permissions = null;
+
+    private static ArrayList<Character> acceptableCharacters = new ArrayList<>();
 
     public EmojiReactions(String filename) {
         this.file = new File(filename);
@@ -108,7 +33,16 @@ public class EmojiReactions {
 
         for (String emoji: emojisAndKeywords.keySet()) {
             for (String keyword: emojisAndKeywords.get(emoji)) {
-                if (messageToString.contains(keyword)) {
+                if (keyword.contains("§")) {
+                    keyword = keyword.substring(1);
+                    if (containsExclusively(messageToString, keyword)) {
+                        try {
+                            message.addReaction(api.getCustomEmojiById(EmojiParser.id(emoji)).get());
+                        } catch (Exception e){
+                            message.addReaction(emoji);
+                        }
+                    }
+                } else if (messageToString.contains(keyword)) {
                     try {
                         message.addReaction(api.getCustomEmojiById(EmojiParser.id(emoji)).get());
                     } catch (Exception e){
@@ -201,6 +135,9 @@ public class EmojiReactions {
         for (String emoji: emojisAndKeywords.keySet()) {
             if(emoji.equals(messageEmoji)) {
                 for (String keyword: emojisAndKeywords.get(emoji)) {
+                    if (keyword.contains("§")) {
+                        keyword = keyword.substring(1);
+                    }
                     out += "\n" + keyword;
                 }
             }
@@ -215,13 +152,16 @@ public class EmojiReactions {
         // Parse message here so you don't have to later
         String message = event.getMessage().getContent();
         String userID = event.getMessage().getAuthor().getIdAsString();
-        System.out.println(userID);
 
         if(permissions.doesUserHaveAccess(userID, "blue")) {
             String fullEmoji = EmojiParser.getFullEmoji(message);
 
             int keywordStart = message.indexOf("!add") + 5;
             int keywordEnd = message.indexOf(fullEmoji) - 1;
+            boolean exclusive = false;
+            if (message.charAt(message.length()-1) == 'e') {
+                exclusive = true;
+            }
 
             if (!emojisAndKeywords.containsKey(fullEmoji)) {
                 ArrayList<String> tempAddArray = new ArrayList<>();
@@ -231,8 +171,17 @@ public class EmojiReactions {
 
             String newKeyWord = message.substring(keywordStart, keywordEnd);
 
+            if (exclusive == true) {
+                newKeyWord = "§" + newKeyWord;
+            }
+
             emojisAndKeywords.get(fullEmoji).add(newKeyWord);
             save();
+
+            if (exclusive == true) {
+                newKeyWord = newKeyWord.substring(1);
+            }
+
             return newKeyWord + " was added as a keyword for \\" + fullEmoji;
         } else {
             return "You need the blue keycard to use that command.";
@@ -253,7 +202,11 @@ public class EmojiReactions {
 
             String oldKeyWord = message.substring(keywordStart, keywordEnd);
 
-            emojisAndKeywords.get(fullEmoji).remove(oldKeyWord);
+            if (emojisAndKeywords.get(fullEmoji).contains(oldKeyWord)) {
+                emojisAndKeywords.get(fullEmoji).remove(oldKeyWord);
+            } else if (emojisAndKeywords.get(fullEmoji).contains("§" + oldKeyWord)) {
+                emojisAndKeywords.get(fullEmoji).remove("§" + oldKeyWord);
+            }
             if (emojisAndKeywords.get(fullEmoji).isEmpty()) {
                 emojisAndKeywords.remove(fullEmoji);
                 System.out.println("Emoji Removed -- No Keywords: " + fullEmoji);
@@ -265,9 +218,34 @@ public class EmojiReactions {
         }
     }
 
+    private static boolean containsExclusively(String line, String word) {
+        boolean contains = false;
+
+        if (line.contains(word)) {
+            if (line.indexOf(word) > 0 && line.indexOf(word)+word.length() < line.length()) {
+                if (acceptableCharacters.contains(line.charAt(line.indexOf(word)-1)) && acceptableCharacters.contains(line.charAt(line.indexOf(word)+word.length()))) {
+                    contains = true;
+                }
+            }
+            else if (line.indexOf(word) == 0) {
+                if (line.indexOf(word)+word.length() >= line.length()) {
+                    contains = true;
+                } else if (acceptableCharacters.contains(line.charAt(line.indexOf(word)+word.length()))) {
+                    contains = true;
+                }
+            }
+            else if (line.indexOf(word)+word.length() == line.length()) {
+                if (acceptableCharacters.contains(line.charAt(line.indexOf(word)-1))) {
+                    contains = true;
+                }
+            }
+        }
+        return contains;
+    }
+
 /*------------------------------------------Data Manipulation Functions-------------------------------------------*/
 
-    // Reads in all current emoji data
+    // Reads in all current emoji data and sets up acceptableCharacters
     public static void prepareEmojiReactions() {
         ArrayList<String> keywords;
         String isMoreData = "";
@@ -290,6 +268,11 @@ public class EmojiReactions {
             emojisAndKeywords.put(emoji,keywords);
             emoji = in.nextLine();
         } while (!emoji.equals("***"));
+
+        char[] tempCharacters = {' ', '?', ',', '.', '!', '\'', '\"', ':', ';', '…', '*', '_', '/', '~', '`'};
+        for (char c: tempCharacters) {
+            acceptableCharacters.add(c);
+        }
     }
 
     // TODO: Finish the save() method

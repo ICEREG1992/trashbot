@@ -28,7 +28,12 @@ public class instantHumorContains {
         for (String keyPhrase: keyPhrases.keySet()) {
             if(messageToString.contains(keyPhrase)) {
                 if (messageToString.contains("good work, trashbot")) {
-                    channel.sendMessage("thx man");
+                    String[] goodWorkMessages = {"thx man", "i appreciate it", "np", "no problem aye", "thx man", "thx man"};
+                    channel.sendMessage(pickString(goodWorkMessages));
+                } else if (messageToString.contains("trashbot") || messageToString.contains("<@450507364768940034>")) {
+                    String[] trashbotMessages = {"you called?", "that's me!", "what's up", "i heard my name...", "you called?"
+                            , "you called?", "you called?"};
+                    channel.sendMessage(pickString(trashbotMessages));
                 } else {
                     channel.sendMessage(keyPhrases.get(keyPhrase));
                 }
@@ -78,7 +83,7 @@ public class instantHumorContains {
             hasAnyContent = false;
         }
 
-        // Loops until it reaches the escape sequece
+        // Loops until it reaches the escape sequence
         while(hasAnyContent && !key.equals("***")) {
             value = in.nextLine();
             in.nextLine();
@@ -107,5 +112,10 @@ public class instantHumorContains {
         out.println("\n***");
         keyPhrases.put(key, value);
         out.close();
+    }
+
+    private static String pickString(String[] set) {
+        int rand = (int)(Math.random()*(set.length-1));
+        return set[rand];
     }
 }
