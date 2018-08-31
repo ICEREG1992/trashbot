@@ -1,7 +1,6 @@
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.event.message.MessageCreateEvent;
-import org.javacord.api.util.logging.ExceptionLogger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -171,14 +170,14 @@ public class EmojiReactions {
 
             String newKeyWord = message.substring(keywordStart, keywordEnd);
 
-            if (exclusive == true) {
+            if (exclusive) {
                 newKeyWord = "§" + newKeyWord;
             }
 
             emojisAndKeywords.get(fullEmoji).add(newKeyWord);
             save();
 
-            if (exclusive == true) {
+            if (exclusive) {
                 newKeyWord = newKeyWord.substring(1);
             }
 
@@ -202,11 +201,8 @@ public class EmojiReactions {
 
             String oldKeyWord = message.substring(keywordStart, keywordEnd);
 
-            if (emojisAndKeywords.get(fullEmoji).contains(oldKeyWord)) {
-                emojisAndKeywords.get(fullEmoji).remove(oldKeyWord);
-            } else if (emojisAndKeywords.get(fullEmoji).contains("§" + oldKeyWord)) {
-                emojisAndKeywords.get(fullEmoji).remove("§" + oldKeyWord);
-            }
+            emojisAndKeywords.get(fullEmoji).remove(oldKeyWord);
+            emojisAndKeywords.get(fullEmoji).remove("§" + oldKeyWord);
             if (emojisAndKeywords.get(fullEmoji).isEmpty()) {
                 emojisAndKeywords.remove(fullEmoji);
                 System.out.println("Emoji Removed -- No Keywords: " + fullEmoji);
@@ -248,7 +244,6 @@ public class EmojiReactions {
     // Reads in all current emoji data and sets up acceptableCharacters
     public static void prepareEmojiReactions() {
         ArrayList<String> keywords;
-        String isMoreData = "";
         Scanner in = null;
         try {
             in = new Scanner(file);
@@ -256,7 +251,7 @@ public class EmojiReactions {
             System.out.println("EmojiReactions was unable to locate the file: " + e);
         }
 
-        String keyword = "***";
+        String keyword;
         String emoji = in.nextLine();
         do {
             keywords = new ArrayList<>();
@@ -269,7 +264,7 @@ public class EmojiReactions {
             emoji = in.nextLine();
         } while (!emoji.equals("***"));
 
-        char[] tempCharacters = {' ', '?', ',', '.', '!', '\'', '\"', ':', ';', '…', '*', '_', '/', '~', '`'};
+        char[] tempCharacters = {' ', '?', ',', '.', '!', '\'', '\"', ':', ';', '…', '*', '_', '/', '~', '`', '-'};
         for (char c: tempCharacters) {
             acceptableCharacters.add(c);
         }

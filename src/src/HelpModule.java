@@ -4,13 +4,41 @@ import org.javacord.api.event.message.MessageCreateEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class HelpModule {
+    private static final String helpMessage = "**Hi!** I'm Trashbot. I'm a friendly guy and can do many things.\n\n" +
+            "Here are some commands:\n" +
+            "```!help\n" +
+            "!ban <user>\n" +
+            "!add <keyword> <emoji>\n" +
+            "!give <color> keycard <@user>\n" +
+            "!revoke <color> keycard <@user>\n" +
+            "!keywords <emoji>\n" +
+            "!karaoke <Song name> / <Artist name>\n" +
+            "!battle\n" +
+            "     !attack\n" +
+            "     !heal\n" +
+            "     !run\n" +
+            "!todo <suggestion>\n" +
+            "!todoclear <entry number>\n" +
+            "!fuck you\n" +
+            "nah u good\n" +
+            "!buckbumble\n" +
+            "/rule34\n" +
+            "@trashbot\n" +
+            "trashbot\n" +
+            "good work, trashbot\n" +
+            "shut the fuck up\n" +
+            "literally stop\n" +
+            "(literally anything involving money)\n" +
+            "black```";
+
     private static File file;
 
-    private static ArrayList<String> helpList = new ArrayList<>();
+    private static Map<String, String> helpList = new HashMap<>();
 
     public HelpModule(String filename) {
         file = new File(filename);
@@ -22,28 +50,18 @@ public class HelpModule {
         String messageToString = message.getContent().toLowerCase();
 
         if (messageToString.startsWith("!help ")) {
-            String todo = messageToString.substring(messageToString.indexOf(" ") + 1);
-            helpList.add(todo);
-            save();
-            channel.sendMessage("added to todo list. get to work bud");
-        } else if (messageToString.startsWith("!todoclear ")) {
-            int index = Integer.parseInt(messageToString.substring(messageToString.indexOf(" ") + 1)) - 1;
-            if (index >= 0 && index < helpList.size()) {
-                helpList.remove(index);
+            String uCommand = messageToString.substring(messageToString.indexOf(" ") + 1);
+            if (helpList.containsKey(uCommand)) {
+                String description = helpList.get(uCommand);
+                channel.sendMessage(description);
+            } else {
+                channel.sendMessage("that command doesn't seem to exist. try adding an ! or check spelling?");
             }
-            save();
-            channel.sendMessage("removed from todo list. good job man im proud of ya");
-        } else if (messageToString.equals("!todo")) {
-            channel.sendMessage("ok here's what needs to be done");
-            String out = "";
-            for (int i = 0; i < helpList.size(); i++) {
-                out+= i+1 + ": " + helpList.get(i) + "\n";
-            }
-            channel.sendMessage(out);
+        } else if (messageToString.equalsIgnoreCase("!help")) {
+            channel.sendMessage(helpMessage);
         }
     }
 
-    // TODO: Finish save() method
     public static String save() {
         PrintWriter out = null;
         try {
@@ -51,15 +69,17 @@ public class HelpModule {
         } catch (FileNotFoundException e) {
             System.out.println("File " + file + " not found: ");
         }
-        for (String objective : helpList) {
-            out.println(objective);
+        for (String key : helpList.keySet()) {
+            out.println(key);
+            out.println(helpList.get(key));
+            out.println();
         }
 
         out.close();
         return "New todo data saved.";
     }
 
-    public static void loadTodo() {
+    public static void loadHelp() {
         Scanner fileReader = null;
         try {
             fileReader = new Scanner(file);
@@ -67,7 +87,10 @@ public class HelpModule {
             System.out.println("File " + file + " not found: ");
         }
         while (fileReader.hasNextLine()) {
-            helpList.add(fileReader.nextLine());
+            helpList.put(fileReader.nextLine(), fileReader.nextLine());
+            if (fileReader.hasNextLine()) {
+                fileReader.nextLine();
+            }
         }
     }
 }

@@ -1,9 +1,6 @@
 randomize phrases
-add more karaoke leniency (if not a&z then a&b)
 install lyrics library
-add !help <command> functionality
-add taz's game
-allow for new permissions colors to be added
-make battle less spammy (edit message, emoji hud)
-revamp keycards
-add the todo and todoclear commands to the help command
+add dev ability to send messages to all servers trashbot exists on
+allow calling of keywords for emojis that people can't use, also !keyword <keyword> should find the emoji related to that keyword and then print all other keywords
+add "stop" to speak, make the game finish at the end like it's supposed to
+buy more boxer briefs

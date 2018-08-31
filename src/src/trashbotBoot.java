@@ -1,13 +1,13 @@
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.emoji.CustomEmoji;
-import org.javacord.api.entity.emoji.Emoji;
 import org.javacord.api.entity.message.Message;
+import org.javacord.api.entity.message.Reaction;
 import org.javacord.api.util.logging.ExceptionLogger;
-
+import java.lang.management.RuntimeMXBean;
+import java.lang.management.ManagementFactory;
 import java.io.*;
-
 import java.util.Scanner;
+import java.util.Set;
 
 public class trashbotBoot {
     // The token that the bot uses to communicate with Discord
@@ -21,13 +21,17 @@ public class trashbotBoot {
     private static EmojiReactions emojiReactions = new EmojiReactions("data\\emojisReactionData.dat");
     private static KaraokeBot karaokeBot = new KaraokeBot("data\\lyrics.dat", permissions);
     private static TodoModule todoModule = new TodoModule("data\\todoList.dat");
+    private static HelpModule helpModule = new HelpModule("data\\helpList.dat");
+    private static SpeakModule speakModule = new SpeakModule("data\\speakList.dat");
 
-    // Trashbot's user ID; this should be changed
+    // Trashbot's user ID; this should be changed if this library is being used for a different bot.
     private static final long selfID = 450507364768940034L;
 
     public static void main(String[] args) throws FileNotFoundException  {
         // Scanner object for reading system input
         Scanner reader = new Scanner(System.in);
+        // RuntimeMXBean object for reporting system uptime
+        RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
 
         // Read data from files
         instantHumorEquals.prepareInstantHumorEqualsKeyPhrases();
@@ -35,6 +39,8 @@ public class trashbotBoot {
         EmojiReactions.prepareEmojiReactions();
         AccessRestriction.loadPermissions();
         TodoModule.loadTodo();
+        HelpModule.loadHelp();
+        SpeakModule.loadMessages();
 
         //Prompts for the token
         System.out.print("Token: ");
@@ -48,10 +54,12 @@ public class trashbotBoot {
                 Message message = event.getMessage();
                 String messageToString = message.getContent().toLowerCase();
 
+                // Send the event to the battleBot object out here because it needs to be able to respond to its own
+                // messages, to use the edit function.
+                battleBot.battle(event);
+
                 // Only attempt to respond to messages if the message doesn't come from the bot
                 if (message.getAuthor().getId() != selfID) {
-                    // Send the event to the battleBot object
-                    battleBot.battle(event);
                     // Send the event to the humorEquals object
                     humorEquals.run(event);
                     // Send the event to the humorContains object
@@ -60,8 +68,12 @@ public class trashbotBoot {
                     emojiReactions.run(event, api, permissions);
                     // Send the event to the karaokeBot object
                     karaokeBot.karaoke(event);
-                    // Send the event to the todoList object
+                    // Send the event to the todoModule object
                     todoModule.run(event);
+                    // Send the event to the helpModule object
+                    helpModule.run(event);
+                    // Send the event to the speakModule object
+                    speakModule.run(event);
 
                     // A bunch of non-standardized commands that cannot be contained within modules are here:
 
@@ -75,9 +87,15 @@ public class trashbotBoot {
                     if (messageToString.startsWith("!give ")) {
                         if (permissions.doesUserHaveAccess((String.valueOf(message.getAuthor().getId())), "blue")) {
                             String keycardColorAndUser = messageToString.substring(6);
-                            String keycardColor = keycardColorAndUser.substring(0,keycardColorAndUser.indexOf(" "));
+                            String keycardColor = keycardColorAndUser.substring(0,keycardColorAndUser.indexOf("keycard ")-1);
                             String keycardUser = keycardColorAndUser.substring(keycardColorAndUser.indexOf("keycard")+10, keycardColorAndUser.length()-1);
-                            channel.sendMessage(permissions.addUser(keycardUser, keycardColor));
+                            if (keycardUser.contains("!")) {
+                                keycardUser = keycardUser.substring(1);
+                            }
+                            // dumb ass workaround
+                            final String finalKeycardUser = keycardUser;
+                            api.getUserById(keycardUser).thenAccept(user ->
+                                    channel.sendMessage(permissions.addUser(finalKeycardUser, user.getName(), keycardColor)));
                         }
                     }
 
@@ -87,22 +105,56 @@ public class trashbotBoot {
                         if (permissions.doesUserHaveAccess((String.valueOf(message.getAuthor().getId())), "blue")) {
                             // Trim message to obtain <color> and <user>
                             String keycardColorAndUser = messageToString.substring(8);
-                            String keycardColor = keycardColorAndUser.substring(0, keycardColorAndUser.indexOf(" "));
+                            String keycardColor = keycardColorAndUser.substring(0, keycardColorAndUser.indexOf("keycard ")-1);
                             String keycardUser = keycardColorAndUser.substring(keycardColorAndUser.indexOf("keycard") + 10, keycardColorAndUser.length()-1);
+                            if (keycardUser.contains("!")) {
+                                keycardUser = keycardUser.substring(1);
+                            }
                             // Print result
                             channel.sendMessage(permissions.removeUser(keycardUser,keycardColor));
                         }
-                    }
-
-                    // Help command, prints most commands to the channel where called.
-                    if (messageToString.equals("!help")) {
-                        channel.sendMessage("**Hi!** I'm Trashbot. I'm a friendly guy and can do many things.\n\nHere are some commands:\n```!help\n!ban <user>\n!add <keyword> <emoji>\n!give <color> keycard <@user>\n!revoke <color> keycard <@user>\n!keywords <emoji>\n!karaoke <Song name> / <Artist name>\n!battle\n     !attack\n     !heal\n     !run\n!fuck you\nnah u good\n!buckbumble\n/rule34\n@trashbot\ntrashbot\ngood work, trashbot\nshut the fuck up\nliterally stop\n(literally anything involving money)\nblack```");
                     }
 
                     // I'm not actually sure if this is necessary.
                     if (messageToString.startsWith("!keywords ")) {
                         EmojiReactions.getKeywords(message);
                     }
+
+                    // uptime command
+                    if (messageToString.equalsIgnoreCase("!uptime")) {
+                        double uptime = runtime.getUptime();
+                        String unit = "milliseconds";
+                        if (uptime > 1000) {
+                            uptime /= 1000;
+                            unit = "seconds";
+                            if (uptime > 60) {
+                                uptime /= 60;
+                                unit = "minutes";
+                                if (uptime > 60) {
+                                    uptime /= 60;
+                                    unit = "hours";
+                                    if (uptime > 24) {
+                                        uptime /= 24;
+                                        unit = "days";
+                                    }
+                                }
+                            }
+                        }
+                        String value = String.format("%.3f", uptime);
+                        channel.sendMessage("Trashbot has been up for " + value + " " + unit + ". wow!");
+                    }
+
+                    // prints all users of a given keycard color
+                    if (messageToString.startsWith("!keycard ")) {
+                        String accessLevel = messageToString.substring(messageToString.indexOf(" ") + 1);
+                        Set<String> users = permissions.getUsers(accessLevel);
+                        String send = "__Users with permission " + accessLevel + ":__\n";
+                        for (String user: users) {
+                            send += user + "\n";
+                        }
+                        channel.sendMessage(send);
+                    }
+
                 }
             });
             // Add listener for new member joins, to print a welcome message.
@@ -123,19 +175,38 @@ public class trashbotBoot {
                 }
 
                 String user = event.getUser().getDisplayName(event.getServer());
-                String[] welcomeMessages = {"Hey hey, " + user + ", welcome to the server.", "whoa hey lol " + user + " just joined",
-                "hey, was that the wind or did I just hear " + user + " come in?", "lol u bitches better watch out, " + user + "'s here and they're ready to fuck shit up aye",
-                "yo sup " + user, "hey what's kickin, " + user + "?"};
-                channel.sendMessage(pickString(welcomeMessages));
+                channel.sendMessage(pickString("Hey hey, " + user + ", welcome to the server.", "whoa hey lol " + user + " just joined",
+                        "hey, was that the wind or did I just hear " + user + " come in?", "lol u bitches better watch out, " + user + "'s here and they're ready to fuck shit up aye",
+                        "yo sup " + user, "hey what's kickin, " + user + "?"));
             });
+
+            api.addReactionAddListener(event -> {
+                if (event.getUser().getId() != selfID) {
+                    Reaction messageReaction = null;
+                    if (event.getReaction().isPresent()) {
+                        messageReaction = event.getReaction().get();
+                    }
+                    if (messageReaction.getEmoji().isUnicodeEmoji()) {
+                        if (messageReaction.getEmoji().asUnicodeEmoji().get().equals("\uD83D\uDE44")) {
+                            if ((int) (Math.random() * 3) == 1) {
+                                event.getChannel().sendMessage("fuck off you sarcastic piece of shit eye roll motherfucker grow the fuck up nobody likes you");
+                                System.out.println("dice!");
+                            } else {
+                                System.out.println("no dice on the eye roll clapback");
+                            }
+                        }
+                    }
+                    battleBot.battle(event);
+                }
+            });
+            // Print boot success
+            System.out.println("Boot success!");
         }).exceptionally(ExceptionLogger.get());
 
-        // Print boot success
-        System.out.println("Boot success!");
-        // It's funny, this line prints even if the token doesn't go through and the whole program crashes on startup.
+
     }
 
-    private static String pickString(String[] set) {
+    private static String pickString(String... set) {
         int rand = (int)(Math.random()*(set.length-1));
         return set[rand];
     }
