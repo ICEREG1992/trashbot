@@ -28,7 +28,7 @@ public class KaraokeBot {
         // Parse message here so you don't have to later
         TextChannel channel = event.getChannel();
         org.javacord.api.entity.message.Message message = event.getMessage();
-        String messageToString = message.getContent().toLowerCase();
+        String messageToString = message.getContent();
 
         // !karaoke sets active to true and spits out the first couple lines, if the user who called it has the blue keycard.
         if (messageToString.equals("!karaoke")) {
@@ -64,7 +64,12 @@ public class KaraokeBot {
                 lyricsReader.close();
             } else if (lyricsReader.hasNextLine()) { // if there's more lyrics to read, the song is still going.
                 uInput = messageToString;
+                int exclamation = countExclamationMarks(uInput);
                 String uLine = removePunctuation(uInput);
+                boolean caps = false;
+                if (isUppercase(uLine)) {
+                    caps = true;
+                }
                 ArrayList<String> uWords = splitIntoWords(uLine);
 
                 nextLine = lyricsReader.nextLine();
@@ -97,7 +102,7 @@ public class KaraokeBot {
                     if (formatWords.size() > 0) {
                         nextLine = formatWords.get(0);
                         for (int i = 1; i < formatWords.size(); i++) {
-                            nextLine += " " + formatWords.get(i);
+                            nextLine = nextLine.concat(" " + formatWords.get(i));
                         }
                     }
                     // if there weren't words left over, print the next line.
@@ -105,18 +110,12 @@ public class KaraokeBot {
                         nextLine = lyricsReader.nextLine();
                     }
                 }
-
-
-//                int match;
-//                // this is probably really bad practice but who's gonna stop me
-//                // compare the formatted line to the user formatted line, see how much of the line the user provided
-//                for (match = 0; match < formatLine.length() && match < uLine.length() && formatLine.charAt(match)==uLine.charAt(match); match++) {
-//                }
-//                if (formatLine.substring(match).length() > 1) { // if there's any left-over line that the user didn't provide, have trashbot complete the line
-//                    nextLine = formatLine.substring(match); // note that this process means that trashbot spits out the scan-formatted line, which makes it look like he's having a stroke
-//                } else {
-//                    nextLine = lyricsReader.nextLine(); // if the whole line is completed, send the next line
-//                }
+                if (caps) {
+                    nextLine = nextLine.toUpperCase();
+                }
+                for (int i = 0; i < exclamation; i++) {
+                    nextLine = nextLine.concat("!");
+                }
 
                 channel.sendMessage(nextLine);
             } else { // if there's no next line, print the goodbye message
@@ -200,5 +199,25 @@ public class KaraokeBot {
             match = true;
         }
         return match;
+    }
+
+    private static boolean isUppercase(String line) {
+        boolean uppercase = true;
+        for (int i = 0; i < line.length(); i++) {
+            if (Character.isAlphabetic(line.charAt(i)) && Character.isLowerCase(line.charAt(i))) {
+                uppercase = false;
+            }
+        }
+        return uppercase;
+    }
+
+    private static int countExclamationMarks(String line) {
+        int count = 0;
+        for (int i = 0; i < line.length(); i++) {
+            if (line.charAt(i) == '!') {
+                count++;
+            }
+        }
+        return count;
     }
 }

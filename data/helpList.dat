@@ -1,15 +1,3 @@
-!help
-prints the list of commands! if given an argument, will print some more specific info on that one command.
-
-!ban
-totally 100% bans a given user.
-
-!add
-adds a new keyword that i will respond to with an emoji. requires blue keycard.
-
-!give
-grants a new keycard to a given user. requires blue keycard.
-
 !revoke
 removes a keycard from a user's inventory. requires blue keycard.
 

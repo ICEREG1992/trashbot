@@ -28,12 +28,10 @@ public class instantHumorContains {
         for (String keyPhrase: keyPhrases.keySet()) {
             if(messageToString.contains(keyPhrase)) {
                 if (messageToString.contains("good work, trashbot")) {
-                    String[] goodWorkMessages = {"thx man", "i appreciate it", "np", "no problem aye", "thx man", "thx man"};
-                    channel.sendMessage(pickString(goodWorkMessages));
+                    channel.sendMessage(helperFunctions.pickString("thx man", "i appreciate it", "np", "no problem aye", "thx man", "thx man"));
                 } else if (messageToString.contains("trashbot") || messageToString.contains("<@450507364768940034>")) {
-                    String[] trashbotMessages = {"you called?", "that's me!", "what's up", "i heard my name...", "you called?"
-                            , "you called?", "you called?"};
-                    channel.sendMessage(pickString(trashbotMessages));
+                    channel.sendMessage(helperFunctions.pickString("you called?", "that's me!", "what's up", "i heard my name...", "you called?"
+                            , "you called?", "you called?"));
                 } else {
                     channel.sendMessage(keyPhrases.get(keyPhrase));
                 }
@@ -42,13 +40,13 @@ public class instantHumorContains {
         if (messageToString.contains("black")) {
             if (message.getServer().get().getId() == 141643881723723777L) {
                 if ((int) (Math.random() * 4) == 1) {
-                    System.out.println("random chance achieved");
+                    System.out.println("In The Witness server: \"race thing\" message triggered.");
                     channel.sendMessage("why you gotta make it a race thing");
                 } else {
-                    System.out.println("no dice, with rice 9/10");
+                    System.out.println("In The Witness server: \"race thing\" message not triggered.");
                 }
             } else {
-                System.out.println("this channel is not the witness");
+                System.out.println("In " + message.getServer().get().getName() + ": \"race thing\" message triggered.");
                 channel.sendMessage("why you gotta make it a race thing");
             }
         }
@@ -112,10 +110,5 @@ public class instantHumorContains {
         out.println("\n***");
         keyPhrases.put(key, value);
         out.close();
-    }
-
-    private static String pickString(String[] set) {
-        int rand = (int)(Math.random()*(set.length-1));
-        return set[rand];
     }
 }

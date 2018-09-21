@@ -25,16 +25,17 @@ public class SpeakModule {
         TextChannel channel = event.getChannel();
         org.javacord.api.entity.message.Message message = event.getMessage();
         String messageToString = message.getContent().toLowerCase();
-        if (channel.asPrivateChannel().isPresent() && messageToString.equalsIgnoreCase("!speak")) {
+        String messageToStringLower = message.getContent().toLowerCase();
+        if (channel.asPrivateChannel().isPresent() && messageToStringLower.equalsIgnoreCase("!speak")) {
             loadMessages();
             active = true;
             speakChannel = channel;
             channel.sendMessage("Loading Speak...");
             botWait();
             channel.sendMessage("At any time, say \"!quit\" to quit.");
-        } else if (messageToString.equalsIgnoreCase("!speak")) {
+        } else if (messageToStringLower.equalsIgnoreCase("!speak")) {
             channel.sendMessage("Speak can only be played in direct messages. it go down in the dm! see ya there");
-        } else if (messageToString.equalsIgnoreCase("!quit") && channel.asPrivateChannel().isPresent()) {
+        } else if (messageToStringLower.equalsIgnoreCase("!quit") && channel.asPrivateChannel().isPresent()) {
             if (active) {
                 channel.sendMessage("ok cool sorry for bein weird on ya");
                 active = false;
@@ -49,14 +50,29 @@ public class SpeakModule {
                 // do nothing
             } else if (level > 0 && level <= 5) {
                 channel.sendMessage("<:blank:445505783224991747>");
+                if (messageToStringLower.contains("stop")) {
+                    level = 6;
+                }
             } else if (level > 5 && level <= 10) {
                 channel.sendMessage("...");
+                if (messageToStringLower.contains("stop")) {
+                    level = 11;
+                }
             } else if (level > 10 && level <= 15) {
-                channel.sendMessage(message.getContent());
+                channel.sendMessage(messageToString);
+                if (messageToStringLower.contains("stop")) {
+                    level = 16;
+                }
             } else if (level > 15 && level <= 25) {
-                channel.sendMessage(stringFlip(message.getContent()));
+                channel.sendMessage(stringFlip(messageToString));
+                if (messageToStringLower.contains("stop")) {
+                    level = 26;
+                }
             } else if (level > 25 && level <= (25+uniqueStrings.size())) {
                 channel.sendMessage(removeAny(uniqueStrings));
+                if (messageToStringLower.contains("stop")) {
+                    level = 26 + uniqueStrings.size();
+                }
             } else if (level == 26 + uniqueStrings.size()) {
                 channel.sendMessage("Do you think that all of this will end some day?");
             } else if (level > 27 + uniqueStrings.size()) {

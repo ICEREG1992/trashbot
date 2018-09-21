@@ -186,16 +186,16 @@ public class trashbotBoot {
                     if (event.getReaction().isPresent()) {
                         messageReaction = event.getReaction().get();
                     }
-                    if (messageReaction.getEmoji().isUnicodeEmoji()) {
-                        if (messageReaction.getEmoji().asUnicodeEmoji().get().equals("\uD83D\uDE44")) {
-                            if ((int) (Math.random() * 3) == 1) {
-                                event.getChannel().sendMessage("fuck off you sarcastic piece of shit eye roll motherfucker grow the fuck up nobody likes you");
-                                System.out.println("dice!");
-                            } else {
-                                System.out.println("no dice on the eye roll clapback");
-                            }
-                        }
-                    }
+//                    if (messageReaction.getEmoji().isUnicodeEmoji()) {
+//                        if (messageReaction.getEmoji().asUnicodeEmoji().get().equals("\uD83D\uDE44")) {
+//                            if ((int) (Math.random() * 3) == 1) {
+//                                event.getChannel().sendMessage("fuck off you sarcastic piece of shit eye roll motherfucker grow the fuck up nobody likes you");
+//                                System.out.println("dice!");
+//                            } else {
+//                                System.out.println("no dice on the eye roll clapback");
+//                            }
+//                        }
+//                    }
                     battleBot.battle(event);
                 }
             });

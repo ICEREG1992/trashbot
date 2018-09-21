@@ -1,4 +1,3 @@
-import javafx.util.Pair;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.Reaction;
@@ -14,8 +13,8 @@ public class BattleBot {
     private int health = 0;
     private int botHealth = 0;
     private int choice = 0;
-    String userEmoji = "";
-    String healthBar = "";
+    private String userEmoji = "";
+    private String healthBar = "";
 
     private Message startMessage = null;
 
@@ -47,14 +46,14 @@ public class BattleBot {
             battleMessage.addReaction("\uD83D\uDC8A");
             battleMessage.addReaction("\uD83C\uDFC3");
             if (choice != -1) {
-                battleMessage.edit(pickString("Let's fuckin fight then boi", "aight bet!!!", "fuckin come get me mf!",
+                battleMessage.edit(helperFunctions.pickString("Let's fuckin fight then boi", "aight bet!!!", "fuckin come get me mf!",
                         "let's go! start swingin bro!", "oh you really wanna go? u really wanna go!?"));
                 botWait();
                 userEmoji = "";
                 if (startMessage.getAuthor().getId() == willID) {
                     userEmoji = "<:william:457350683927117826>";
                 } else {
-                userEmoji = pickString("\uD83D\uDE20", "\uD83D\uDE2C", "\uD83E\uDD2A", "\uD83E\uDD14");
+                userEmoji = helperFunctions.pickString("\uD83D\uDE20", "\uD83D\uDE2C", "\uD83E\uDD2A", "\uD83E\uDD14");
                 }
                 health = ((int) (Math.random() * 10) * 2) + 10;
                 botHealth = ((int) (Math.random() * 10) * 2) + 10;
@@ -64,7 +63,7 @@ public class BattleBot {
                 healthBar = healthString(health, botHealth);
                 battleMessage.edit (userEmoji + ":" + healthBar + ":\uD83E\uDD16\nWhat do you do? >!attack >!heal >!run");
             } else {
-                channel.sendMessage(pickString("Whoa there, buddy. I'm already fighting someone.", "easy there frosh chill a sec lemme finish fighting someone else",
+                channel.sendMessage(helperFunctions.pickString("Whoa there, buddy. I'm already fighting someone.", "easy there frosh chill a sec lemme finish fighting someone else",
                         "Ok lol chill out", "ok i'm already fighting someone rn chill a little"));
             }
         }
@@ -124,7 +123,7 @@ public class BattleBot {
             battleMessage.removeAllReactions();
             // SHOW bot punch (don't change health yet)
             healthBar = healthString(health, botHealth);
-            battleMessage.edit (userEmoji + ":" + healthBar + ":\uD83D\uDCA5\n" + pickString("ow fuck!", "ow jeez dude!", "oof!", "ouchie!", "fuck jeez ow!"));
+            battleMessage.edit (userEmoji + ":" + healthBar + ":\uD83D\uDCA5\n" + helperFunctions.pickString("ow fuck!", "ow jeez dude!", "oof!", "ouchie!", "fuck jeez ow!"));
             // decrease bot health for next show
             botHealth -= damage;
             botWait();
@@ -132,14 +131,14 @@ public class BattleBot {
             userEmoji = "\uD83D\uDCA5";
             // SHOW user punch (bot health has changed
             healthBar = healthString(health, botHealth);
-            battleMessage.edit (userEmoji + ":" + healthBar + ":\uD83E\uDD16\n" + pickString("take that!", "take this frosh!", "get a taste of my knuckle sandwich!", "take that bro!", "ok take this aye!"));
+            battleMessage.edit (userEmoji + ":" + healthBar + ":\uD83E\uDD16\n" + helperFunctions.pickString("take that!", "take this frosh!", "get a taste of my knuckle sandwich!", "take that bro!", "ok take this aye!"));
             // decrease user health for next show
             damage = ((int)(Math.random() * 5) + 5);
             health -= damage;
             botWait();
             if (botHealth<=0) {
 
-                userEmoji = pickString("\uD83D\uDE01", "☺️", "\uD83D\uDE24");
+                userEmoji = helperFunctions.pickString("\uD83D\uDE01", "☺️", "\uD83D\uDE24");
                 // SHOW battle end
                 healthBar = healthString(health, botHealth);
                 battleMessage.edit(userEmoji + ":" + healthBar + ":\uD83E\uDD16\nOh shit, fuck, ow. You whooped my ass pretty hard. gg <:oof:418944392124956682>");
@@ -148,7 +147,7 @@ public class BattleBot {
                 System.out.println("Battle ended!");
             } else if (health<=0) {
                 // set user emoji to skull, ghost, or upside down face
-                userEmoji = pickString("\uD83D\uDC80", "\uD83D\uDC7B", "\uD83D\uDE43");
+                userEmoji = helperFunctions.pickString("\uD83D\uDC80", "\uD83D\uDC7B", "\uD83D\uDE43");
                 // SHOW battle end
                 healthBar = healthString(health, botHealth);
                 battleMessage.edit(userEmoji + ":" + healthBar + ":\uD83E\uDD16\nYou fall to your bitch ass and die. Fuckin rest in pepperonis bro <:restinpepperoni:412754423257890827>");
@@ -157,7 +156,7 @@ public class BattleBot {
                 System.out.println("Battle ended!");
             } else {
                 // set user emoji to hurt
-                userEmoji = pickString("\uD83D\uDE23", "\uD83D\uDE1F", "\uD83D\uDE22", "\uD83E\uDD12", "\uD83E\uDD15", "\uD83E\uDD22");
+                userEmoji = helperFunctions.pickString("\uD83D\uDE23", "\uD83D\uDE1F", "\uD83D\uDE22", "\uD83E\uDD12", "\uD83E\uDD15", "\uD83E\uDD22");
                 healthBar = healthString(health, botHealth);
                 battleMessage.edit (userEmoji + ":" + healthBar + ":\uD83E\uDD16\nWhat do you do? >!attack >!heal >!run");
                 battleMessage.addReaction("⚔");
@@ -178,14 +177,14 @@ public class BattleBot {
             userEmoji = "\uD83D\uDCA5";
             // SHOW user punch
             healthBar = healthString(health, botHealth);
-            battleMessage.edit (userEmoji + ":" + healthBar + ":\uD83E\uDD16\n" + pickString("take that!", "take this frosh!", "this boutta do so much damage", "take that bro!", "ok take this aye!"));
+            battleMessage.edit (userEmoji + ":" + healthBar + ":\uD83E\uDD16\n" + helperFunctions.pickString("take that!", "take this frosh!", "this boutta do so much damage", "take that bro!", "ok take this aye!"));
             botWait();
             health -= damage;
             // set user emoji to hurt
-            userEmoji = pickString("\uD83D\uDE23", "\uD83D\uDE1F", "\uD83D\uDE22", "\uD83E\uDD12", "\uD83E\uDD15", "\uD83E\uDD22");
+            userEmoji = helperFunctions.pickString("\uD83D\uDE23", "\uD83D\uDE1F", "\uD83D\uDE22", "\uD83E\uDD12", "\uD83E\uDD15", "\uD83E\uDD22");
             // SHOW new health
             healthBar = healthString(health, botHealth);
-            battleMessage.edit (userEmoji + ":" + healthBar + ":\uD83E\uDD16\n" + pickString("yeet", "lol haha", "esketit bro", "aight frosh"));
+            battleMessage.edit (userEmoji + ":" + healthBar + ":\uD83E\uDD16\n" + helperFunctions.pickString("yeet", "lol haha", "esketit bro", "aight frosh"));
             botWait();
             int heal = ((int)(Math.random() * 10) + 7);
             health += heal;
@@ -195,10 +194,10 @@ public class BattleBot {
             // set user emoji to hospital
             userEmoji = "\uD83D\uDE91";
             healthBar = healthString(health, botHealth);
-            battleMessage.edit (userEmoji + ":" + healthBar + ":\uD83E\uDD16\n" + pickString("o", "oh ok", "thats sorta unfair but ok", "oh", "oh no"));
+            battleMessage.edit (userEmoji + ":" + healthBar + ":\uD83E\uDD16\n" + helperFunctions.pickString("o", "oh ok", "thats sorta unfair but ok", "oh", "oh no"));
             botWait();
             if (botHealth<=0) {
-                userEmoji = pickString("\uD83D\uDE01", "☺️", "\uD83D\uDE24");
+                userEmoji = helperFunctions.pickString("\uD83D\uDE01", "☺️", "\uD83D\uDE24");
                 // SHOW battle end
                 healthBar = healthString(health, botHealth);
                 battleMessage.edit(userEmoji + ":" + healthBar + ":\uD83E\uDD16\nOh shit, fuck, ow. You whooped my ass pretty hard. gg <:oof:418944392124956682>");
@@ -207,7 +206,7 @@ public class BattleBot {
                 System.out.println("Battle ended!");
             } else if (health<=0) {
                 // set user emoji to skull, ghost, or upside down face
-                userEmoji = pickString("\uD83D\uDC80", "\uD83D\uDC7B", "\uD83D\uDE43");
+                userEmoji = helperFunctions.pickString("\uD83D\uDC80", "\uD83D\uDC7B", "\uD83D\uDE43");
                 // SHOW battle end
                 healthBar = healthString(health, botHealth);
                 battleMessage.edit(userEmoji + ":" + healthBar + ":\uD83E\uDD16\nYou fall to your bitch ass and die. Fuckin rest in pepperonis bro <:restinpepperoni:412754423257890827>");
@@ -216,7 +215,7 @@ public class BattleBot {
                 System.out.println("Battle ended!");
             } else {
                 // set user emoji to hurt
-                userEmoji = pickString("\uD83D\uDE23", "\uD83D\uDE1F", "\uD83D\uDE22", "\uD83E\uDD12", "\uD83E\uDD15", "\uD83E\uDD22");
+                userEmoji = helperFunctions.pickString("\uD83D\uDE23", "\uD83D\uDE1F", "\uD83D\uDE22", "\uD83E\uDD12", "\uD83E\uDD15", "\uD83E\uDD22");
                 healthBar = healthString(health, botHealth);
                 battleMessage.edit (userEmoji + ":" + healthBar + ":\uD83E\uDD16\nWhat do you do? >!attack >!heal >!run");
                 battleMessage.addReaction("⚔");
@@ -236,10 +235,10 @@ public class BattleBot {
             userEmoji = "\uD83D\uDCA5";
             // SHOW user punch (bot health has changed
             healthBar = healthString(health, botHealth);
-            battleMessage.edit (userEmoji + ":" + healthBar + ":\uD83E\uDD16\n" + pickString("coward ass! take this on ur way out!", "fuckin lame-o!", "pussy bitch! take this aye!", "oh so now u finna back down!?", "loser!"));
+            battleMessage.edit (userEmoji + ":" + healthBar + ":\uD83E\uDD16\n" + helperFunctions.pickString("coward ass! take this on ur way out!", "fuckin lame-o!", "pussy bitch! take this aye!", "oh so now u finna back down!?", "loser!"));
             if (health<=0) {
                 // set user emoji to skull, ghost, or upside down face
-                userEmoji = pickString("\uD83D\uDC80", "\uD83D\uDC7B", "\uD83D\uDE43");
+                userEmoji = helperFunctions.pickString("\uD83D\uDC80", "\uD83D\uDC7B", "\uD83D\uDE43");
                 // SHOW battle end
                 healthBar = healthString(health, botHealth);
                 battleMessage.edit(userEmoji + ":" + healthBar + ":\uD83E\uDD16\nYou fall to your bitch ass and die. Fuckin rest in pepperonis bro <:restinpepperoni:412754423257890827>");
@@ -267,11 +266,6 @@ public class BattleBot {
         } catch (InterruptedException e) {
             System.out.println("bot's broke, boss");
         }
-    }
-
-    private static String pickString(String... set) {
-        int rand = (int)(Math.random()*(set.length-1));
-        return set[rand];
     }
 
     private static String healthString(int uHealth, int botHealth) {

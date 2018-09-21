@@ -1,20 +1,21 @@
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EmojiParser {
+public class helperFunctions {
 
-    // From "<:emojiName:emojiID>", returns just :emojiName:
-    public static String name(String message) {
+    // From "<:emojiName:emojiID>", returns just emojiName
+    public static String name(String message, boolean loud) {
         String emojiName = "";
-
-        String fullEmoji = getFullEmoji(message);
-
-        int indexOfFirstColon = fullEmoji.indexOf(":");
-        String emojiNameWithId = fullEmoji.substring(indexOfFirstColon);
-        int indexOfSecondColon = emojiNameWithId.indexOf(":");
-
-        emojiName = emojiNameWithId.substring(0, indexOfSecondColon+1);
-
+        try {
+            int emojiStart = message.indexOf(":");
+            String tempMessage = message.substring(emojiStart+1);
+            int emojiEnd = tempMessage.indexOf(":");
+            emojiName = tempMessage.substring(0, emojiEnd);
+        } catch (StringIndexOutOfBoundsException e) {
+            if (loud) {
+                System.out.println("Emoji not found in message: " + message);
+            }
+        }
         return emojiName;
     }
 
@@ -22,7 +23,7 @@ public class EmojiParser {
     public static String id(String message) {
         String emojiID = "";
 
-        String fullEmoji = getFullEmoji(message);
+        String fullEmoji = getFullEmoji(message, false);
 
         int indexOfFirstColon = fullEmoji.indexOf(":");
         String emojiNameWithId = fullEmoji.substring(indexOfFirstColon+1);
@@ -33,8 +34,7 @@ public class EmojiParser {
     }
 
     // Parses out the first emoji in a message and returns "<:emojiName:emojiID>"
-    public static String getFullEmoji(String message) {
-
+    public static String getFullEmoji(String message, boolean loud) {
         String fullEmoji = "";
         try {
             int emojiStart = message.indexOf("<");
@@ -47,13 +47,15 @@ public class EmojiParser {
             if (matcher.find()) {
                 fullEmoji = matcher.group();
             }
-            else {
+            else if (loud) {
                 System.out.println("Emoji not found: " + fullEmoji);
-                fullEmoji = "";
             }
         }
-
-
         return fullEmoji;
+    }
+
+    public static String pickString(String... set) {
+        int rand = (int)(Math.random()*(set.length-1));
+        return set[rand];
     }
 }

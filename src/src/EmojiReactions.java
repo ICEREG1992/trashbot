@@ -36,14 +36,14 @@ public class EmojiReactions {
                     keyword = keyword.substring(1);
                     if (containsExclusively(messageToString, keyword)) {
                         try {
-                            message.addReaction(api.getCustomEmojiById(EmojiParser.id(emoji)).get());
+                            message.addReaction(api.getCustomEmojiById(helperFunctions.id(emoji)).get());
                         } catch (Exception e){
                             message.addReaction(emoji);
                         }
                     }
                 } else if (messageToString.contains(keyword)) {
                     try {
-                        message.addReaction(api.getCustomEmojiById(EmojiParser.id(emoji)).get());
+                        message.addReaction(api.getCustomEmojiById(helperFunctions.id(emoji)).get());
                     } catch (Exception e){
                         message.addReaction(emoji);
                     }
@@ -122,17 +122,21 @@ public class EmojiReactions {
     public static String getKeywords(org.javacord.api.entity.message.Message message) {
         // Parse message here so you don't have to later
         String messageToString = message.getContent().toLowerCase();
-        String messageEmoji;
-        try {
-            messageEmoji = EmojiParser.getFullEmoji(messageToString);
-        } catch (StringIndexOutOfBoundsException e) {
-            messageEmoji = messageToString.substring(messageToString.indexOf(" ") + 1);
+        String messageEmoji = helperFunctions.getFullEmoji(messageToString, true);
+        boolean halfEmoji = false;
+        if (messageEmoji.isEmpty()) {
+            messageEmoji = helperFunctions.name(messageToString, true);
+            halfEmoji = true;
         }
         String out = "__Keywords for " + messageEmoji + ":__";
 
-        //String emojiID = EmojiParser.id(fullEmoji);
+        //String emojiID = helperFunctions.id(fullEmoji);
         for (String emoji: emojisAndKeywords.keySet()) {
-            if(emoji.equals(messageEmoji)) {
+            String checkEmoji = emoji;
+            if (halfEmoji) {
+                checkEmoji = helperFunctions.name(emoji, false);
+            }
+            if(checkEmoji.equals(messageEmoji)) {
                 for (String keyword: emojisAndKeywords.get(emoji)) {
                     if (keyword.contains("§")) {
                         keyword = keyword.substring(1);
@@ -153,7 +157,7 @@ public class EmojiReactions {
         String userID = event.getMessage().getAuthor().getIdAsString();
 
         if(permissions.doesUserHaveAccess(userID, "blue")) {
-            String fullEmoji = EmojiParser.getFullEmoji(message);
+            String fullEmoji = helperFunctions.getFullEmoji(message, true);
 
             int keywordStart = message.indexOf("!add") + 5;
             int keywordEnd = message.indexOf(fullEmoji) - 1;
@@ -194,7 +198,7 @@ public class EmojiReactions {
         String userID = event.getMessage().getAuthor().getIdAsString();
 
         if(permissions.doesUserHaveAccess(userID, "blue")) {
-            String fullEmoji = EmojiParser.getFullEmoji(message);
+            String fullEmoji = helperFunctions.getFullEmoji(message, true);
 
             int keywordStart = message.indexOf("!add") + 9;
             int keywordEnd = message.indexOf(fullEmoji) - 1;
@@ -252,17 +256,21 @@ public class EmojiReactions {
         }
 
         String keyword;
-        String emoji = in.nextLine();
-        do {
-            keywords = new ArrayList<>();
-            keyword = in.nextLine();
-            while (!keyword.equals("")) {
-                keywords.add(keyword);
+        while(in.hasNextLine()) {
+            System.out.println("Line read!");
+            String emoji = in.nextLine();
+            do {
+                keywords = new ArrayList<>();
                 keyword = in.nextLine();
-            }
-            emojisAndKeywords.put(emoji,keywords);
-            emoji = in.nextLine();
-        } while (!emoji.equals("***"));
+                while (!keyword.equals("")) {
+                    keywords.add(keyword);
+                    keyword = in.nextLine();
+                }
+                emojisAndKeywords.put(emoji, keywords);
+                System.out.println("Emoji added!");
+                emoji = in.nextLine();
+            } while (!emoji.equals("***"));
+        }
 
         char[] tempCharacters = {' ', '?', ',', '.', '!', '\'', '\"', ':', ';', '…', '*', '_', '/', '~', '`', '-'};
         for (char c: tempCharacters) {

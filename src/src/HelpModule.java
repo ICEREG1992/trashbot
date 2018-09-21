@@ -24,6 +24,7 @@ public class HelpModule {
             "     !run\n" +
             "!todo <suggestion>\n" +
             "!todoclear <entry number>\n" +
+            "!speak" +
             "!fuck you\n" +
             "nah u good\n" +
             "!buckbumble\n" +
