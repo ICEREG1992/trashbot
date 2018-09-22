@@ -1,24 +1,50 @@
-apply plugin: 'application'
-apply plugin: 'idea'
+plugins {
+    id 'java'
+    id 'application'
+    id 'idea'
+}
+
+group 'test.trashbotStandalone'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
-    maven {
+    maven{
         url 'https://jitpack.io'
     }
 }
 
 dependencies {
-    compile 'org.javacord:javacord:3.0.0'
+    compile fileTree(dir: 'src', include:'*.jar'), 'org.javacord:javacord:3.0.0', files("${System.properties['java.home']}/../lib/tools.jar"), fileTree(dir: 'data', include:'*.dat')
+    testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
-mainClassName = 'trashbotBoot'
+mainClassName='trashbotBoot'
 
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-    options.incremental = true
+sourceSets{
+    main{
+        java{
+            srcDirs=['src/main']
+        }
+    }
+}
+
+tasks.withType(JavaCompile){
+    options.encoding='UTF-8'
+    options.incremental=true
+}
+
+task compile(type: JavaCompile) {
+    source=file('src')
 }
 
 run{
     standardInput=System.in
 }
+/*
+task runTrashBot(type: JavaExec){
+    main='trashbotBoot.java'
+    standardInput=System.in
+}*/
