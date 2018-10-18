@@ -63,7 +63,7 @@ set CMD_LINE_ARGS=%*
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\trashbotStandAlone-1.0-SNAPSHOT.jar;%APP_HOME%\lib\tools.jar;%APP_HOME%\lib\emojisReactionData.dat;%APP_HOME%\lib\helpList.dat;%APP_HOME%\lib\instantHumorContainsPhrases.dat;%APP_HOME%\lib\instantHumorEqualsPhrases.dat;%APP_HOME%\lib\lyrics.dat;%APP_HOME%\lib\permissions.dat;%APP_HOME%\lib\speakList.dat;%APP_HOME%\lib\todoList.dat;%APP_HOME%\lib\javacord-core-3.0.0.jar;%APP_HOME%\lib\javacord-api-3.0.0.jar;%APP_HOME%\lib\logging-interceptor-3.9.1.jar;%APP_HOME%\lib\okhttp-3.9.1.jar;%APP_HOME%\lib\jackson-databind-2.9.3.jar;%APP_HOME%\lib\nv-websocket-client-1.31.jar;%APP_HOME%\lib\log4j-api-2.11.0.jar;%APP_HOME%\lib\okio-1.13.0.jar;%APP_HOME%\lib\jackson-annotations-2.9.0.jar;%APP_HOME%\lib\jackson-core-2.9.3.jar
+set CLASSPATH=%APP_HOME%\lib\trashbotStandAlone-0.9.jar;%APP_HOME%\lib\tools.jar;%APP_HOME%\lib\emojisReactionData.dat;%APP_HOME%\lib\helpList.dat;%APP_HOME%\lib\instantHumorContainsPhrases.dat;%APP_HOME%\lib\instantHumorEqualsPhrases.dat;%APP_HOME%\lib\lyrics.dat;%APP_HOME%\lib\permissions.dat;%APP_HOME%\lib\speakList.dat;%APP_HOME%\lib\todoList.dat;%APP_HOME%\lib\javacord-core-3.0.0.jar;%APP_HOME%\lib\javacord-api-3.0.0.jar;%APP_HOME%\lib\logging-interceptor-3.9.1.jar;%APP_HOME%\lib\okhttp-3.9.1.jar;%APP_HOME%\lib\jackson-databind-2.9.3.jar;%APP_HOME%\lib\nv-websocket-client-1.31.jar;%APP_HOME%\lib\log4j-api-2.11.0.jar;%APP_HOME%\lib\okio-1.13.0.jar;%APP_HOME%\lib\jackson-annotations-2.9.0.jar;%APP_HOME%\lib\jackson-core-2.9.3.jar
 
 @rem Execute trashbotStandAlone
 "%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %TRASHBOT_STAND_ALONE_OPTS%  -classpath "%CLASSPATH%" trashbotBoot %CMD_LINE_ARGS%

@@ -14,15 +14,15 @@ public class trashbotBoot {
     private static String token = "";
 
     // Build and initialize modules to files
-    private static AccessRestriction permissions = new AccessRestriction("data\\permissions.dat");
+    private static AccessRestriction permissions = new AccessRestriction("data/permissions.dat");
     private static BattleBot battleBot = new BattleBot();
-    private static instantHumorEquals humorEquals = new instantHumorEquals("data\\instantHumorEqualsPhrases.dat");
-    private static instantHumorContains humorContains = new instantHumorContains("data\\instantHumorContainsPhrases.dat");
-    private static EmojiReactions emojiReactions = new EmojiReactions("data\\emojisReactionData.dat");
-    private static KaraokeBot karaokeBot = new KaraokeBot("data\\lyrics.dat", permissions);
-    private static TodoModule todoModule = new TodoModule("data\\todoList.dat");
-    private static HelpModule helpModule = new HelpModule("data\\helpList.dat");
-    private static SpeakModule speakModule = new SpeakModule("data\\speakList.dat");
+    private static instantHumorEquals humorEquals = new instantHumorEquals("data/instantHumorEqualsPhrases.dat");
+    private static instantHumorContains humorContains = new instantHumorContains("data/instantHumorContainsPhrases.dat");
+    private static EmojiReactions emojiReactions = new EmojiReactions("data/emojisReactionData.dat");
+    private static KaraokeBot karaokeBot = new KaraokeBot("data/lyrics.dat", permissions);
+    private static TodoModule todoModule = new TodoModule("data/todoList.dat");
+    private static HelpModule helpModule = new HelpModule("data/helpList.dat");
+    private static SpeakModule speakModule = new SpeakModule("data/speakList.dat");
 
     // Trashbot's user ID; this should be changed if this library is being used for a different bot.
     private static final long selfID = 450507364768940034L;
@@ -178,6 +178,13 @@ public class trashbotBoot {
                 channel.sendMessage(pickString("Hey hey, " + user + ", welcome to the server.", "whoa hey lol " + user + " just joined",
                         "hey, was that the wind or did I just hear " + user + " come in?", "lol u bitches better watch out, " + user + "'s here and they're ready to fuck shit up aye",
                         "yo sup " + user, "hey what's kickin, " + user + "?"));
+            });
+
+            api.addUserStartTypingListener(event -> {
+               if ((int) (Math.random() * 1000) == 1) {
+                   System.out.println("");
+                   event.getChannel().sendMessage("get ready for the dopest fuckin message you're about to ever read in your entire life");
+               }
             });
 
             api.addReactionAddListener(event -> {

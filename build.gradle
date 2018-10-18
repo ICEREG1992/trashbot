@@ -4,8 +4,16 @@ plugins {
     id 'idea'
 }
 
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'trashbotBoot'
+        )
+    }
+}
+
 group 'test.trashbotStandalone'
-version '1.0-SNAPSHOT'
+version '0.9'
 
 sourceCompatibility = 1.8
 
