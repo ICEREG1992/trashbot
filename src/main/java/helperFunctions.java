@@ -89,4 +89,12 @@ public class helperFunctions {
             System.out.println("bot's broke, boss");
         }
     }
+
+    public static void botWaitLong() {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            System.out.println("bot's broke, boss");
+        }
+    }
 }

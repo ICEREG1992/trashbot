@@ -5,9 +5,8 @@ import org.javacord.api.entity.message.Reaction;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.event.message.reaction.ReactionAddEvent;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class KaraokeManager {
@@ -68,7 +67,7 @@ public class KaraokeManager {
     private void printToFile(String lyrics) {
         PrintWriter out = null;
         try {
-            out = new PrintWriter(this.lyricsFile);
+            out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.lyricsFile), StandardCharsets.UTF_8));
         } catch (FileNotFoundException e) {
             System.out.println("File " + this.lyricsFile + " not found during save.");
         }
@@ -80,8 +79,8 @@ public class KaraokeManager {
     private Queue<String> getLyrics() {
         Scanner fileReader = null;
         try {
-            fileReader = new Scanner(lyricsFile);
-        } catch (FileNotFoundException e) {
+            fileReader = new Scanner(lyricsFile, StandardCharsets.UTF_8).useDelimiter("\n");
+        } catch (IOException e) {
             System.out.println("File " + this.lyricsFile + " not found during load.");
         }
         Queue<String> lyricsQueue = new LinkedList<>();

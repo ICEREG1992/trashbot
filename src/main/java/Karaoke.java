@@ -29,6 +29,8 @@ public class Karaoke {
         helperFunctions.botWait();
         this.nextLine = lyricsQueue.remove();
         channel.sendMessage(this.nextLine);
+        this.nextLine = lyricsQueue.remove();
+        channel.sendMessage(this.nextLine);
     }
 
     public void run(String message) {

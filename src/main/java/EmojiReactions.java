@@ -2,9 +2,8 @@ import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.event.message.MessageCreateEvent;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class EmojiReactions {
@@ -108,6 +107,9 @@ public class EmojiReactions {
                     case "!remove":
                         out = removeKeyword(event, permissions);
                         break;
+
+                    case "!printall":
+                        out = printAllKeywords(event, permissions);
 
                     default:
                         out = "Command not recognized."; // this line should never ever be reached
@@ -220,6 +222,24 @@ public class EmojiReactions {
         }
     }
 
+    private static String printAllKeywords(MessageCreateEvent event, AccessRestriction permissions) {
+        String message = event.getMessage().getContent();
+        String userID = event.getMessage().getAuthor().getIdAsString();
+        String out = "**Here ya go, bud.**\n\n";
+        if (AccessRestriction.doesUserHaveAccess(userID, "blue")) {
+            for (String key : emojisAndKeywords.keySet()) {
+                out += "__" + key + "__\n";
+                for (String emoji : emojisAndKeywords.get(key)) {
+                    out += emoji + "\n";
+                }
+            }
+            out += "\n";
+        } else {
+            out = "You need the blue keycard to use that command.";
+        }
+        return out;
+    }
+
     private static boolean containsExclusively(String line, String word) {
         boolean contains = false;
 
@@ -277,22 +297,23 @@ public class EmojiReactions {
     }
 
     // Saves all changes made to the emojiReactions keywords and such.
-    public static String save() {
+    private static void save() {
         PrintWriter out = null;
         try {
-            out = new PrintWriter(file);
+            out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
         } catch (FileNotFoundException e) {
             System.out.println("File " + file + " not found: ");
         }
-        for (String emoji : emojisAndKeywords.keySet()) {
-            out.println(emoji);
-            for (String keyword : emojisAndKeywords.get(emoji)) {
-                out.println(keyword);
+        if (out != null) {
+            for (String emoji : emojisAndKeywords.keySet()) {
+                out.println(emoji);
+                for (String keyword : emojisAndKeywords.get(emoji)) {
+                    out.println(keyword);
+                }
+                out.println();
             }
-            out.println();
+            out.println("***");
+            out.close();
         }
-        out.println("***");
-        out.close();
-        return "New EmojiReaction data successfully saved.";
     }
 }

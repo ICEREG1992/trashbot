@@ -3,9 +3,8 @@ import org.javacord.api.event.message.MessageCreateEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class TodoModule {
@@ -50,7 +49,7 @@ public class TodoModule {
     public static String save() {
         PrintWriter out = null;
         try {
-            out = new PrintWriter(file);
+            out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
         } catch (FileNotFoundException e) {
             System.out.println("File " + file + " not found: ");
         }
@@ -66,8 +65,8 @@ public class TodoModule {
     public static void loadTodo() {
         Scanner fileReader = null;
         try {
-            fileReader = new Scanner(file);
-        } catch (FileNotFoundException e) {
+            fileReader = new Scanner(file, StandardCharsets.UTF_8).useDelimiter("\n");
+        } catch (IOException e) {
             System.out.println("File " + file + " not found: ");
         }
         while (fileReader.hasNextLine()) {

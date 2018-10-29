@@ -25,15 +25,12 @@ public class trashbotBoot {
     private static KaraokeManager karaokeBot = new KaraokeManager("data" + fileSep + "lyrics.dat", permissions);
     private static TodoModule todoModule = new TodoModule("data" + fileSep + "todoList.dat");
     private static HelpModule helpModule = new HelpModule("data" + fileSep + "helpList.dat");
-    private static SpeakModule speakModule = new SpeakModule("data" + fileSep + "speakList.dat");
+    private static SpeakManager speakModule = new SpeakManager("data" + fileSep + "speakList.dat");
     private static UptimeModule uptimeModule = new UptimeModule("data" + fileSep + "recordUptime.dat");
 
     private static final Logger botLogger = LoggerFactory.getLogger(trashbotBoot.class);
 
     public static void main(String[] args) {
-        // Scanner object for reading system input
-
-
         // Read data from files
         instantHumorEquals.prepareInstantHumorEqualsKeyPhrases();
         instantHumorContains.prepareInstantHumorContainsKeyPhrases();
@@ -41,10 +38,9 @@ public class trashbotBoot {
         AccessRestriction.loadPermissions();
         TodoModule.loadTodo();
         HelpModule.loadHelp();
-        SpeakModule.loadMessages();
         UptimeModule.loadUptime();
 
-        //Prompts for the token
+        //Prompt for the token
 
         System.out.println("Token: ");
         Scanner reader = new Scanner(System.in);

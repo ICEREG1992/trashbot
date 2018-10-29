@@ -1,9 +1,8 @@
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.event.message.MessageCreateEvent;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -31,7 +30,7 @@ public class instantHumorEquals {
             if(messageToString.equals(keyPhrase)) {
                 if(messageToString.equals("/rule34")) {
                     if ((int) (Math.random() * 4) == 1) {
-                        botWaitLong();
+                        helperFunctions.botWaitLong();
                         channel.sendMessage("That's fucked.");
                     }
                 } else if (message.getAuthor().getId() == 473760382616600597L && messageToString.equals("shut the fuck up")) {
@@ -43,21 +42,13 @@ public class instantHumorEquals {
         }
         if (messageToString.startsWith("!equalsadd ") && AccessRestriction.doesUserHaveAccess(userID, "blue")) {
             String keyword = messageToString.substring(messageToString.indexOf(" ") + 1, messageToString.indexOf("§") - 1);
-            String response = message.getContent().substring(messageToString.indexOf("§")+2);
+            String response = message.getContent().substring(messageToString.indexOf("§") + 2);
             keyPhrases.put(keyword, response);
             save();
         } else if (messageToString.startsWith("!equalsremove ") && AccessRestriction.doesUserHaveAccess(userID, "blue")) {
             String keyword = messageToString.substring(messageToString.indexOf(" ") + 1);
             keyPhrases.remove(keyword);
             save();
-        }
-    }
-
-    private static void botWaitLong() {
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            System.out.println("bot's broke, boss");
         }
     }
 
@@ -68,8 +59,8 @@ public class instantHumorEquals {
 
         // Creates a new scanner item to read from the file
         try {
-            in = new Scanner(file);
-        } catch (FileNotFoundException e) {
+            in = new Scanner(file, StandardCharsets.UTF_8).useDelimiter("\n");
+        } catch (IOException e) {
             System.out.println("File not found error: " + e);
         }
 
@@ -96,7 +87,7 @@ public class instantHumorEquals {
     public static void save() {
         PrintWriter out = null;
         try {
-            out = new PrintWriter(file);
+            out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
         } catch (FileNotFoundException e) {
             System.out.println("Error creating filewriter: " + e);
         }
@@ -106,7 +97,7 @@ public class instantHumorEquals {
             out.println(keyPhrases.get(oldKey) + "\n");
         }
 
-        out.println("\n***");
+        out.println("***");
 
         out.close();
     }

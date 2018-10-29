@@ -4,6 +4,7 @@ import org.javacord.api.entity.message.Reaction;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.event.message.reaction.ReactionAddEvent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,10 +44,14 @@ public class BattleManager {
     }
 
     public void cleanBattles() {
+        ArrayList<String> cleanStrings = new ArrayList<>();
         for (String userID : battleMap.keySet()) {
             if (battleMap.get(userID).isDead()) {
-                battleMap.remove(userID);
+                cleanStrings.add(userID);
             }
+        }
+        for (String clean : cleanStrings) {
+            battleMap.remove(clean);
         }
     }
 

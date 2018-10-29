@@ -1,6 +1,5 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class AccessRestriction {
@@ -76,8 +75,8 @@ public class AccessRestriction {
 
         try {
             //in = new Scanner(file, "UTF-8").useDelimiter("\n");
-            in = new Scanner(file);
-        } catch (FileNotFoundException e) {
+            in = new Scanner(file, StandardCharsets.UTF_8).useDelimiter("\n");
+        } catch (IOException e) {
             System.out.println("File " + file + " not found: ");
         }
         if (in.hasNextLine()) {
@@ -103,7 +102,7 @@ public class AccessRestriction {
     private static String save() {
         PrintWriter out = null;
         try {
-            out = new PrintWriter(file);
+            out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
         } catch (FileNotFoundException e) {
             System.out.println("File " + file + " not found: ");
         }
