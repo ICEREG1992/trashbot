@@ -1,9 +1,8 @@
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
-import org.javacord.api.entity.message.Reaction;
 import org.javacord.api.event.message.MessageCreateEvent;
-import org.javacord.api.event.message.reaction.ReactionAddEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -14,8 +13,9 @@ public class KaraokeManager {
     private Map<String, Karaoke> karaokeMap = new HashMap<>();
     private static AccessRestriction permissions = null;
     private File lyricsFile;
+    private static final Logger logger = LogManager.getLogger(KaraokeManager.class);
 
-    public KaraokeManager(String lyricsFilename, AccessRestriction perms) {
+    KaraokeManager(String lyricsFilename, AccessRestriction perms) {
         // initialize file to filename given in constructor
         this.lyricsFile = new File(lyricsFilename);
         // set permissions
@@ -30,14 +30,22 @@ public class KaraokeManager {
 
         if (messageToString.equals("!karaoke")) {
             addKaraoke(channel);
+            if (event.getServer().isPresent()) {
+                logger.info("Karaoke added in " + event.getServer().get().getId());
+            }
+
         } else if (karaokeMap.containsKey(channelID) && !karaokeMap.get(channelID).isDead()) {
             sendToKaraoke(channelID, message.getContent());
+            if (messageToString.equals("!exit")) {
+                cleanKaraoke();
+            }
         } else if (messageToString.startsWith("!givelyrics ")) {
             String userID = event.getMessage().getAuthor().getIdAsString();
             if (permissions.doesUserHaveAccess(userID, "blue")) {
                 String lyrics = message.getContent().substring(messageToString.indexOf(" ") + 1);
                 printToFile(lyrics);
                 channel.sendMessage("New lyrics loaded!");
+                logger.info("New lyrics added by " + message.getAuthor().getName() + ": \"" + lyrics.substring(0, lyrics.indexOf("\n")) + "\"...");
             } else {
                 channel.sendMessage("Sorry, you need to have the blue keycard to use that command.");
             }
@@ -53,9 +61,10 @@ public class KaraokeManager {
     }
 
     private void cleanKaraoke() {
-        for (String userID : karaokeMap.keySet()) {
-            if (karaokeMap.get(userID).isDead()) {
-                karaokeMap.remove(userID);
+        for (String channelID : karaokeMap.keySet()) {
+            if (karaokeMap.get(channelID).isDead()) {
+                karaokeMap.remove(channelID);
+                logger.info("Karaoke ended in " + channelID);
             }
         }
     }
@@ -69,11 +78,12 @@ public class KaraokeManager {
         try {
             out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(this.lyricsFile), StandardCharsets.UTF_8));
         } catch (FileNotFoundException e) {
-            System.out.println("File " + this.lyricsFile + " not found during save.");
+            logger.error("File " + this.lyricsFile + " not found during save.");
         }
-        out.println(lyrics);
-        out.close();
-        System.out.println("New lyrics data saved.");
+        if (out != null) {
+            out.println(lyrics);
+            out.close();
+        }
     }
 
     private Queue<String> getLyrics() {
@@ -81,13 +91,16 @@ public class KaraokeManager {
         try {
             fileReader = new Scanner(lyricsFile, StandardCharsets.UTF_8).useDelimiter("\n");
         } catch (IOException e) {
-            System.out.println("File " + this.lyricsFile + " not found during load.");
+            logger.error("File " + this.lyricsFile + " not found during load.");
         }
         Queue<String> lyricsQueue = new LinkedList<>();
-        while (fileReader.hasNextLine()) {
-            lyricsQueue.add(fileReader.nextLine());
+        if (fileReader != null) {
+            while (fileReader.hasNextLine()) {
+                lyricsQueue.add(fileReader.nextLine());
+            }
+            fileReader.close();
         }
-        fileReader.close();
+        logger.info("Lyrics successfully loaded for Karaoke.");
         return lyricsQueue;
     }
 }

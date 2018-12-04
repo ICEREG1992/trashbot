@@ -1,22 +1,25 @@
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class instantHumorContains {
 
     // hashmap to store <prompt phrase, reaction phrase>
-    private static Map<String, String> keyPhrases = new HashMap<>();
-    private static AccessRestriction permissions = null;
-    private static File file;
+    private Map<String, ArrayList<String>> keyPhrases = new HashMap<>();
+    private AccessRestriction permissions;
+    private File file;
+    private static final Logger logger = LogManager.getLogger(instantHumorContains.class);
 
-    public instantHumorContains(String filename, AccessRestriction permissions) {
+
+    instantHumorContains(String filename, AccessRestriction permissions) {
         this.permissions = permissions;
         this.file = new File(filename);
+        prepareInstantHumorContainsKeyPhrases();
     }
 
     public void run(MessageCreateEvent event) {
@@ -33,82 +36,106 @@ public class instantHumorContains {
                 } else if (messageToString.contains("<@450507364768940034>")) {
                     channel.sendMessage(helperFunctions.pickString("you called?", "that's me!", "what's up", "you called?", "you called?"));
                 } else {
-                    channel.sendMessage(keyPhrases.get(keyPhrase));
+                    channel.sendMessage(helperFunctions.pickString(keyPhrases.get(keyPhrase)));
                 }
             }
         }
         if (messageToString.contains("black")) {
-            if (message.getServer().get().getId() == 141643881723723777L) {
-                if ((int) (Math.random() * 4) == 1) {
-                    System.out.println("In The Witness server: \"race thing\" message triggered.");
+            if (message.getServer().isPresent() && message.getServer().get().getId() == 141643881723723777L) {
+                if ((int) (Math.random() * 5) == 1) {
+                    logger.info("In The Witness server: \"race thing\" message triggered.");
                     channel.sendMessage("why you gotta make it a race thing");
                 } else {
-                    System.out.println("In The Witness server: \"race thing\" message not triggered.");
+                    logger.info("In The Witness server: \"race thing\" message not triggered.");
                 }
             } else {
-                System.out.println("In " + message.getServer().get().getName() + ": \"race thing\" message triggered.");
+                logger.info("In " + message.getServer().get().getName() + ": \"race thing\" message triggered.");
                 channel.sendMessage("why you gotta make it a race thing");
             }
         }
-        if (messageToString.startsWith("!containsadd ") && AccessRestriction.doesUserHaveAccess(userID, "blue")) {
+        if (messageToString.startsWith("!containsadd ") && permissions.doesUserHaveAccess(userID, "blue")) {
             String keyword = messageToString.substring(messageToString.indexOf(" ") + 1, messageToString.indexOf("§") - 1);
             String response = message.getContent().substring(messageToString.indexOf("§") + 2);
-            keyPhrases.put(keyword, response);
+            if (keyPhrases.containsKey(keyword)) {
+                keyPhrases.get(keyword).add(response);
+                logger.info("New contains response for \"" + keyword + "\" added: \"" + response + "\"");
+            } else {
+                ArrayList<String> addList = new ArrayList<>();
+                addList.add(response);
+                keyPhrases.put(keyword, addList);
+                logger.info("New contains keyword added: \"" + keyword + "\" with response \"" + response + "\"");
+            }
             save();
-        } else if (messageToString.startsWith("!containsremove ") && AccessRestriction.doesUserHaveAccess(userID, "blue")) {
+        } else if (messageToString.startsWith("!containsremove ") && permissions.doesUserHaveAccess(userID, "blue")) {
             String keyword = messageToString.substring(messageToString.indexOf(" ") + 1);
             keyPhrases.remove(keyword);
+            logger.info("Contains responses for \"" + keyword + "\" has been removed.");
             save();
         }
     }
 
-    public static void prepareInstantHumorContainsKeyPhrases() {
+    private void prepareInstantHumorContainsKeyPhrases() {
         // This boolean is to keep track of whether the content in the destination file contains any information.
         boolean hasAnyContent = true;
         Scanner in = null;
 
         // Creates a new scanner item to read from the file
         try {
-            in = new Scanner(file, "UTF-8").useDelimiter("\n");
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found error: " + e);
+            in = new Scanner(file, StandardCharsets.UTF_8).useDelimiter("\n");
+        } catch (IOException e) {
+            logger.error("File not found error: " + e);
         }
 
-        // Reads in only the first line of the file
-        String key = in.nextLine();
-        String value = "";
+        if (in != null) {
+            try {
+                // Reads in only the first line of the file
+                String key = in.nextLine();
 
-        // If the first line is empty or contains the escape sequence (***) then there is no content in the file.
-        if(key.equals("***") || key.equals("")) {
-            hasAnyContent = false;
-        }
+                // If the first line is empty or contains the escape sequence (***) then there is no content in the file.
+                if(key.equals("***") || key.equals("")) {
+                    hasAnyContent = false;
+                }
 
-        // Loops until it reaches the escape sequence
-        while(hasAnyContent && !key.equals("***")) {
-            value = in.nextLine();
-            in.nextLine();
-            keyPhrases.put(key, value);
-            key = in.nextLine();
+                if (hasAnyContent) {
+                    while (!key.equals("***")) {
+                        ArrayList<String> addList = new ArrayList<>();
+                        String value = in.nextLine();
+                        while (!value.equals("")) {
+                            addList.add(value);
+                            value = in.nextLine();
+                        }
+                        this.keyPhrases.put(key, addList);
+                        key = in.nextLine();
+
+                    }
+                }
+                logger.info("Contains phrases successfully loaded.");
+            } catch (NoSuchElementException e) {
+                logger.error("Incorrect formatting in " + this.file.getName() + ", correctly formatted entries have been loaded.");
+            }
+            in.close();
         }
-        in.close();
     }
 
     // Saves the current data in keyPhrases to file.
-    public static void save() {
+    private void save() {
         PrintWriter out = null;
         try {
             out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
         } catch (FileNotFoundException e) {
-            System.out.println("Error creating filewriter: " + e);
+            logger.error("Error creating filewriter: " + e);
         }
 
-        for (String oldKey: keyPhrases.keySet()) {
-            out.println(oldKey);
-            out.println(keyPhrases.get(oldKey) + "\n");
+        if (out != null) {
+            for (String oldKey : keyPhrases.keySet()) {
+                out.println(oldKey);
+                for (String response : keyPhrases.get(oldKey)) {
+                    out.println(response);
+                }
+                out.println();
+            }
+            out.println("***");
+            out.close();
         }
-
-        out.println("***");
-
-        out.close();
     }
 }

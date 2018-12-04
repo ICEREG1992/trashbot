@@ -1,11 +1,4 @@
-import org.javacord.api.entity.channel.Channel;
 import org.javacord.api.entity.channel.TextChannel;
-import org.javacord.api.entity.message.Message;
-import org.javacord.api.entity.message.Reaction;
-import org.javacord.api.event.message.MessageCreateEvent;
-
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Karaoke {
@@ -13,13 +6,11 @@ public class Karaoke {
     private Queue<String> lyricsQueue;
     private TextChannel karaokeChannel;
     private String nextLine;
-    private String uInput;
-    private static AccessRestriction permissions = null;
 
     // active is true when a song is currently being sung
     private boolean active;
 
-    public Karaoke(TextChannel channel, Queue<String> lyrics) {
+    Karaoke(TextChannel channel, Queue<String> lyrics) {
         this.active = true;
         this.karaokeChannel = channel;
         this.lyricsQueue = lyrics;
@@ -29,11 +20,11 @@ public class Karaoke {
         helperFunctions.botWait();
         this.nextLine = lyricsQueue.remove();
         channel.sendMessage(this.nextLine);
-        this.nextLine = lyricsQueue.remove();
-        channel.sendMessage(this.nextLine);
+        run(this.nextLine);
     }
 
     public void run(String message) {
+        String uInput;
         if (this.active) {
             if (message.equals("!exit")) {
                 karaokeChannel.sendMessage("yeah, i get kinda bored there too. thanks for singing with me.");
@@ -49,8 +40,9 @@ public class Karaoke {
                 ArrayList<String> uWords = splitIntoWords(uLine);
 
                 nextLine = lyricsQueue.remove();
-                String formatLine = removePunctuation(nextLine);
+                String formatLine = formatForScan(nextLine);
                 ArrayList<String> formatWords = splitIntoWords(formatLine);
+                ArrayList<String> words = splitIntoWords(nextLine);
 
                 // filter any garbage first words from the user line
                 // if the first word in the user line is not equal to the real line, but that word is actually contained in the real line,
@@ -62,6 +54,7 @@ public class Karaoke {
                 } else if (!isStringSimilar(uWords.get(0), formatWords.get(0)) && formatWords.contains(uWords.get(0))) {
                     while (!isStringSimilar(uWords.get(0), formatWords.get(0))) {
                         formatWords.remove(0);
+                        words.remove(0);
                     }
                 }
 
@@ -73,12 +66,13 @@ public class Karaoke {
                     while (uWords.size() > 0 && formatWords.size() > 0 && isStringSimilar(uWords.get(0), formatWords.get(0))) {
                         uWords.remove(0);
                         formatWords.remove(0);
+                        words.remove(0);
                     }
                     // if there were words left over, print the rest of the line
                     if (formatWords.size() > 0) {
-                        nextLine = formatWords.get(0);
+                        nextLine = words.get(0);
                         for (int i = 1; i < formatWords.size(); i++) {
-                            nextLine = nextLine.concat(" " + formatWords.get(i));
+                            nextLine = nextLine.concat(" " + words.get(i));
                         }
                     }
                     // if there weren't words left over, print the next line.
@@ -106,7 +100,7 @@ public class Karaoke {
         }
     }
 
-    public boolean isDead() {
+    boolean isDead() {
         return !active;
     }
 
@@ -116,31 +110,31 @@ public class Karaoke {
 
     // removes characters if there are more than 1 in a row
     private static String removeElongation(String line) {
-        String out = "";
+        StringBuilder outString = new StringBuilder();
         char previousChar = ' ';
         for (int i = 0; i < line.length(); i++) {
             char currentChar = line.charAt(i);
             if (currentChar != previousChar) {
-                out+=currentChar;
+                outString.append(currentChar);
                 previousChar = currentChar;
             }
         }
-        return out;
+        return outString.toString();
     }
 
     // removes a specific set of characters from a string
     // aids in formatting for scan
     private static String removePunctuation(String line) {
-        String out = "";
+        StringBuilder outString = new StringBuilder();
         for (int i = 0; i < line.length(); i++) {
             char currentChar = line.charAt(i);
             if (Character.isLetter(currentChar) || currentChar=='(' || currentChar==')' || currentChar==' ' || currentChar=='？' || currentChar=='、') {
-                out+=currentChar;
+                outString.append(currentChar);
             } else if (i == line.length()-1 && (currentChar=='?' || currentChar=='!')) {
-                out+=currentChar;
+                outString.append(currentChar);
             }
         }
-        return out;
+        return outString.toString();
     }
 
     // formats a string to make it easier to scan to compare to lyrics-- makes karaoke more forgiving for typos and elongations and extra punctuation
@@ -173,18 +167,20 @@ public class Karaoke {
             match = true;
         } else if (a.length() > 1 && b.length() > 1 && a.charAt(0) == b.charAt(0) && a.charAt(1) == b.charAt(1)) {
             match = true;
+        } else if (a.length() > 2 && b.length() > 2 && a.charAt(aLength-3) == b.charAt(bLength-3) && a.charAt(aLength-2) == b.charAt(bLength-2) && a.charAt(aLength-1) == b.charAt(bLength-1)) {
+            match = true;
         }
         return match;
     }
 
     private static boolean isUppercase(String line) {
-        boolean uppercase = true;
+        int buffer = 3;
         for (int i = 0; i < line.length(); i++) {
             if (Character.isAlphabetic(line.charAt(i)) && Character.isLowerCase(line.charAt(i))) {
-                uppercase = false;
+                buffer -= 1;
             }
         }
-        return uppercase;
+        return buffer >= 0;
     }
 
     private static int countExclamationMarks(String line) {

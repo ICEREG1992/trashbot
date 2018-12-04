@@ -1,7 +1,7 @@
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.event.message.MessageCreateEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -10,11 +10,12 @@ import java.util.*;
 public class TodoModule {
 
     private static File file;
-    private static final Logger botLogger = LoggerFactory.getLogger(TodoModule.class);
+    private static final Logger botLogger = LogManager.getLogger(TodoModule.class);
     private static ArrayList<String> todoList = new ArrayList<>();
 
-    public TodoModule(String filename) {
+    TodoModule(String filename) {
         file = new File(filename);
+        loadTodo();
     }
 
     public void run(MessageCreateEvent event) {
@@ -25,53 +26,60 @@ public class TodoModule {
         if (messageToString.startsWith("!todo ")) {
             String todo = messageToString.substring(messageToString.indexOf(" ") + 1);
             todoList.add(todo);
-            save();
             channel.sendMessage("added to todo list. get to work bud");
             botLogger.info("New item added to todo list: " + todo);
+            save();
         } else if (messageToString.startsWith("!todoclear ")) {
             int index = Integer.parseInt(messageToString.substring(messageToString.indexOf(" ") + 1)) - 1;
             if (index >= 0 && index < todoList.size()) {
-                botLogger.info("Item removed from todo list: " + todoList.get(index));
+                String remove = todoList.get(index);
                 todoList.remove(index);
+                botLogger.info("Item removed from todo list: " + remove);
             }
             save();
             channel.sendMessage("removed from todo list. good job man im proud of ya");
         } else if (messageToString.equals("!todo")) {
             channel.sendMessage("ok here's what needs to be done");
-            String out = "";
+            StringBuilder outString = new StringBuilder();
             for (int i = 0; i < todoList.size(); i++) {
-                out+= i+1 + ": " + todoList.get(i) + "\n";
+                outString.append(i+1).append(": ").append(todoList.get(i)).append("\n");
             }
-            channel.sendMessage(out);
+            if (todoList.size() == 0) {
+                outString.append("uuuhhhhh.... nothing! nice, man. get some sleep.");
+            }
+            channel.sendMessage(outString.toString());
         }
     }
 
-    public static String save() {
+    private void save() {
         PrintWriter out = null;
         try {
             out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
         } catch (FileNotFoundException e) {
-            System.out.println("File " + file + " not found: ");
+            botLogger.error("File " + file + " not found: ");
         }
-        for (String objective : todoList) {
-            out.println(objective);
+        if (out != null) {
+            for (String objective : todoList) {
+                out.println(objective);
+            }
+            out.close();
+            botLogger.info("New todo data saved.");
         }
-
-        out.close();
-        botLogger.info("New todo data saved.");
-        return "New todo data saved.";
     }
 
-    public static void loadTodo() {
+    private void loadTodo() {
         Scanner fileReader = null;
         try {
             fileReader = new Scanner(file, StandardCharsets.UTF_8).useDelimiter("\n");
         } catch (IOException e) {
-            System.out.println("File " + file + " not found: ");
+            botLogger.error("File " + file + " not found: ");
         }
-        while (fileReader.hasNextLine()) {
-            todoList.add(fileReader.nextLine());
+        if (fileReader != null) {
+            while (fileReader.hasNextLine()) {
+                todoList.add(fileReader.nextLine());
+            }
+            fileReader.close();
+            botLogger.info("Todo data successfully loaded.");
         }
-        botLogger.debug("Todo data loaded successfully.");
     }
 }

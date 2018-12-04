@@ -1,14 +1,19 @@
-import org.javacord.api.entity.channel.Channel;
+import com.vdurmont.emoji.EmojiParser;
 import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.server.Server;
+import org.javacord.api.entity.user.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.List;
 
 public class helperFunctions {
+    private static final Logger logger = LogManager.getLogger(EmojiReactions.class);
 
     // From "<:emojiName:emojiID>", returns just emojiName
-    public static String name(String message, boolean loud) {
+    static String name(String message) {
         String emojiName = "";
         try {
             int emojiStart = message.indexOf(":");
@@ -16,54 +21,68 @@ public class helperFunctions {
             int emojiEnd = tempMessage.indexOf(":");
             emojiName = tempMessage.substring(0, emojiEnd);
         } catch (StringIndexOutOfBoundsException e) {
-            if (loud) {
-                System.out.println("Emoji not found in message: " + message);
-            }
+            logger.warn("Emoji not found in message: " + message);
         }
         return emojiName;
     }
 
     // From "<:emojiName:emojiID>", returns just emojiID
-    public static String id(String message) {
-        String emojiID = "";
-
-        String fullEmoji = getFullEmoji(message, false);
+    static String id(String message) {
+        String fullEmoji = getFullEmoji(message);
 
         int indexOfFirstColon = fullEmoji.indexOf(":");
         String emojiNameWithId = fullEmoji.substring(indexOfFirstColon+1);
         int indexOfSecondColon = emojiNameWithId.indexOf(":");
+        int indexOfEndBracket = emojiNameWithId.indexOf(">");
 
-        emojiID = emojiNameWithId.substring(indexOfSecondColon + 1, emojiNameWithId.length()-1);
-        return emojiID;
+        return emojiNameWithId.substring(indexOfSecondColon + 1, indexOfEndBracket);
     }
 
-    // Parses out the first emoji in a message and returns "<:emojiName:emojiID>"
-    public static String getFullEmoji(String message, boolean loud) {
+    // Parses out the first custom emoji in a message and returns "<:emojiName:emojiID>"
+    // if there are no custom emojis in the message, return the first unicode emoji.
+    static String getFullEmoji(String message) {
         String fullEmoji = "";
-        try {
-            int emojiStart = message.indexOf("<");
-            int emojiEnd = message.indexOf(">") + 1;
-            fullEmoji = message.substring(emojiStart, emojiEnd);
-        } catch (StringIndexOutOfBoundsException e) {
-            Pattern pattern = Pattern.compile("[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]",
-                    Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
-            Matcher matcher = pattern.matcher(message);
-            if (matcher.find()) {
-                fullEmoji = matcher.group();
+        int emojiStart = message.indexOf("<:");
+        int emojiEnd = message.indexOf(">");
+        if (emojiStart < 0 || emojiEnd < 0) {
+            List<String> emojis = EmojiParser.extractEmojis(message);
+            if (!emojis.isEmpty()) {
+                fullEmoji = emojis.get(0);
             }
-            else if (loud) {
-                System.out.println("Emoji not found: " + fullEmoji);
-            }
+        } else {
+            fullEmoji = message.substring(emojiStart, emojiEnd + 1);
         }
+
+        if (fullEmoji.equals("")) {
+            logger.warn("No emoji found in message:" + message);
+        }
+
         return fullEmoji;
     }
 
-    public static String pickString(String... set) {
-        int rand = (int)(Math.random()*(set.length-1));
+    static long getFirstMentionID(Message message) {
+        List<User> mentions = message.getMentionedUsers();
+        User firstMention = mentions.get(0);
+        return firstMention.getId();
+    }
+
+    static String getFirstMentionName(Message message) {
+        List<User> mentions = message.getMentionedUsers();
+        User firstMention = mentions.get(0);
+        return firstMention.getName();
+    }
+
+    static String pickString(String... set) {
+        int rand = (int)(Math.random()*(set.length));
         return set[rand];
     }
 
-    public static TextChannel getGeneralChannel(Server server) {
+    static String pickString(ArrayList<String> set) {
+        int rand = (int)(Math.random() * (set.size()));
+        return set.get(rand);
+    }
+
+    static TextChannel getGeneralChannel(Server server) {
         TextChannel channel;
         // Get a channel to send the welcome message to
         if (server.getSystemChannel().isPresent()) {
@@ -76,25 +95,33 @@ public class helperFunctions {
             channel = server.getTextChannelsByNameIgnoreCase("casual").get(0);
         } else {
             channel = null;
-            System.out.println("A general channel was searched for in " + server.getName() + " but no suitable channel was found.");
+            logger.error("A general channel was searched for in " + server.getName() + " but no suitable channel was found.");
         }
         return channel;
     }
 
     // Method that pauses the bot for 1 second
-    public static void botWait() {
+    static void botWait() {
         try {
             Thread.sleep(1500);
         } catch (InterruptedException e) {
-            System.out.println("bot's broke, boss");
+            logger.error("Call to botWait threw " + e);
         }
     }
 
-    public static void botWaitLong() {
+    static void botWaitLong() {
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
-            System.out.println("bot's broke, boss");
+            logger.error("Call to botWaitLong threw " + e);
+        }
+    }
+
+    static void botWaitShort() {
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            logger.error("Call to botWaitShort threw " + e);
         }
     }
 }

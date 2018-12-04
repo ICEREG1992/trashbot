@@ -9,7 +9,7 @@ public class Speak {
     private TextChannel speakChannel;
     private int level;
 
-    public Speak(TextChannel channel, ArrayList<String> phrases) {
+    Speak(TextChannel channel, ArrayList<String> phrases) {
         this.active = true;
         this.speakChannel = channel;
         this.phrasesList = phrases;
@@ -83,7 +83,7 @@ public class Speak {
         }
     }
 
-    public boolean isDead() {
+    boolean isDead() {
         return !this.active;
     }
 
@@ -92,11 +92,11 @@ public class Speak {
      */
 
     private static String stringFlip(String in) {
-        String out = "";
+        StringBuilder outString = new StringBuilder();
         for (int i = in.length()-1; i >= 0; i--) {
-            out += in.charAt(i);
+            outString.append(in.charAt(i));
         }
-        return out;
+        return outString.toString();
     }
 
     private static String removeAny(ArrayList<String> strings) {

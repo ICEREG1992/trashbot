@@ -1,53 +1,54 @@
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class AccessRestriction {
-    private static File file;
+class AccessRestriction {
+    private File file;
+    private HashMap<String, Set<String>> permissions = new HashMap<>();
 
-    private static HashMap<String, Set<String>> permissions = new HashMap<>();
+    private static final Logger logger = LogManager.getLogger(AccessRestriction.class);
 
-    public AccessRestriction(String filename) {
+    AccessRestriction(String filename) {
         file = new File(filename);
+        loadPermissions();
     }
 
-    public static String addUser(String userID, String name, String accessLevel) {
-        String out;
+    void addUser(String userID, String name, String accessLevel) {
         if (permissions.containsKey(accessLevel)) {
             permissions.get(accessLevel).add(userID + "§" + name);
-            out = "User <@" + userID + "> added to permission " + accessLevel;
+            logger.info("User <@" + userID + "> added to permission " + accessLevel);
         } else {
             Set<String> tempAdd = new HashSet<>();
             tempAdd.add(userID + "§" + name);
             permissions.put(accessLevel, tempAdd);
-            out = "New keycard color created: " + accessLevel + ", user <@" + userID + "> has been added.";
+            logger.info("New keycard color created: " + accessLevel + ", user <@" + userID + "> has been added.");
         }
         save();
-        return out;
     }
 
-    public static String removeUser(String userID, String accessLevel) {
-        String out = "";
+    void removeUser(String userID, String accessLevel) {
         boolean found = false;
         for (String userIDAndName : permissions.get(accessLevel)) {
             if (userIDAndName.startsWith(userID)) {
                 found = true;
                 permissions.get(accessLevel).remove(userIDAndName);
-                out = "User <@" + userID + "> removed from permission " + accessLevel;
+                logger.info("User <@" + userID + "> removed from permission " + accessLevel);
                 if (permissions.get(accessLevel).size() == 0) {
                     permissions.remove(accessLevel);
-                    out+=". " + accessLevel + " is now empty, and has been deleted.";
+                    logger.info(". " + accessLevel + " is now empty, and has been deleted.");
                 }
             }
         }
         if (!found) {
-            out = "User <@" + userID + "> does not have that keycard!";
+            logger.warn("User <@" + userID + "> does not have that keycard!");
         }
         save();
-        return out;
     }
 
-    public static Set<String> getUsers(String accessLevel) {
+    Set<String> getUsers(String accessLevel) {
         Set<String> out = new HashSet<>();
         if (permissions.containsKey(accessLevel)) {
             out = permissions.get(accessLevel);
@@ -55,7 +56,7 @@ public class AccessRestriction {
         return out;
     }
 
-    public static boolean doesUserHaveAccess(String id, String... accessLevels) {
+    boolean doesUserHaveAccess(String id, String... accessLevels) {
         boolean found = false;
         for (String level : accessLevels) {
             Set<String> users = permissions.get(level);
@@ -68,7 +69,7 @@ public class AccessRestriction {
         return found;
     }
 
-    public static void loadPermissions() {
+    private void loadPermissions() {
         Scanner in = null;
 
         Set<String> users;
@@ -77,47 +78,53 @@ public class AccessRestriction {
             //in = new Scanner(file, "UTF-8").useDelimiter("\n");
             in = new Scanner(file, StandardCharsets.UTF_8).useDelimiter("\n");
         } catch (IOException e) {
-            System.out.println("File " + file + " not found: ");
+            logger.error("File " + file + " not found: ");
         }
-        if (in.hasNextLine()) {
-            String permissionLevel = in.nextLine();
+        if (in != null && in.hasNextLine()) {
+            try {
+                String permissionLevel = in.nextLine();
 
-            while(!permissionLevel.equals("***")) {
-                users = new HashSet<>();
-                String user = in.nextLine();
+                while (!permissionLevel.equals("***")) {
+                    users = new HashSet<>();
+                    String user = in.nextLine();
 
-                do {
-                    users.add(user);
-                    user = in.nextLine();
-                } while (!user.equals(""));
-                permissions.put(permissionLevel,users);
-                permissionLevel = in.nextLine();
+                    do {
+                        users.add(user);
+                        user = in.nextLine();
+                    } while (!user.equals(""));
+                    permissions.put(permissionLevel, users);
+                    permissionLevel = in.nextLine();
+                }
+                logger.info("Permissions successfully loaded.");
+            } catch (NoSuchElementException e) {
+                logger.error("Incorrect formatting in " + this.file.getName() + ", correctly formatted entries have been loaded.");
             }
+            in.close();
         }
-
-
-        System.out.println("Permissions successfully loaded.");
     }
 
-    private static String save() {
+    private void save() {
         PrintWriter out = null;
         try {
             out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
         } catch (FileNotFoundException e) {
-            System.out.println("File " + file + " not found: ");
+            logger.error("File " + file + " not found: ");
         }
 
-        for (Map.Entry<String, Set<String>> permissionLevel : permissions.entrySet()) {
-            String level = permissionLevel.getKey();
-            Set<String> members = permissionLevel.getValue();
-            out.println(level);
-            for (String name : members) {
-                out.println(name);
+        if (out != null) {
+            for (Map.Entry<String, Set<String>> permissionLevel : permissions.entrySet()) {
+                String level = permissionLevel.getKey();
+                Set<String> members = permissionLevel.getValue();
+                out.println(level);
+                for (String name : members) {
+                    out.println(name);
+                }
+                out.println();
             }
-            out.println();
+            out.print("***");
+            out.close();
         }
-        out.print("***");
-        out.close();
-        return "New permissions data successfully saved.";
+
+        logger.info("New permissions data saved.");
     }
 }

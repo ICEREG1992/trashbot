@@ -1,30 +1,40 @@
 import org.javacord.api.DiscordApi;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class EmojiReactions {
-    private static Map<String, ArrayList<String>> emojisAndKeywords = new HashMap<>();
-    private static File file = null;
-    private static AccessRestriction permissions = null;
+    private Map<String, ArrayList<String>> emojisAndKeywords = new HashMap<>();
+    private File file;
+    private AccessRestriction permissions;
+    private static final Logger logger = LogManager.getLogger(EmojiReactions.class);
 
     private static ArrayList<Character> acceptableCharacters = new ArrayList<>();
-
-    public EmojiReactions(String filename, AccessRestriction permissions) {
-        this.file = new File(filename);
-        this.permissions = permissions;
+    static {
+        final char[] tempCharacters = {' ', '?', ',', '.', '!', '\'', '\"', ':', ';', '…', '*', '_', '/', '~', '`', '-'};
+        for (char c: tempCharacters) {
+            acceptableCharacters.add(c);
+        }
     }
 
-    public void run(MessageCreateEvent event, DiscordApi api, AccessRestriction permissions) {
+    EmojiReactions(String filename, AccessRestriction permissions) {
+        this.file = new File(filename);
+        this.permissions = permissions;
+        prepareEmojiReactions();
+    }
+
+    public void run(MessageCreateEvent event, DiscordApi api) {
         addReactionsToMessages(event, api);
-        checkForEmojiReactionCommands(event, api);
+        checkForEmojiReactionCommands(event);
     }
 
     // Adds a reaction to a message
-    public static void addReactionsToMessages(MessageCreateEvent event, DiscordApi api) {
+    private void addReactionsToMessages(MessageCreateEvent event, DiscordApi api) {
         // Parse message here so you don't have to later
         org.javacord.api.entity.message.Message message = event.getMessage();
         String messageToString = message.getContent().toLowerCase();
@@ -34,9 +44,9 @@ public class EmojiReactions {
                 if (keyword.contains("§")) {
                     keyword = keyword.substring(1);
                     if (containsExclusively(messageToString, keyword)) {
-                        try {
+                        if (api.getCustomEmojiById(helperFunctions.id(emoji)).isPresent()) {
                             message.addReaction(api.getCustomEmojiById(helperFunctions.id(emoji)).get());
-                        } catch (Exception e){
+                        } else {
                             message.addReaction(emoji);
                         }
                     }
@@ -66,29 +76,22 @@ public class EmojiReactions {
        able to use the command. Ex:
 
        private static String newCommand(MessageCreateEvent event, Access Restriction permissions) {
-
             Your code here
-
             return "What you want the bot to put in the chat after the command has run";
        }
 
-
-       private static String
-
     2) Add a case to the switch case where the case is the name that you want to call the command
 
-    3) Add the command name to the ArrayList command names right here: ------------------------------------
-     */                                                                                                 //|
-                                                                                                        //|
-    private static void checkForEmojiReactionCommands(MessageCreateEvent event, DiscordApi api) {       //|
+    3) Add the command name to the ArrayList command names right here: ----------------------
+     */
+    private void checkForEmojiReactionCommands(MessageCreateEvent event) {
         // Parse message here so you don't have to later
-        TextChannel channel = event.getChannel();                                                       //|
-        org.javacord.api.entity.message.Message message = event.getMessage();                           //|
-        String messageToString = message.getContent().toLowerCase();                                    //|
-                                                                                                        //|
-        String out = "";                                                                                //|
-        ArrayList<String> commandNames = new ArrayList<>();                                             //|
-        commandNames.add("!keywords"); //<----------------------------------------------------
+        TextChannel channel = event.getChannel();
+        org.javacord.api.entity.message.Message message = event.getMessage();
+        String messageToString = message.getContent().toLowerCase();
+        String out = "";
+        ArrayList<String> commandNames = new ArrayList<>();
+        commandNames.add("!keywords");
         commandNames.add("!add");
         commandNames.add("!remove");
         commandNames.add("!printall");
@@ -110,6 +113,7 @@ public class EmojiReactions {
 
                     case "!printall":
                         out = printAllKeywords(event, permissions);
+                        break;
 
                     default:
                         out = "Command not recognized."; // this line should never ever be reached
@@ -121,47 +125,45 @@ public class EmojiReactions {
     }
 
     // Gets the keywords for an emoji
-    public static String getKeywords(org.javacord.api.entity.message.Message message) {
+    private String getKeywords(org.javacord.api.entity.message.Message message) {
         // Parse message here so you don't have to later
         String messageToString = message.getContent().toLowerCase();
-        String messageEmoji = helperFunctions.getFullEmoji(messageToString, true);
+        String messageEmoji = helperFunctions.getFullEmoji(messageToString);
         boolean halfEmoji = false;
         if (messageEmoji.isEmpty()) {
-            messageEmoji = helperFunctions.name(messageToString, true);
             halfEmoji = true;
-            if (messageEmoji.isEmpty()) {
-                halfEmoji = false;
-            }
         }
-        String out = "__Keywords for " + messageEmoji + ":__";
+        StringBuilder outString = new StringBuilder();
+        outString.append("__Keywords for ").append(messageEmoji).append(":__");
 
         for (String emoji: emojisAndKeywords.keySet()) {
             String checkEmoji = emoji;
             if (halfEmoji) {
-                checkEmoji = helperFunctions.name(emoji, false);
+                checkEmoji = helperFunctions.name(emoji);
             }
             if(checkEmoji.equals(messageEmoji)) {
+
                 for (String keyword: emojisAndKeywords.get(emoji)) {
                     if (keyword.contains("§")) {
                         keyword = keyword.substring(1);
                     }
-                    out += "\n" + keyword;
+                    outString.append("\n").append(keyword);
                 }
             }
         }
-
-        return out + "\n";
+        outString.append("\n");
+        return outString.toString();
     }
 
     // Adds a keyword to an emoji when the !add command is called.
     // Proper use:  !add keyword \<:customemoji:123456789012345678>
-    private static String addKeyword(MessageCreateEvent event, AccessRestriction permissions) {
+    private String addKeyword(MessageCreateEvent event, AccessRestriction permissions) {
         // Parse message here so you don't have to later
         String message = event.getMessage().getContent();
         String userID = event.getMessage().getAuthor().getIdAsString();
 
-        if(AccessRestriction.doesUserHaveAccess(userID, "blue")) {
-            String fullEmoji = helperFunctions.getFullEmoji(message, true);
+        if(permissions.doesUserHaveAccess(userID, "blue")) {
+            String fullEmoji = helperFunctions.getFullEmoji(message);
 
             int keywordStart = message.indexOf("!add") + 5;
             int keywordEnd = message.indexOf(fullEmoji) - 1;
@@ -173,7 +175,7 @@ public class EmojiReactions {
             if (!emojisAndKeywords.containsKey(fullEmoji)) {
                 ArrayList<String> tempAddArray = new ArrayList<>();
                 emojisAndKeywords.put(fullEmoji, tempAddArray);
-                System.out.println("New Emoji Added: " + fullEmoji);
+                logger.info("New Emoji Added: " + fullEmoji);
             }
 
             String newKeyWord = message.substring(keywordStart, keywordEnd);
@@ -189,7 +191,9 @@ public class EmojiReactions {
                 newKeyWord = newKeyWord.substring(1);
             }
 
-            return newKeyWord + " was added as a keyword for " + fullEmoji;
+            String out = newKeyWord + " was added as a keyword for " + fullEmoji;
+            logger.info(out);
+            return out;
         } else {
             return "You need the blue keycard to use that command.";
         }
@@ -197,12 +201,12 @@ public class EmojiReactions {
 
     // Removes a keyword from a certain reaction emoji.
     // Proper use:  !remove keyword <:customemoji:123456789012345678>
-    private static String removeKeyword(MessageCreateEvent event, AccessRestriction permissions) {
+    private String removeKeyword(MessageCreateEvent event, AccessRestriction permissions) {
         String message = event.getMessage().getContent();
         String userID = event.getMessage().getAuthor().getIdAsString();
 
-        if(AccessRestriction.doesUserHaveAccess(userID, "blue")) {
-            String fullEmoji = helperFunctions.getFullEmoji(message, true);
+        if(permissions.doesUserHaveAccess(userID, "blue")) {
+            String fullEmoji = helperFunctions.getFullEmoji(message);
 
             int keywordStart = message.indexOf("!add") + 9;
             int keywordEnd = message.indexOf(fullEmoji) - 1;
@@ -213,31 +217,33 @@ public class EmojiReactions {
             emojisAndKeywords.get(fullEmoji).remove("§" + oldKeyWord);
             if (emojisAndKeywords.get(fullEmoji).isEmpty()) {
                 emojisAndKeywords.remove(fullEmoji);
-                System.out.println("Emoji Removed -- No Keywords: " + fullEmoji);
+                logger.info("Emoji Removed -- No Keywords: " + fullEmoji);
             }
             save();
-            return "Successfully removed " + oldKeyWord + " as a keyword for \\" + fullEmoji;
+            String out = "Successfully removed " + oldKeyWord + " as a keyword for \\" + fullEmoji;
+            logger.info(out);
+            return out;
         } else {
             return "You need the blue keycard to use that command.";
         }
     }
 
-    private static String printAllKeywords(MessageCreateEvent event, AccessRestriction permissions) {
-        String message = event.getMessage().getContent();
+    private String printAllKeywords(MessageCreateEvent event, AccessRestriction permissions) {
         String userID = event.getMessage().getAuthor().getIdAsString();
-        String out = "**Here ya go, bud.**\n\n";
-        if (AccessRestriction.doesUserHaveAccess(userID, "blue")) {
+        StringBuilder outString = new StringBuilder();
+        outString.append("**Here ya go, bud.**\n\n");
+        if (permissions.doesUserHaveAccess(userID, "blue")) {
             for (String key : emojisAndKeywords.keySet()) {
-                out += "__" + key + "__\n";
+                outString.append("__").append(key).append("__\n");
                 for (String emoji : emojisAndKeywords.get(key)) {
-                    out += emoji + "\n";
+                    outString.append(emoji).append("\n");
                 }
             }
-            out += "\n";
+            outString.append("\n\n");
         } else {
-            out = "You need the blue keycard to use that command.";
+            outString = new StringBuilder("You need the blue keycard to use that command.");
         }
-        return out;
+        return outString.toString();
     }
 
     private static boolean containsExclusively(String line, String word) {
@@ -268,41 +274,44 @@ public class EmojiReactions {
 /*------------------------------------------Data Manipulation Functions-------------------------------------------*/
 
     // Reads in all current emoji data and sets up acceptableCharacters
-    public static void prepareEmojiReactions() {
+    private void prepareEmojiReactions() {
         ArrayList<String> keywords;
         Scanner in = null;
         try {
-            in = new Scanner(file, "UTF-8").useDelimiter("\n");
-        } catch (FileNotFoundException e) {
-            System.out.println("EmojiReactions was unable to locate the file: " + e);
+            in = new Scanner(file, StandardCharsets.UTF_8).useDelimiter("\n");
+        } catch (IOException e) {
+            logger.error("EmojiReactions was unable to locate the file " + e);
         }
 
-        String keyword;
-        String emoji = in.nextLine();
-            do {
-                keywords = new ArrayList<>();
-                keyword = in.nextLine();
-                while (!keyword.equals("")) {
-                    keywords.add(keyword);
+        if (in != null) {
+            try {
+                String keyword;
+                String emoji = in.nextLine();
+                do {
+                    keywords = new ArrayList<>();
                     keyword = in.nextLine();
-                }
-                emojisAndKeywords.put(emoji, keywords);
-                emoji = in.nextLine();
-            } while (!emoji.equals("***"));
-
-        final char[] tempCharacters = {' ', '?', ',', '.', '!', '\'', '\"', ':', ';', '…', '*', '_', '/', '~', '`', '-'};
-        for (char c: tempCharacters) {
-            acceptableCharacters.add(c);
+                    while (!keyword.equals("")) {
+                        keywords.add(keyword);
+                        keyword = in.nextLine();
+                    }
+                    emojisAndKeywords.put(emoji, keywords);
+                    emoji = in.nextLine();
+                } while (!emoji.equals("***"));
+                logger.info("Emojis and keywords successfully loaded.");
+            } catch (NoSuchElementException e) {
+                logger.error("Incorrect formatting in " + this.file.getName() + ", correctly formatted entries have been loaded.");
+            }
+            in.close();
         }
     }
 
     // Saves all changes made to the emojiReactions keywords and such.
-    private static void save() {
+    private void save() {
         PrintWriter out = null;
         try {
             out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
         } catch (FileNotFoundException e) {
-            System.out.println("File " + file + " not found: ");
+            logger.error("File " + file + " not found: ");
         }
         if (out != null) {
             for (String emoji : emojisAndKeywords.keySet()) {

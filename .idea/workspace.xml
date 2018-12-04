@@ -1,100 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="40698d7f-ecc2-4425-822e-5ffa88700557" name="Default" comment="v0.10 &quot;can someone switch trashbot to decaf or something?&quot;&#10;&#10;- split BattleBot.java and KaraokeBot.java into a manager and object class. this means that multiple instances of karaoke and battle can be run at the same time. Now, only the person who initiates a battle can send commands to it.&#10;- implemented a temporary logger into trashbotBoot.java as a proof of concept.&#10;- !add and !remove commands have been implemented into instantHumorContains and instantHumorEquals.&#10;- slightly altered the way permissions are loaded into EmojiReactions&#10;- new UptimeModule object, which keeps track of trashbot uptime. new !recorduptime command which reports the record of how long trashbot has ran nonstop.&#10;- new !devsendmessage command, which sends a message to every server that trashbot is on.&#10;- new !panic command, which gracefully kills the bot (although does not stop the process, this needs to be looked into)&#10;- trashbot no longer responds to his name in passing, you must @ him.&#10;- karaoke should end as soon as the song ends&#10;- new !givelyrics command for karaoke, saves a new set of lyrics to the file. requires blue keycard">
-      <change afterPath="$PROJECT_DIR$/src/main/java/SpeakManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileChanges/last-build.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileContent/annotation-processors.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileContent/fileContent.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/resourceHashesCache.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/classAnalysis.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/jarAnalysis.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/javaCompile.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/taskHistory.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/taskJars.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8/fileChanges/last-build.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8/fileContent/annotation-processors.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8/fileContent/fileContent.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8/fileHashes/fileHashes.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8/fileHashes/fileHashes.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8/fileHashes/resourceHashesCache.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8/javaCompile/classAnalysis.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8/javaCompile/jarAnalysis.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8/javaCompile/javaCompile.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8/javaCompile/processorPath.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8/javaCompile/taskHistory.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8/javaCompile/taskJars.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8/taskHistory/taskHistory.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.8/taskHistory/taskHistory.lock" beforeDir="false" />
+    <list default="true" id="40698d7f-ecc2-4425-822e-5ffa88700557" name="Default" comment="v0.11 &quot;you can commit if you want to, you can leave your old repo behind&quot; (safety push)&#10;&#10;- all Scanners and PrintWriters now properly configured to use UTF-8.&#10;- BattleManager should now create and destroy battles at the correct times.&#10;- !printall dev command added, prints a relatively clean list of all emojis and&#10;keyphrases currently saved in the list.&#10;- Karaoke and Speak modules have been instantiated.&#10;- !givelyrics command, updates the Karaoke lyrics.">
+      <change afterPath="$PROJECT_DIR$/src/main/java/BattleB.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/BattleDefault.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/BattleU.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/vcsWorkingDirs/gc.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/src_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/trashbot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/trashbot.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/AccessRestriction.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/AccessRestriction.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/BattleBot.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/EmojiReactions.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/EmojiReactions.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/HelpModule.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/HelpModule.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/SpeakModule.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/SpeakModule.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/KaraokeBot.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/SpeakModule.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/TodoModule.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/TodoModule.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/java/main/helperFunctions.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/helperFunctions.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/instantHumorContains.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/instantHumorContains.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/instantHumorEquals.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/instantHumorEquals.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/java/main/trashbotBoot.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/trashbotBoot.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/distributions/trashbot-0.10/bin/data/emojisReactionData.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/distributions/trashbot-0.10/bin/data/helpList.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/distributions/trashbot-0.10/bin/data/instantHumorContainsPhrases.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/distributions/trashbot-0.10/bin/data/instantHumorEqualsPhrases.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/distributions/trashbot-0.10/bin/data/lyrics.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/distributions/trashbot-0.10/bin/data/permissions.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/distributions/trashbot-0.10/bin/data/recordUptime.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/distributions/trashbot-0.10/bin/data/speakList.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/distributions/trashbot-0.10/bin/data/todoList.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/distributions/trashbot-0.10/bin/token.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/distributions/trashbot-0.10/bin/trashbot" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/distributions/trashbot-0.10/bin/trashbot.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/distributions/trashbot-0.10/bin/trashbotOutPut.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/distributions/trashbot-0.10/lib/data/emojisReactionData.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/distributions/trashbot-0.10/lib/data/helpList.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/distributions/trashbot-0.10/lib/data/instantHumorContainsPhrases.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/distributions/trashbot-0.10/lib/data/instantHumorEqualsPhrases.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/distributions/trashbot-0.10/lib/data/lyrics.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/distributions/trashbot-0.10/lib/data/permissions.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/distributions/trashbot-0.10/lib/data/recordUptime.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/distributions/trashbot-0.10/lib/data/speakList.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/distributions/trashbot-0.10/lib/data/todoList.dat" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/build/distributions/trashbot.tar" beforeDir="false" afterPath="$PROJECT_DIR$/build/distributions/trashbot.tar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/scripts/trashbot" beforeDir="false" afterPath="$PROJECT_DIR$/build/scripts/trashbot" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/scripts/trashbot.bat" beforeDir="false" afterPath="$PROJECT_DIR$/build/scripts/trashbot.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/emojisReactionData.dat" beforeDir="false" afterPath="$PROJECT_DIR$/data/emojisReactionData.dat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/instantHumorContainsPhrases.dat" beforeDir="false" afterPath="$PROJECT_DIR$/data/instantHumorContainsPhrases.dat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/instantHumorEqualsPhrases.dat" beforeDir="false" afterPath="$PROJECT_DIR$/data/instantHumorEqualsPhrases.dat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/emojisReactionData.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/helpList.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/instantHumorContainsPhrases.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/instantHumorEqualsPhrases.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/lyrics.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/permissions.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/speakList.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/todoList.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/lyrics.dat" beforeDir="false" afterPath="$PROJECT_DIR$/data/lyrics.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/permissions.dat" beforeDir="false" afterPath="$PROJECT_DIR$/data/permissions.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/recordUptime.dat" beforeDir="false" afterPath="$PROJECT_DIR$/data/recordUptime.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/todoList.dat" beforeDir="false" afterPath="$PROJECT_DIR$/data/todoList.dat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/AccessRestriction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/AccessRestriction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BattleBot.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Battle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Battle.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/BattleManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/BattleManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/EmojiReactions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/EmojiReactions.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/HelpModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/HelpModule.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Karaoke.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Karaoke.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/KaraokeBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Speak.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/KaraokeManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/KaraokeManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SpeakModule.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Speak.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Speak.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SpeakManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/SpeakManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/TodoModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/TodoModule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/UptimeModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/UptimeModule.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/helperFunctions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/helperFunctions.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/instantHumorContains.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/instantHumorContains.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/instantHumorEquals.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/instantHumorEquals.java" afterDir="false" />
@@ -131,6 +78,12 @@
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="trashbot" type="f1a62948:ProjectNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="trashbot" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="distribution" type="c8890929:TasksNode$1" />
               </path>
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
@@ -235,33 +188,53 @@
     <session id="279575774">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="5" />
+          <entry key="project.closed" value="16" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.10" value="1" />
+          <entry key="project.open.time.27" value="2" />
+          <entry key="project.open.time.29" value="1" />
+          <entry key="project.open.time.31" value="1" />
           <entry key="project.open.time.33" value="1" />
+          <entry key="project.open.time.34" value="1" />
+          <entry key="project.open.time.35" value="4" />
+          <entry key="project.open.time.39" value="1" />
           <entry key="project.open.time.6" value="1" />
-          <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="5" />
+          <entry key="project.open.time.7" value="3" />
+          <entry key="project.open.time.75" value="1" />
+          <entry key="project.opened" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="1996" />
+          <entry key="dat" value="420" />
+          <entry key="gradle" value="54" />
+          <entry key="java" value="20574" />
+          <entry key="txt" value="664" />
+          <entry key="xml" value="14" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="1996" />
+          <entry key="Groovy" value="54" />
+          <entry key="JAVA" value="20574" />
+          <entry key="PLAIN_TEXT" value="1084" />
+          <entry key="XML" value="14" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="java" value="29" />
+          <entry key="dat" value="14" />
+          <entry key="gradle" value="4" />
+          <entry key="java" value="215" />
+          <entry key="xml" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JAVA" value="29" />
+          <entry key="Groovy" value="4" />
+          <entry key="JAVA" value="215" />
+          <entry key="PLAIN_TEXT" value="14" />
+          <entry key="XML" value="3" />
         </counts>
       </usages-collector>
     </session>
@@ -271,11 +244,98 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/trashbotBoot.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1326">
-              <caret line="115" column="44" selection-start-line="115" selection-start-column="44" selection-end-line="115" selection-end-column="44" />
+            <state relative-caret-position="85">
+              <caret line="25" selection-start-line="25" selection-end-line="25" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/EmojiReactions.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="392">
+              <caret line="54" selection-start-line="54" selection-end-line="54" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/data/emojisReactionData.dat">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="357">
+              <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/instantHumorContains.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="171">
+              <caret line="21" selection-start-line="21" selection-end-line="21" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/helperFunctions.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="103">
+              <caret line="35" column="61" lean-forward="true" selection-start-line="35" selection-start-column="61" selection-end-line="35" selection-end-column="61" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/BattleB.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="459">
+              <caret line="27" column="34" lean-forward="true" selection-start-line="27" selection-start-column="34" selection-end-line="27" selection-end-column="34" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/Battle.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="221">
+              <caret line="15" column="40" selection-start-line="15" selection-start-column="40" selection-end-line="15" selection-end-column="40" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/BattleU.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="11" column="29" lean-forward="true" selection-start-line="11" selection-start-column="29" selection-end-line="11" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/instantHumorEquals.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="239">
+              <caret line="111" column="40" lean-forward="true" selection-start-line="111" selection-start-column="40" selection-end-line="111" selection-end-column="40" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -302,6 +362,11 @@
       <find>run</find>
       <find>botWait</find>
       <find>botwait</find>
+      <find>System.out</find>
+      <find>this.</find>
+      <find>updateHealthBar()</find>
+      <find>bruh</find>
+      <find>promptResponse</find>
     </findStrings>
     <dirStrings>
       <dir>C:\Users\William\Documents\GitHub\trashbot\src\main\java</dir>
@@ -523,9 +588,9 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="6157693223660" />
+        <entry key="$PROJECT_DIR$" value="6165102204408" />
         <entry key="$PROJECT_DIR$/.gradle" value="0" />
-        <entry key="$PROJECT_DIR$/build.gradle" value="1214958465" />
+        <entry key="$PROJECT_DIR$/build.gradle" value="2391276022" />
         <entry key="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" value="2290625707" />
         <entry key="$PROJECT_DIR$/settings.gradle" value="4145260238" />
       </map>
@@ -723,7 +788,6 @@
         <option value="$PROJECT_DIR$/data/stupidInstantHumorKeyPhrases.dat" />
         <option value="$PROJECT_DIR$/src/src/StupidInstantHumor.java" />
         <option value="$PROJECT_DIR$/data/keywords.dat" />
-        <option value="$PROJECT_DIR$/data/instantHumorEqualsPhrases.dat" />
         <option value="$PROJECT_DIR$/src/src/AccessRestriction.java" />
         <option value="$PROJECT_DIR$/src/src/BattleBot.java" />
         <option value="$PROJECT_DIR$/src/src/KaraokeBot.java" />
@@ -735,32 +799,38 @@
         <option value="$PROJECT_DIR$/src/src/EmojiReactions.java" />
         <option value="$PROJECT_DIR$/src/src/instantHumorEquals.java" />
         <option value="$PROJECT_DIR$/src/src/EmojiParser.java" />
-        <option value="$PROJECT_DIR$/data/emojisReactionData.dat" />
         <option value="$PROJECT_DIR$/data/recordUptime.dat" />
         <option value="$PROJECT_DIR$/data/helpList.dat" />
-        <option value="$PROJECT_DIR$/src/main/java/UptimeModule.java" />
-        <option value="$PROJECT_DIR$/build.gradle" />
-        <option value="$PROJECT_DIR$/src/main/java/Battle.java" />
-        <option value="$PROJECT_DIR$/data/lyrics.dat" />
-        <option value="$PROJECT_DIR$/data/instantHumorContainsPhrases.dat" />
         <option value="$PROJECT_DIR$/data/permissions2.dat" />
         <option value="$PROJECT_DIR$/data/permissions.dat" />
-        <option value="$PROJECT_DIR$/src/main/java/BattleManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/HelpModule.java" />
-        <option value="$PROJECT_DIR$/src/main/java/KaraokeManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/TodoModule.java" />
-        <option value="$PROJECT_DIR$/src/main/java/instantHumorContains.java" />
-        <option value="$PROJECT_DIR$/src/main/java/AccessRestriction.java" />
-        <option value="$PROJECT_DIR$/src/main/java/instantHumorEquals.java" />
-        <option value="$PROJECT_DIR$/src/main/java/helperFunctions.java" />
         <option value="$PROJECT_DIR$/src/main/java/KaraokeBot.java" />
         <option value="$PROJECT_DIR$/src/main/java/BattleBot.java" />
         <option value="$PROJECT_DIR$/src/main/java/SpeakModule.java" />
-        <option value="$PROJECT_DIR$/src/main/java/SpeakManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/trashbotBoot.java" />
         <option value="$PROJECT_DIR$/src/main/java/Speak.java" />
+        <option value="$PROJECT_DIR$/src/main/java/BotBattle.java" />
+        <option value="$PROJECT_DIR$/src/main/java/BattleDefault.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/log4j2.xml" />
+        <option value="$PROJECT_DIR$/build.gradle" />
+        <option value="$PROJECT_DIR$/src/main/java/BattleManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/SpeakManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/Battle.java" />
+        <option value="$PROJECT_DIR$/src/main/java/BattleU.java" />
+        <option value="$PROJECT_DIR$/src/main/java/TodoModule.java" />
+        <option value="$PROJECT_DIR$/src/main/java/UptimeModule.java" />
         <option value="$PROJECT_DIR$/src/main/java/Karaoke.java" />
+        <option value="$PROJECT_DIR$/data/lyrics.dat" />
+        <option value="$PROJECT_DIR$/src/main/java/BattleB.java" />
+        <option value="$PROJECT_DIR$/src/main/java/KaraokeManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/trashbotBoot.java" />
+        <option value="$PROJECT_DIR$/src/main/java/AccessRestriction.java" />
         <option value="$PROJECT_DIR$/src/main/java/EmojiReactions.java" />
+        <option value="$PROJECT_DIR$/src/main/java/HelpModule.java" />
+        <option value="$PROJECT_DIR$/data/emojisReactionData.dat" />
+        <option value="$PROJECT_DIR$/data/instantHumorEqualsPhrases.dat" />
+        <option value="$PROJECT_DIR$/src/main/java/instantHumorContains.java" />
+        <option value="$PROJECT_DIR$/src/main/java/instantHumorEquals.java" />
+        <option value="$PROJECT_DIR$/data/instantHumorContainsPhrases.dat" />
+        <option value="$PROJECT_DIR$/src/main/java/helperFunctions.java" />
       </list>
     </option>
   </component>
@@ -774,6 +844,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -804,17 +875,28 @@
               <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="javacord" type="b2602c69:ProjectViewProjectNode" />
+              <item name="trashbot" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="javacord" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://D:/z_trashbot/trashbot/src/src/BattleBot.java" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1540317730835" />
+    <property name="SearchEverywhereHistoryKey" value="&#9;FILE&#9;file://C:/Users/William/Documents/GitHub/trashbot/src/main/java/trashbotBoot.java" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543959950493" />
+    <property name="last.edited.regexp" value="" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -848,7 +930,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Gradle.trashbot [distTar]">
+  <component name="RunManager" selected="Gradle.trashbot [run]">
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <method v="2">
@@ -932,7 +1014,7 @@
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
+        <option name="scriptParameters" value="--info" />
         <option name="taskDescriptions">
           <list />
         </option>
@@ -941,7 +1023,7 @@
             <option value="run" />
           </list>
         </option>
-        <option name="vmOptions" />
+        <option name="vmOptions" value="" />
       </ExternalSystemSettings>
       <method v="2" />
     </configuration>
@@ -983,10 +1065,10 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.trashbot [distTar]" />
         <item itemvalue="Gradle.trashbot [run]" />
         <item itemvalue="Gradle.trashbot [distZip]" />
         <item itemvalue="Gradle.trashbot [build]" />
+        <item itemvalue="Gradle.trashbot [distTar]" />
         <item itemvalue="Gradle.trashbot [clean]" />
       </list>
     </recent_temporary>
@@ -1009,34 +1091,52 @@
       <option name="project" value="LOCAL" />
       <updated>1539852823607</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="v0.11 &quot;you can commit if you want to, you can leave your old repo behind&quot; (safety push)&#10;&#10;- all Scanners and PrintWriters now properly configured to use UTF-8.&#10;- BattleManager should now create and destroy battles at the correct times.&#10;- !printall dev command added, prints a relatively clean list of all emojis and&#10;keyphrases currently saved in the list.&#10;- Karaoke and Speak modules have been instantiated.&#10;- !givelyrics command, updates the Karaoke lyrics.">
+      <created>1540832652105</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1540832652105</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="0" width="974" height="1047" extended-state="0" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Designer" order="0" />
       <window_info id="UI Designer" order="1" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Favorites" order="3" sideWeight="0.5014749" side_tool="true" weight="0.1444563" />
       <window_info id="Image Layers" order="4" />
-      <window_info content_ui="combo" id="Project" order="5" sideWeight="0.49852508" visible="true" weight="0.3129103" />
+      <window_info active="true" content_ui="combo" id="Project" order="5" sideWeight="0.49852508" visible="true" weight="0.08795309" />
       <window_info id="Structure" order="6" sideWeight="0.5014749" side_tool="true" weight="0.1444563" />
       <window_info id="Repositories" order="7" weight="0.32995737" />
-      <window_info anchor="bottom" id="Terminal" order="0" sideWeight="0.4989059" weight="0.32858709" />
-      <window_info active="true" anchor="bottom" id="Event Log" order="1" sideWeight="0.19083156" side_tool="true" visible="true" weight="0.21358159" />
-      <window_info anchor="bottom" id="Version Control" order="2" sideWeight="0.77771854" weight="0.2483731" />
-      <window_info anchor="bottom" id="Build" order="3" weight="0.22772278" />
+      <window_info anchor="bottom" id="Terminal" order="0" sideWeight="0.4978678" weight="0.3275488" />
+      <window_info anchor="bottom" id="Event Log" order="1" sideWeight="0.18976545" side_tool="true" visible="true" weight="0.31995663" />
+      <window_info anchor="bottom" id="Version Control" order="2" sideWeight="0.7761194" weight="0.2451193" />
+      <window_info anchor="bottom" id="Build" order="3" sideWeight="0.49946696" weight="0.22668113" />
       <window_info anchor="bottom" id="Messages" order="4" sideWeight="0.496788" weight="0.3263965" />
       <window_info anchor="bottom" id="Message" order="5" />
-      <window_info anchor="bottom" id="Find" order="6" weight="0.32897604" />
-      <window_info anchor="bottom" id="Run" order="7" sideWeight="0.80916846" weight="0.26681128" />
-      <window_info anchor="bottom" id="Debug" order="8" sideWeight="0.49946696" weight="0.39479393" />
+      <window_info anchor="bottom" id="Find" order="6" sideWeight="0.4946695" weight="0.3275488" />
+      <window_info anchor="bottom" id="Run" order="7" sideWeight="0.81023455" visible="true" weight="0.31995663" />
+      <window_info anchor="bottom" id="Debug" order="8" sideWeight="0.81449896" weight="0.39045554" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="11" />
+      <window_info anchor="bottom" id="TODO" order="11" sideWeight="0.4989339" weight="0.329718" />
+      <window_info active="true" anchor="bottom" id="Inspection Results" order="12" sideWeight="0.4989339" visible="true" weight="0.3264642" />
       <window_info anchor="right" id="Capture Analysis" order="0" />
-      <window_info anchor="right" id="Gradle" order="1" visible="true" weight="0.07658643" />
+      <window_info anchor="right" id="Gradle" order="1" visible="true" weight="0.059168443" />
       <window_info anchor="right" id="Palette&#9;" order="2" />
       <window_info anchor="right" id="Theme Preview" order="3" />
       <window_info anchor="right" id="Maven Projects" order="4" />
@@ -1088,7 +1188,8 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_NEW_TODO" value="false" />
     <MESSAGE value="v0.10 &quot;can someone switch trashbot to decaf or something?&quot;&#10;&#10;- split BattleBot.java and KaraokeBot.java into a manager and object class. this means that multiple instances of karaoke and battle can be run at the same time. Now, only the person who initiates a battle can send commands to it.&#10;- implemented a temporary logger into trashbotBoot.java as a proof of concept.&#10;- !add and !remove commands have been implemented into instantHumorContains and instantHumorEquals.&#10;- slightly altered the way permissions are loaded into EmojiReactions&#10;- new UptimeModule object, which keeps track of trashbot uptime. new !recorduptime command which reports the record of how long trashbot has ran nonstop.&#10;- new !devsendmessage command, which sends a message to every server that trashbot is on.&#10;- new !panic command, which gracefully kills the bot (although does not stop the process, this needs to be looked into)&#10;- trashbot no longer responds to his name in passing, you must @ him.&#10;- karaoke should end as soon as the song ends&#10;- new !givelyrics command for karaoke, saves a new set of lyrics to the file. requires blue keycard" />
-    <option name="LAST_COMMIT_MESSAGE" value="v0.10 &quot;can someone switch trashbot to decaf or something?&quot;&#10;&#10;- split BattleBot.java and KaraokeBot.java into a manager and object class. this means that multiple instances of karaoke and battle can be run at the same time. Now, only the person who initiates a battle can send commands to it.&#10;- implemented a temporary logger into trashbotBoot.java as a proof of concept.&#10;- !add and !remove commands have been implemented into instantHumorContains and instantHumorEquals.&#10;- slightly altered the way permissions are loaded into EmojiReactions&#10;- new UptimeModule object, which keeps track of trashbot uptime. new !recorduptime command which reports the record of how long trashbot has ran nonstop.&#10;- new !devsendmessage command, which sends a message to every server that trashbot is on.&#10;- new !panic command, which gracefully kills the bot (although does not stop the process, this needs to be looked into)&#10;- trashbot no longer responds to his name in passing, you must @ him.&#10;- karaoke should end as soon as the song ends&#10;- new !givelyrics command for karaoke, saves a new set of lyrics to the file. requires blue keycard" />
+    <MESSAGE value="v0.11 &quot;you can commit if you want to, you can leave your old repo behind&quot; (safety push)&#10;&#10;- all Scanners and PrintWriters now properly configured to use UTF-8.&#10;- BattleManager should now create and destroy battles at the correct times.&#10;- !printall dev command added, prints a relatively clean list of all emojis and&#10;keyphrases currently saved in the list.&#10;- Karaoke and Speak modules have been instantiated.&#10;- !givelyrics command, updates the Karaoke lyrics." />
+    <option name="LAST_COMMIT_MESSAGE" value="v0.11 &quot;you can commit if you want to, you can leave your old repo behind&quot; (safety push)&#10;&#10;- all Scanners and PrintWriters now properly configured to use UTF-8.&#10;- BattleManager should now create and destroy battles at the correct times.&#10;- !printall dev command added, prints a relatively clean list of all emojis and&#10;keyphrases currently saved in the list.&#10;- Karaoke and Speak modules have been instantiated.&#10;- !givelyrics command, updates the Karaoke lyrics." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1103,34 +1204,16 @@
           <properties />
           <option name="timeStamp" value="15" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/EmojiReactions.java</url>
+          <line>41</line>
+          <properties />
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/util/Scanner.java" />
-    <entry file="file://$PROJECT_DIR$/gradlew.bat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1020" />
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/net/SocketInputStream.java" />
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/de.btobastian.Javacord/javacord-core/v_3-SNAPSHOT/faaddb6a77da4adeac530a78a67e5b03bd41fc5e/javacord-core-v_3-SNAPSHOT-sources.jar!/org/javacord/core/util/handler/message/MessageCreateHandler.java" />
-    <entry file="file://$PROJECT_DIR$/src/src/AccessRestriction.java" />
-    <entry file="file://$PROJECT_DIR$/src/src/KaraokeBot.java" />
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/de.btobastian.Javacord/javacord-core/v_3-SNAPSHOT/faaddb6a77da4adeac530a78a67e5b03bd41fc5e/javacord-core-v_3-SNAPSHOT-sources.jar!/org/javacord/core/util/event/EventDispatcher.java" />
-    <entry file="file://$PROJECT_DIR$/src/src/BattleBot.java" />
-    <entry file="file://$PROJECT_DIR$/data/todoList.dat">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/instantHumorEqualsPhrases.dat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="29" lean-forward="true" selection-start-line="23" selection-start-column="29" selection-end-line="23" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/src/trashbotBoot.java" />
-    <entry file="file://$PROJECT_DIR$/src/src/HelpModule.java" />
     <entry file="file://$PROJECT_DIR$/src/src/EmojiReactions.java" />
     <entry file="file://$PROJECT_DIR$/src/src/instantHumorContains.java" />
     <entry file="file://$PROJECT_DIR$/src/src/instantHumorEquals.java" />
@@ -1154,28 +1237,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.idea/encodings.xml" />
-    <entry file="file://$PROJECT_DIR$/data/emojisReactionData.dat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="629">
-          <caret line="37" column="3" lean-forward="true" selection-start-line="37" selection-start-column="3" selection-end-line="37" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="25" column="74" selection-start-line="25" selection-start-column="74" selection-end-line="25" selection-end-column="74" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/lyrics.dat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="35" selection-start-line="5" selection-start-column="35" selection-end-line="5" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/data/speakList.dat">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -1184,25 +1245,11 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/data/permissions2.dat" />
-    <entry file="file://$PROJECT_DIR$/data/permissions.dat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="3" lean-forward="true" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitattributes">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/instantHumorContainsPhrases.dat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="3" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
-        </state>
-      </provider>
     </entry>
     <entry file="jar://C:/Program Files/Java/jdk-10.0.2/lib/src.zip!/java.base/java/util/Scanner.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -1218,24 +1265,116 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Battle.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/KaraokeBot.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/BattleBot.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/SpeakModule.java" />
+    <entry file="jar://C:/Program Files/Java/jdk-10.0.2/lib/src.zip!/java.base/java/util/function/Consumer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="595">
-          <caret line="37" column="12" selection-start-line="37" selection-start-column="12" selection-end-line="37" selection-end-column="12" />
+        <state relative-caret-position="230">
+          <caret line="48" column="9" selection-start-line="48" selection-start-column="9" selection-end-line="48" selection-end-column="9" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/TodoModule.java">
+    <entry file="file://$PROJECT_DIR$/data/permissions.dat">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="373">
-          <caret line="67" column="86" selection-start-line="67" selection-start-column="86" selection-end-line="67" selection-end-column="86" />
+        <state relative-caret-position="170">
+          <caret line="10" column="3" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
         </state>
       </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.javacord/javacord-core/3.0.0/76958707c8dfbbeb75b92ca349c1d273d48fe7ba/javacord-core-3.0.0-sources.jar!/org/javacord/core/entity/message/MessageImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="344" selection-start-line="344" selection-end-line="344" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.javacord/javacord-core/3.0.0/76958707c8dfbbeb75b92ca349c1d273d48fe7ba/javacord-core-3.0.0-sources.jar!/org/javacord/core/entity/message/MessageAuthorImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="52" selection-start-line="52" selection-end-line="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.javacord/javacord-api/3.0.0/5a60f7383fc440f462206d692b5c558bfd35275/javacord-api-3.0.0-sources.jar!/org/javacord/api/entity/DiscordEntity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="346">
+          <caret line="55" selection-start-line="55" selection-end-line="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.javacord/javacord-core/3.0.0/76958707c8dfbbeb75b92ca349c1d273d48fe7ba/javacord-core-3.0.0-sources.jar!/org/javacord/core/util/event/EventDispatcherBase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1649">
+          <caret line="290" column="13" lean-forward="true" selection-start-line="290" selection-start-column="13" selection-end-line="290" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.javacord/javacord-core/3.0.0/76958707c8dfbbeb75b92ca349c1d273d48fe7ba/javacord-core-3.0.0-sources.jar!/org/javacord/core/util/event/EventDispatcher.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="2152" column="34" selection-start-line="2152" selection-start-column="34" selection-end-line="2152" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.javacord/javacord-core/3.0.0/76958707c8dfbbeb75b92ca349c1d273d48fe7ba/javacord-core-3.0.0-sources.jar!/org/javacord/core/event/message/reaction/SingleReactionEventImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="177">
+          <caret line="56" selection-start-line="56" selection-end-line="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/BattleDefault.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="402">
+          <caret line="27" selection-start-line="27" selection-end-line="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Speak.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1632">
+          <caret line="98" column="35" selection-start-line="98" selection-start-column="35" selection-end-line="98" selection-end-column="35" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="22" column="82" selection-start-line="22" selection-start-column="82" selection-end-line="22" selection-end-column="82" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/log4j2.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="16" selection-start-line="12" selection-start-column="16" selection-end-line="12" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/SpeakManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="632">
+          <caret line="78" column="31" lean-forward="true" selection-start-line="78" selection-start-column="31" selection-end-line="78" selection-end-column="31" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/lyrics.dat">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/BattleManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="22" column="48" lean-forward="true" selection-start-line="22" selection-start-column="48" selection-end-line="22" selection-end-column="48" />
+        <state relative-caret-position="405">
+          <caret line="43" column="5" lean-forward="true" selection-start-line="43" selection-start-column="5" selection-end-line="43" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1244,33 +1383,122 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/HelpModule.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="850">
-          <caret line="104" column="5" selection-start-line="104" selection-start-column="5" selection-end-line="104" selection-end-column="5" />
+        <state relative-caret-position="269">
+          <caret line="93" column="62" selection-start-line="93" selection-start-column="62" selection-end-line="93" selection-end-column="62" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/instantHumorContains.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/Karaoke.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="441">
-          <caret line="109" column="21" lean-forward="true" selection-start-line="109" selection-start-column="21" selection-end-line="109" selection-end-column="21" />
+        <state relative-caret-position="204">
+          <caret line="12" column="7" selection-start-line="12" selection-start-column="7" selection-end-line="12" selection-end-column="7" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#4745#4746#0" expanded="true" />
+            <element signature="e#4775#4776#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/AccessRestriction.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1173">
-          <caret line="71" column="26" lean-forward="true" selection-start-line="71" selection-start-column="26" selection-end-line="71" selection-end-column="26" />
+        <state relative-caret-position="280">
+          <caret line="91" column="32" selection-start-line="91" selection-start-column="32" selection-end-line="91" selection-end-column="32" />
           <folding>
-            <element signature="e#264#265#0" expanded="true" />
-            <element signature="e#305#306#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/KaraokeManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="365">
+          <caret line="102" column="63" lean-forward="true" selection-start-line="102" selection-start-column="63" selection-end-line="102" selection-end-column="63" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/TodoModule.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="411">
+          <caret line="80" column="31" selection-start-line="80" selection-start-column="31" selection-end-line="80" selection-end-column="31" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/UptimeModule.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="77" column="31" selection-start-line="77" selection-start-column="31" selection-end-line="77" selection-end-column="31" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/encodings.xml" />
+    <entry file="file://$PROJECT_DIR$/data/instantHumorEqualsPhrases.dat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="9" lean-forward="true" selection-start-line="6" selection-start-column="9" selection-end-line="6" selection-end-column="9" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/instantHumorEquals.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="32" column="40" selection-start-line="32" selection-start-column="40" selection-end-line="32" selection-end-column="40" />
+        <state relative-caret-position="239">
+          <caret line="111" column="40" lean-forward="true" selection-start-line="111" selection-start-column="40" selection-end-line="111" selection-end-column="40" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/instantHumorContainsPhrases.dat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="27" lean-forward="true" selection-start-line="27" selection-end-line="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/emojisReactionData.dat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/instantHumorContains.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="21" selection-start-line="21" selection-end-line="21" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/trashbotBoot.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="25" selection-start-line="25" selection-end-line="25" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/EmojiReactions.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="392">
+          <caret line="54" selection-start-line="54" selection-end-line="54" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1279,60 +1507,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/helperFunctions.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="407">
-          <caret line="93" column="13" lean-forward="true" selection-start-line="93" selection-start-column="13" selection-end-line="93" selection-end-column="13" />
+        <state relative-caret-position="103">
+          <caret line="35" column="61" lean-forward="true" selection-start-line="35" selection-start-column="61" selection-end-line="35" selection-end-column="61" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/UptimeModule.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/BattleU.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="563">
-          <caret line="68" column="13" selection-start-line="68" selection-start-column="13" selection-end-line="68" selection-end-column="13" />
+        <state relative-caret-position="153">
+          <caret line="11" column="29" lean-forward="true" selection-start-line="11" selection-start-column="29" selection-end-line="11" selection-end-column="29" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/KaraokeBot.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/BattleBot.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/SpeakModule.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/java/Speak.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/Battle.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="6" column="42" selection-start-line="6" selection-start-column="42" selection-end-line="6" selection-end-column="42" />
+        <state relative-caret-position="221">
+          <caret line="15" column="40" selection-start-line="15" selection-start-column="40" selection-end-line="15" selection-end-column="40" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Karaoke.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/BattleB.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="32" column="43" selection-start-line="32" selection-start-column="43" selection-end-line="32" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/KaraokeManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="35" column="44" selection-start-line="35" selection-start-column="44" selection-end-line="35" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/EmojiReactions.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="20" column="28" lean-forward="true" selection-start-line="20" selection-start-column="28" selection-end-line="20" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/SpeakManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="469">
-          <caret line="74" column="9" selection-start-line="74" selection-start-column="9" selection-end-line="74" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/trashbotBoot.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1326">
-          <caret line="115" column="44" selection-start-line="115" selection-start-column="44" selection-end-line="115" selection-end-column="44" />
+        <state relative-caret-position="459">
+          <caret line="27" column="34" lean-forward="true" selection-start-line="27" selection-start-column="34" selection-end-line="27" selection-end-column="34" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

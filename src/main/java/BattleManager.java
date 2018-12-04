@@ -3,6 +3,8 @@ import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.Reaction;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.event.message.reaction.ReactionAddEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,9 +12,11 @@ import java.util.Map;
 
 public class BattleManager {
 
-    private Map<String, Battle> battleMap = new HashMap<>();
+    private Map<String, Battle> battleMap;
+    private static final Logger logger = LogManager.getLogger(BattleManager.class);
 
-    public BattleManager() {
+    BattleManager() {
+        battleMap = new HashMap<>();
     }
 
     public void run(MessageCreateEvent event) {
@@ -21,7 +25,11 @@ public class BattleManager {
         String messageToString = message.getContent().toLowerCase();
 
         if (messageToString.equals("!battle")) {
-            addBattle(message.getAuthor().getIdAsString(), channel);
+            addBotBattle(message.getAuthor().getIdAsString(), channel);
+            logger.info("Bot battle started for " + message.getAuthor().getName() + ".");
+        } else if (messageToString.startsWith("!battle <@")) {
+            addUserBattle(message.getAuthor().getIdAsString(), "" + helperFunctions.getFirstMentionID(message), channel);
+            logger.info("User battle started for " + message.getAuthor().getName() + " against " + helperFunctions.getFirstMentionName(message) + ".");
         } else if (message.getAuthor().isYourself() && messageToString.startsWith("user")) {
             String userID = messageToString.substring(4);
             battleMap.get(userID).initialize(message);
@@ -31,19 +39,28 @@ public class BattleManager {
     public void run(ReactionAddEvent event) {
         String userID = event.getUser().getIdAsString();
         if (battleMap.containsKey(userID)) {
-            sendToBattle(userID, event.getReaction().get());
+            event.getReaction().ifPresent(reaction -> sendToBattle(userID, reaction));
         }
     }
 
-    public void addBattle(String userID, TextChannel channel) {
+    private void addBotBattle(String userID, TextChannel channel) {
         cleanBattles();
         if (!battleMap.containsKey(userID)) {
-            Battle addBattle = new Battle(channel, userID);
+            Battle addBattle = new BattleB(channel, userID);
             battleMap.put(userID, addBattle);
         }
     }
 
-    public void cleanBattles() {
+    private void addUserBattle(String userID, String enemyID, TextChannel channel) {
+        cleanBattles();
+        if (!battleMap.containsKey(userID)) {
+            Battle addBattle = new BattleU(channel, userID);
+            battleMap.put(userID, addBattle);
+            battleMap.put(enemyID, addBattle);
+        }
+    }
+
+    private void cleanBattles() {
         ArrayList<String> cleanStrings = new ArrayList<>();
         for (String userID : battleMap.keySet()) {
             if (battleMap.get(userID).isDead()) {
@@ -52,10 +69,11 @@ public class BattleManager {
         }
         for (String clean : cleanStrings) {
             battleMap.remove(clean);
+            logger.info("Battle ended for " + clean + ".");
         }
     }
 
-    public void sendToBattle(String userID, Reaction reaction) {
-        battleMap.get(userID).battle(reaction);
+    private void sendToBattle(String userID, Reaction reaction) {
+        battleMap.get(userID).battle(userID, reaction);
     }
 }

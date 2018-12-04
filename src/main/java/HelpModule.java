@@ -1,10 +1,13 @@
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class HelpModule {
@@ -46,12 +49,13 @@ public class HelpModule {
             "(literally anything involving money)\n" +
             "black```";
 
-    private static File file;
+    private File file;
+    private static final Logger logger = LogManager.getLogger(HelpModule.class);
+    private Map<String, String> helpList = new HashMap<>();
 
-    private static Map<String, String> helpList = new HashMap<>();
-
-    public HelpModule(String filename) {
+    HelpModule(String filename) {
         file = new File(filename);
+        loadHelp();
     }
 
     public void run(MessageCreateEvent event) {
@@ -72,35 +76,43 @@ public class HelpModule {
         }
     }
 
-    public static String save() {
-        PrintWriter out = null;
-        try {
-            out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
-        } catch (FileNotFoundException e) {
-            System.out.println("File " + file + " not found: ");
-        }
-        for (String key : helpList.keySet()) {
-            out.println(key);
-            out.println(helpList.get(key));
-            out.println();
-        }
-
-        out.close();
-        return "New todo data saved.";
-    }
-
-    public static void loadHelp() {
+    private void loadHelp() {
         Scanner fileReader = null;
         try {
-            fileReader = new Scanner(file, "UTF-8").useDelimiter("\n");
-        } catch (FileNotFoundException e) {
-            System.out.println("File " + file + " not found: ");
+            fileReader = new Scanner(file, StandardCharsets.UTF_8).useDelimiter("\n");
+        } catch (IOException e) {
+            logger.error("File " + file + " not found: ");
         }
-        while (fileReader.hasNextLine()) {
-            helpList.put(fileReader.nextLine(), fileReader.nextLine());
-            if (fileReader.hasNextLine()) {
-                fileReader.nextLine();
+        if (fileReader != null) {
+            try {
+                while (fileReader.hasNextLine()) {
+                    helpList.put(fileReader.nextLine(), fileReader.nextLine());
+                    if (fileReader.hasNextLine()) {
+                        fileReader.nextLine();
+                    }
+                }
+                logger.info("Help data successfully loaded.");
+            } catch (NoSuchElementException e) {
+                logger.error("Incorrect formatting in " + this.file.getName() + ", correctly formatted entries have been loaded.");
             }
+            fileReader.close();
         }
     }
+
+//    public String save() {
+//        PrintWriter out = null;
+//        try {
+//            out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
+//        } catch (FileNotFoundException e) {
+//            logger.error("File " + file + " not found: ");
+//        }
+//        for (String key : helpList.keySet()) {
+//            out.println(key);
+//            out.println(helpList.get(key));
+//            out.println();
+//        }
+//
+//        out.close();
+//        logger.info("New help info saved.");
+//    }
 }

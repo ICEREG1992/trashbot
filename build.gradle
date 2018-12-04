@@ -21,9 +21,9 @@ mainClassName = 'trashbotBoot'
 dependencies {
     // This dependency is found on compile classpath of this component and consumers.
     compile 'org.javacord:javacord:3.0.0', fileTree(dir: 'data', include: '*.dat')
-    compile group: 'org.slf4j', name:'slf4j-api', version: '1.7.2'
-    compile group: 'ch.qos.logback', name:'logback-classic', version: '1.0.9'
-    compile group: 'ch.qos.logback', name:'logback-core', version: '1.0.9'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
+    compile 'com.vdurmont:emoji-java:4.0.0'
     //specify files needed at runtime
     runtime files('data')
 }
@@ -43,6 +43,7 @@ repositories {
 run{
     //specify the input stream for the run task
     standardInput=System.in
+    args = ["NDUwNTA3MzY0NzY4OTQwMDM0.DuDUzQ.fiBrrUAN5pd-Kw9jws3WxCke7Ts"]
 }
 
 //adds the data/ directory to the distributions as a root level directory called data/

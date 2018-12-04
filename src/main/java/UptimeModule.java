@@ -1,25 +1,25 @@
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class UptimeModule {
 
-    private static File file;
-
-    private static double recordUptime;
+    private File file;
+    private double recordUptime;
 
     // RuntimeMXBean object for reporting system uptime
-    RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
+    private RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();
+    private static final Logger logger = LogManager.getLogger(UptimeModule.class);
 
-    public UptimeModule(String filename) {
+    UptimeModule(String filename) {
         file = new File(filename);
         loadUptime();
     }
@@ -36,6 +36,7 @@ public class UptimeModule {
                 record = true;
                 recordUptime = currentUptime;
                 save();
+                logger.info("New uptime record! " + millisToString(recordUptime));
             }
             String uptimeOut = millisToString(currentUptime);
             channel.sendMessage(helperFunctions.pickString("Trashbot has been up for " + uptimeOut + ". wow!",
@@ -52,28 +53,31 @@ public class UptimeModule {
         }
     }
 
-    public static String save() {
+    private void save() {
         PrintWriter out = null;
         try {
             out = new PrintWriter(file);
         } catch (FileNotFoundException e) {
-            System.out.println("File " + file + " not found: ");
+            logger.error("File " + file + " not found: ");
         }
-        out.println(recordUptime);
-        out.close();
-        return "New uptime data saved.";
+        if (out != null) {
+            out.println(recordUptime);
+            out.close();
+        }
     }
 
-    public static void loadUptime() {
+    private void loadUptime() {
         Scanner fileReader = null;
         try {
             fileReader = new Scanner(file);
         } catch (FileNotFoundException e) {
-            System.out.println("File " + file + " not found: ");
+            logger.error("File " + file + " not found: ");
         }
-        if (fileReader.hasNextLine()) {
+        if (fileReader != null && fileReader.hasNextLine()) {
             recordUptime = fileReader.nextDouble();
+            fileReader.close();
         }
+        logger.info("Uptime data successfully loaded.");
     }
 
     private static String millisToString(double millis) {
