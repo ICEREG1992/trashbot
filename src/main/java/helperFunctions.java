@@ -6,11 +6,15 @@ import org.javacord.api.entity.user.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class helperFunctions {
-    private static final Logger logger = LogManager.getLogger(EmojiReactions.class);
+    private static final Logger logger = LogManager.getLogger(helperFunctions.class);
 
     // From "<:emojiName:emojiID>", returns just emojiName
     static String name(String message) {
@@ -28,6 +32,7 @@ public class helperFunctions {
 
     // From "<:emojiName:emojiID>", returns just emojiID
     static String id(String message) {
+        String out;
         String fullEmoji = getFullEmoji(message);
 
         int indexOfFirstColon = fullEmoji.indexOf(":");
@@ -35,7 +40,13 @@ public class helperFunctions {
         int indexOfSecondColon = emojiNameWithId.indexOf(":");
         int indexOfEndBracket = emojiNameWithId.indexOf(">");
 
-        return emojiNameWithId.substring(indexOfSecondColon + 1, indexOfEndBracket);
+        if (indexOfSecondColon > 0 && indexOfEndBracket > 0) {
+            out = emojiNameWithId.substring(indexOfSecondColon + 1, indexOfEndBracket);
+        } else {
+            out = "";
+        }
+
+        return out;
     }
 
     // Parses out the first custom emoji in a message and returns "<:emojiName:emojiID>"
@@ -64,12 +75,6 @@ public class helperFunctions {
         List<User> mentions = message.getMentionedUsers();
         User firstMention = mentions.get(0);
         return firstMention.getId();
-    }
-
-    static String getFirstMentionName(Message message) {
-        List<User> mentions = message.getMentionedUsers();
-        User firstMention = mentions.get(0);
-        return firstMention.getName();
     }
 
     static String pickString(String... set) {
@@ -123,5 +128,62 @@ public class helperFunctions {
         } catch (InterruptedException e) {
             logger.error("Call to botWaitShort threw " + e);
         }
+    }
+
+    // reads in a list of non-paired entries to an arraylist
+    static ArrayList<String> readEntriesFromFile(File inFile) {
+        ArrayList<String> entries = new ArrayList<>();
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(inFile), StandardCharsets.UTF_8));
+        } catch (FileNotFoundException e) {
+            logger.error("File not found error: " + e);
+        }
+
+        if (reader != null) {
+            try {
+                String line = reader.readLine();
+                while (!line.equals("***")) {
+                    entries.add(line);
+                    line = reader.readLine();
+                }
+                reader.close();
+            } catch ( IOException e ) {
+                logger.error("Something went wrong while reading from " + inFile.getName());
+            } catch ( NullPointerException e) {
+                logger.warn("Incorrect formatting in " + inFile.getName() + ", correctly formatted entries have been loaded.");
+            }
+        }
+        return entries;
+    }
+
+    // reads in a list of paired entries to a map<string, string>
+    static Map<String, String> readPairsFromFile(File inFile) {
+        Map<String, String> pairs = new HashMap<>();
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(inFile), StandardCharsets.UTF_8));
+        } catch (FileNotFoundException e) {
+            logger.error("File not found error: " + e);
+        }
+
+        if (reader != null) {
+            try {
+                String key = reader.readLine();
+                while (!key.equals("***")) {
+                    String value = reader.readLine();
+                    pairs.put(key, value);
+                    reader.readLine();
+                    key = reader.readLine();
+                }
+            } catch (IOException e) {
+                logger.warn("Incorrect formatting in " + inFile.getName() + ", correctly formatted entries have been loaded.");
+            }
+        }
+        return pairs;
+    }
+
+    static int randomNumber(int lo, int hi) {
+        return (int)(Math.random()*(hi-lo)) + lo;
     }
 }

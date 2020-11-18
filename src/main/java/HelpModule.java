@@ -91,7 +91,7 @@ public class HelpModule {
                         fileReader.nextLine();
                     }
                 }
-                logger.info("Help data successfully loaded.");
+                logger.info("Help data loaded.");
             } catch (NoSuchElementException e) {
                 logger.error("Incorrect formatting in " + this.file.getName() + ", correctly formatted entries have been loaded.");
             }

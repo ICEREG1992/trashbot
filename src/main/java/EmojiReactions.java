@@ -51,9 +51,9 @@ public class EmojiReactions {
                         }
                     }
                 } else if (messageToString.contains(keyword)) {
-                    try {
+                    if (api.getCustomEmojiById(helperFunctions.id(emoji)).isPresent()) {
                         message.addReaction(api.getCustomEmojiById(helperFunctions.id(emoji)).get());
-                    } catch (Exception e){
+                    } else {
                         message.addReaction(emoji);
                     }
                 }
@@ -175,7 +175,7 @@ public class EmojiReactions {
             if (!emojisAndKeywords.containsKey(fullEmoji)) {
                 ArrayList<String> tempAddArray = new ArrayList<>();
                 emojisAndKeywords.put(fullEmoji, tempAddArray);
-                logger.info("New Emoji Added: " + fullEmoji);
+                logger.info("Emoji Added -- " + fullEmoji);
             }
 
             String newKeyWord = message.substring(keywordStart, keywordEnd);
@@ -208,7 +208,7 @@ public class EmojiReactions {
         if(permissions.doesUserHaveAccess(userID, "blue")) {
             String fullEmoji = helperFunctions.getFullEmoji(message);
 
-            int keywordStart = message.indexOf("!add") + 9;
+            int keywordStart = message.indexOf("!remove ") + 8;
             int keywordEnd = message.indexOf(fullEmoji) - 1;
 
             String oldKeyWord = message.substring(keywordStart, keywordEnd);
@@ -220,7 +220,7 @@ public class EmojiReactions {
                 logger.info("Emoji Removed -- No Keywords: " + fullEmoji);
             }
             save();
-            String out = "Successfully removed " + oldKeyWord + " as a keyword for \\" + fullEmoji;
+            String out = oldKeyWord + " was removed as a keyword for " + fullEmoji;
             logger.info(out);
             return out;
         } else {
@@ -238,8 +238,8 @@ public class EmojiReactions {
                 for (String emoji : emojisAndKeywords.get(key)) {
                     outString.append(emoji).append("\n");
                 }
+                outString.append("\n");
             }
-            outString.append("\n\n");
         } else {
             outString = new StringBuilder("You need the blue keycard to use that command.");
         }
@@ -297,7 +297,7 @@ public class EmojiReactions {
                     emojisAndKeywords.put(emoji, keywords);
                     emoji = in.nextLine();
                 } while (!emoji.equals("***"));
-                logger.info("Emojis and keywords successfully loaded.");
+                logger.info("Emojis and keywords loaded.");
             } catch (NoSuchElementException e) {
                 logger.error("Incorrect formatting in " + this.file.getName() + ", correctly formatted entries have been loaded.");
             }

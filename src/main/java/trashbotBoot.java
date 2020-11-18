@@ -1,5 +1,6 @@
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.channel.TextChannel;
+import org.javacord.api.entity.emoji.Emoji;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.util.logging.ExceptionLogger;
@@ -22,6 +23,7 @@ public class trashbotBoot {
     // Build and initialize modules to files
     private static AccessRestriction permissions = new AccessRestriction("data" + fileSep + "permissions.dat");
     private static BattleManager battleBot = new BattleManager();
+    private static GoModule goModule = new GoModule();
     private static instantHumorEquals humorEquals = new instantHumorEquals("data" + fileSep + "instantHumorEqualsPhrases.dat", permissions);
     private static instantHumorContains humorContains = new instantHumorContains("data" + fileSep + "instantHumorContainsPhrases.dat", permissions);
     private static EmojiReactions emojiReactions = new EmojiReactions("data" + fileSep + "emojisReactionData.dat", permissions);
@@ -30,6 +32,7 @@ public class trashbotBoot {
     private static HelpModule helpModule = new HelpModule("data" + fileSep + "helpList.dat");
     private static SpeakManager speakModule = new SpeakManager("data" + fileSep + "speakList.dat");
     private static UptimeModule uptimeModule = new UptimeModule("data" + fileSep + "recordUptime.dat");
+    private static PiModule piModule = new PiModule();
 
     public static void main(String[] args) {
         String token;
@@ -70,22 +73,25 @@ public class trashbotBoot {
 
                 // Only attempt to respond to messages if the message doesn't come from the bot
                 if (!message.getAuthor().isYourself()) {
+                    //goModule.run(event);
                     // Send the event to the humorEquals object
                     humorEquals.run(event);
                     // Send the event to the humorContains object
                     humorContains.run(event);
                     // Send the event and api to the emojiReactions object
-                    emojiReactions.run(event, api);
+                    //emojiReactions.run(event, api);
                     // Send the event to the karaokeBot object
                     karaokeBot.run(event);
                     // Send the event to the todoModule object
-                    todoModule.run(event);
+                    //todoModule.run(event);
                     // Send the event to the helpModule object
                     helpModule.run(event);
                     // Send the event to the speakModule object
-                    speakModule.run(event);
+                    //speakModule.run(event);
                     // Send the event to the uptimeModule object
                     uptimeModule.run(event);
+                    // Send the event to the piModule object
+                    piModule.run(event);
 
                     // A bunch of non-standardized commands that cannot be contained within modules are here:
 
@@ -94,8 +100,9 @@ public class trashbotBoot {
                         channel.sendMessage(message.getContent().substring(messageToString.indexOf("!ban ") + 4) + " has been banned.");
                     }
 
-                    if (messageToString.contains("thoonk")) {
-                        channel.sendMessage("<:thoonk:491141744445095947>");
+                    // Joke unban command
+                    if (messageToString.startsWith("!unban ")) {
+                        channel.sendMessage(message.getContent().substring(7) + " has been unbanned. suck it, staz.");
                     }
 
                     // !give <color> keycard <user>
@@ -109,7 +116,7 @@ public class trashbotBoot {
                             final String finalKeycardUser = keycardUser;
                             api.getUserById(keycardUser).thenAccept(user -> {
                                     permissions.addUser(finalKeycardUser, user.getName(), keycardColor);
-                                    String log = "User <@" + userID + "> added to permission " + keycardColor;
+                                    String log = "User <@" + finalKeycardUser + "> added to permission " + keycardColor;
                                     channel.sendMessage(log);
                             });
                         }
@@ -125,7 +132,7 @@ public class trashbotBoot {
                             String keycardUser = "" + helperFunctions.getFirstMentionID(message);
                             // Print result
                             permissions.removeUser(keycardUser,keycardColor);
-                            String log = "User <@" + userID + "> removed from permission " + keycardColor;
+                            String log = "User <@" + keycardUser + "> removed from permission " + keycardColor;
                             channel.sendMessage(log);
                         }
                     }
@@ -137,7 +144,7 @@ public class trashbotBoot {
                         StringBuilder outString = new StringBuilder();
                         outString.append("__Users with permission ").append(accessLevel).append(":__\n");
                         for (String user: users) {
-                            outString.append(user).append("\n");
+                            outString.append(user.substring(user.indexOf('§') + 1)).append("\n");
                         }
                         channel.sendMessage(outString.toString());
                     }
@@ -168,22 +175,9 @@ public class trashbotBoot {
                         botLogger.info("Shutdown command triggered by " + message.getAuthor().getName() + "!");
                         api.disconnect();
                     }
-
-                } else {
-                    if (messageToString.equals("<:thoonk:491141744445095947>")) {
-                        helperFunctions.botWaitShort();
-                        message.edit("<:thoonkroll1:518144565538979870>");
-                        helperFunctions.botWaitShort();
-                        message.edit("<:thoonkroll2:518144615459848207>");
-                        helperFunctions.botWaitShort();
-                        message.edit("<:thoonkroll3:518144629825208341>");
-                        helperFunctions.botWaitShort();
-                        message.edit("<:thoonk:491141744445095947>");
-                        helperFunctions.botWaitShort();
-                        message.delete();
-                    }
                 }
             });
+
             // Add listener for new member joins, to print a welcome message.
             api.addServerMemberJoinListener(event -> {
                 TextChannel channel;
@@ -198,6 +192,14 @@ public class trashbotBoot {
             api.addReactionAddListener(event -> {
                 if (!event.getUser().isYourself()) {
                     battleBot.run(event);
+                }
+            });
+
+            api.addMessageEditListener(event -> {
+                if (event.getNewContent().contains("| : : :  **LOST**  : : : |")) {
+                    event.getChannel().sendMessage("lol");
+                } if (event.getNewContent().contains("lol just code ur own discord bot to send messages for you")) {
+                    event.getChannel().sendMessage("yeah lol it's esey i mean look at me you just do it and its good");
                 }
             });
             // Print boot success

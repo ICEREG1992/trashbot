@@ -141,7 +141,7 @@ class BattleU extends BattleB{
             updateHealthBar(this.leftHealth, this.rightHealth, this.healthBar); // this is probably not necessary
             this.battleMessage.edit(this.leftEmoji + ":" + this.healthBar + ":" + this.rightEmoji + "\n" + helperFunctions.pickString(healResponse));
             helperFunctions.botWait();
-            int heal = ((int)(Math.random() * 10) + 7);
+            int heal = ((int)(Math.random() * 12) + 4);
             this.leftHealth += heal;
             if (this.leftHealth > 30) {
                 this.leftHealth = 30;
@@ -162,7 +162,7 @@ class BattleU extends BattleB{
             updateHealthBar(this.leftHealth, this.rightHealth, this.healthBar); // this is probably not necessary
             this.battleMessage.edit(this.leftEmoji + ":" + this.healthBar + ":" + this.rightEmoji + "\n" + helperFunctions.pickString(healResponse));
             helperFunctions.botWait();
-            int heal = ((int)(Math.random() * 10) + 7);
+            int heal = ((int)(Math.random() * 12) + 4);
             this.rightHealth += heal;
             if (this.rightHealth > 30) {
                 this.rightHealth = 30;

@@ -65,20 +65,8 @@ public class SpeakManager {
     }
 
     private ArrayList<String> getPhrases() {
-        Scanner fileReader = null;
-        try {
-            fileReader = new Scanner(this.speakFile, StandardCharsets.UTF_8).useDelimiter("\n");
-        } catch (IOException e) {
-            logger.error("File " + this.speakFile + " not found during load.");
-        }
-        ArrayList<String> phrasesList = new ArrayList<>();
-        if (fileReader != null) {
-            while (fileReader.hasNextLine()) {
-                phrasesList.add(fileReader.nextLine());
-            }
-            fileReader.close();
-        }
-        logger.info("Speak phrases successfully loaded.");
+        phrasesList = helperFunctions.readEntriesFromFile(this.speakFile);
+        logger.info("Speak phrases loaded.");
         return phrasesList;
     }
 }

@@ -31,13 +31,7 @@ public class instantHumorContains {
 
         for (String keyPhrase: keyPhrases.keySet()) {
             if(messageToString.contains(keyPhrase)) {
-                if (messageToString.contains("good work, trashbot")) {
-                    channel.sendMessage(helperFunctions.pickString("thx man", "i appreciate it", "np", "no problem aye", "thx man", "thx man"));
-                } else if (messageToString.contains("<@450507364768940034>")) {
-                    channel.sendMessage(helperFunctions.pickString("you called?", "that's me!", "what's up", "you called?", "you called?"));
-                } else {
-                    channel.sendMessage(helperFunctions.pickString(keyPhrases.get(keyPhrase)));
-                }
+                channel.sendMessage(helperFunctions.pickString(keyPhrases.get(keyPhrase)));
             }
         }
         if (messageToString.contains("black")) {
@@ -109,7 +103,7 @@ public class instantHumorContains {
 
                     }
                 }
-                logger.info("Contains phrases successfully loaded.");
+                logger.info("Contains phrases loaded.");
             } catch (NoSuchElementException e) {
                 logger.error("Incorrect formatting in " + this.file.getName() + ", correctly formatted entries have been loaded.");
             }

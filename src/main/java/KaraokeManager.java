@@ -49,6 +49,8 @@ public class KaraokeManager {
             } else {
                 channel.sendMessage("Sorry, you need to have the blue keycard to use that command.");
             }
+        } else if (messageToString.startsWith("!getlyrics ")) {
+
         }
     }
 
@@ -87,20 +89,9 @@ public class KaraokeManager {
     }
 
     private Queue<String> getLyrics() {
-        Scanner fileReader = null;
-        try {
-            fileReader = new Scanner(lyricsFile, StandardCharsets.UTF_8).useDelimiter("\n");
-        } catch (IOException e) {
-            logger.error("File " + this.lyricsFile + " not found during load.");
-        }
-        Queue<String> lyricsQueue = new LinkedList<>();
-        if (fileReader != null) {
-            while (fileReader.hasNextLine()) {
-                lyricsQueue.add(fileReader.nextLine());
-            }
-            fileReader.close();
-        }
+        Queue<String> lyricsQueue = new LinkedList<>(helperFunctions.readEntriesFromFile(this.lyricsFile));
         logger.info("Lyrics successfully loaded for Karaoke.");
         return lyricsQueue;
     }
+
 }

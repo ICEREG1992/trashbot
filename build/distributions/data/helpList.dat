@@ -1,53 +1,23 @@
-!help
-prints the help message. can be given a command as an argument to provide more help about a certain command.
-
-!ban
-bans someone or something from the server.
-
-!add
-adds a keyword to which i will respond with a given emoji. requires blue keycard.
-
-!remove
-removes that keyword from the list that i check for my emoji responses. requires blue keycard.
-
-!printall
-prints all emoji keywords that are currently existing. requires blue keycard.
-
-!give
-gives a certain color keycard to a user. requires blue keycard.
-
 !revoke
 removes a keycard from a user's inventory. requires blue keycard.
 
 !keywords
 gives the list of all keywords for a certain emoji.
 
-!containsadd
-if a message contains the keyword given, i'll respond with a certain given phrase. requires blue keycard.
-
-!containsremove
-removes a contains association from file. requires blue keycard.
-
-!equalsadd
-if a message matches the keyword exactly, i'll respond with a certain given phrase. requires blue keycard.
-
-!equalsremove
-removes an equals association from file. requires blue keycard.
-
-!uptime
-lets you know how long i've been running nonstop for.
-
-!recorduptime
-lets you know the longest time i've ever ran nonstop for!
-
-!devsendmessage
-sends a message to every server i'm on. very powerful command. requires blue keycard.
-
 !karaoke
-sing a fun song with me! requires white keycard.
+sing a fun song with me!
 
 !battle
 angry at me? start a fight!
+
+!attack
+used during the battle to deal damage.
+
+!heal
+used during the battle to restore hit points.
+
+!run
+used during the battle to pussy out and run away
 
 !fuck you
 i dont really like this command very much.
@@ -88,5 +58,5 @@ prints the current todo list. if given an argument, i'll add that item to the li
 !todoclear
 clears an entry from the todo list. nice job!
 
-***
-
+!credit
+look you fuckin idiot this is a tatsumaki command fkn cut it out

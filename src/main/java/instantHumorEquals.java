@@ -28,11 +28,16 @@ public class instantHumorEquals {
         String messageToString = message.getContent().toLowerCase();
         String userID = event.getMessage().getAuthor().getIdAsString();
 
-        for (String keyPhrase: keyPhrases.keySet()) {
-            if(messageToString.equals(keyPhrase)) {
-                channel.sendMessage(helperFunctions.pickString(keyPhrases.get(keyPhrase)));
+        if (userID.equals("473760382616600597") && messageToString.equals("shut the fuck up")) {
+            channel.sendMessage("hey, what did pruz ever do to you, man?");
+        } else {
+            for (String keyPhrase: keyPhrases.keySet()) {
+                if(messageToString.equals(keyPhrase)) {
+                    channel.sendMessage(helperFunctions.pickString(keyPhrases.get(keyPhrase)));
+                }
             }
         }
+
         if (messageToString.startsWith("!equalsadd ") && permissions.doesUserHaveAccess(userID, "blue")) {
             String keyword = messageToString.substring(messageToString.indexOf(" ") + 1, messageToString.indexOf("§") - 1);
             String response = message.getContent().substring(messageToString.indexOf("§") + 2);
@@ -88,7 +93,7 @@ public class instantHumorEquals {
                         key = in.nextLine();
                     }
                 }
-                logger.info("Equals phrases successfully loaded.");
+                logger.info("Equals phrases loaded.");
             } catch (NoSuchElementException e) {
                 logger.error("Incorrect formatting in " + this.file.getName() + ", correctly formatted entries have been loaded.");
             }

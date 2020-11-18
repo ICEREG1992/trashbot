@@ -38,7 +38,7 @@ class AccessRestriction {
                 logger.info("User <@" + userID + "> removed from permission " + accessLevel);
                 if (permissions.get(accessLevel).size() == 0) {
                     permissions.remove(accessLevel);
-                    logger.info(". " + accessLevel + " is now empty, and has been deleted.");
+                    logger.info("Permission level " + accessLevel + " is now empty, and has been deleted.");
                 }
             }
         }
@@ -75,7 +75,6 @@ class AccessRestriction {
         Set<String> users;
 
         try {
-            //in = new Scanner(file, "UTF-8").useDelimiter("\n");
             in = new Scanner(file, StandardCharsets.UTF_8).useDelimiter("\n");
         } catch (IOException e) {
             logger.error("File " + file + " not found: ");
@@ -95,7 +94,7 @@ class AccessRestriction {
                     permissions.put(permissionLevel, users);
                     permissionLevel = in.nextLine();
                 }
-                logger.info("Permissions successfully loaded.");
+                logger.info("Permissions loaded.");
             } catch (NoSuchElementException e) {
                 logger.error("Incorrect formatting in " + this.file.getName() + ", correctly formatted entries have been loaded.");
             }

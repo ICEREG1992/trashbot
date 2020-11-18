@@ -26,12 +26,10 @@ public class BattleManager {
 
         if (messageToString.equals("!battle")) {
             addBotBattle(message.getAuthor().getIdAsString(), channel);
-            logger.info("Bot battle started for " + message.getAuthor().getName() + ".");
         } else if (messageToString.startsWith("!battle <@")) {
             addUserBattle(message.getAuthor().getIdAsString(), "" + helperFunctions.getFirstMentionID(message), channel);
-            logger.info("User battle started for " + message.getAuthor().getName() + " against " + helperFunctions.getFirstMentionName(message) + ".");
-        } else if (message.getAuthor().isYourself() && messageToString.startsWith("user")) {
-            String userID = messageToString.substring(4);
+        } else if (message.getAuthor().isYourself() && messageToString.startsWith("battle")) {
+            String userID = messageToString.substring(6);
             battleMap.get(userID).initialize(message);
         }
     }
@@ -48,6 +46,9 @@ public class BattleManager {
         if (!battleMap.containsKey(userID)) {
             Battle addBattle = new BattleB(channel, userID);
             battleMap.put(userID, addBattle);
+            logger.info("Bot battle started for " + userID + ".");
+        } else {
+            channel.sendMessage("yo chill you're already fighting me bro");
         }
     }
 
@@ -57,6 +58,9 @@ public class BattleManager {
             Battle addBattle = new BattleU(channel, userID);
             battleMap.put(userID, addBattle);
             battleMap.put(enemyID, addBattle);
+            logger.info("User battle started for " + userID + " against " + enemyID + ".");
+        } else {
+            channel.sendMessage("calm down one guy at a time dude");
         }
     }
 

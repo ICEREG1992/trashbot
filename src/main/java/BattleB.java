@@ -14,7 +14,7 @@ class BattleB implements Battle {
     private StringBuilder healthBar;
 
     BattleB(TextChannel textChannel, String userID) {
-        textChannel.sendMessage("user" + userID);
+        textChannel.sendMessage("battle" + userID);
         this.leftID = userID;
     }
 
@@ -109,7 +109,7 @@ class BattleB implements Battle {
             updateHealthBar(this.leftHealth, this.rightHealth, this.healthBar);
             this.battleMessage.edit (this.leftEmoji + ":" + this.healthBar + ":" + ROBOT_EMOJI + "\n" + helperFunctions.pickString("yeet", "lol haha", "esketit bro", "aight frosh"));
             helperFunctions.botWait();
-            int heal = ((int)(Math.random() * 10) + 7);
+            int heal = ((int)(Math.random() * 12) + 4);
             this.leftHealth += heal;
             if (this.leftHealth > 30) {
                 this.leftHealth = 30;

@@ -79,7 +79,7 @@ public class TodoModule {
                 todoList.add(fileReader.nextLine());
             }
             fileReader.close();
-            botLogger.info("Todo data successfully loaded.");
+            botLogger.info("Todo data loaded.");
         }
     }
 }

@@ -1,0 +1,1 @@
+worker: build/scripts/trashbot qwKmjZ-f-n_Oz7JhcCairRiZ5OfJfWFb

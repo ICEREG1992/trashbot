@@ -1,0 +1,75 @@
+08:19:05.702 [main] INFO  AccessRestriction - Permissions successfully loaded.
+08:19:05.745 [main] DEBUG TodoModule - Todo data loaded successfully.
+2018-11-21 08:19:06.056+0000 INFO org.javacord.core.util.logging.ExceptionLoggerDelegateImpl No Log4j2 compatible logger was found. Using default Javacord implementation!
+08:19:08.798 [Javacord - Central ExecutorService - 1] INFO  trashbotBoot - Boot success!
+08:24:51.701 [Javacord - Central ExecutorService - 1] INFO  BattleManager - Battle started for 283785595728429057.
+08:25:14.087 [Javacord - Central ExecutorService - 3] INFO  BattleManager - Battle ended for 283785595728429057.
+08:25:14.088 [Javacord - Central ExecutorService - 3] INFO  BattleManager - Battle started for 283785595728429057.
+2018-11-22 02:45:19.590+0000 INFO org.javacord.core.util.gateway.DiscordWebSocketAdapter Websocket closed with reason 'unknown' and code AWAY (1001) by server! {shard=0} 
+2018-11-22 02:45:19.594+0000 INFO org.javacord.core.util.gateway.DiscordWebSocketAdapter Trying to reconnect/resume in 1 seconds! {shard=0} 
+2018-11-22 03:35:32.044+0000 INFO org.javacord.core.util.gateway.DiscordWebSocketAdapter Websocket closed with reason 'unknown' and code AWAY (1001) by server! {shard=0} 
+2018-11-22 03:35:32.046+0000 INFO org.javacord.core.util.gateway.DiscordWebSocketAdapter Trying to reconnect/resume in 1 seconds! {shard=0} 
+2018-11-22 23:36:55.679+0000 INFO org.javacord.core.util.gateway.DiscordWebSocketAdapter Websocket closed with reason 'Heartbeat was not answered properly' and code UNKNOWN_ERROR (4000) by client! {shard=0} 
+2018-11-22 23:36:55.680+0000 INFO org.javacord.core.util.gateway.DiscordWebSocketAdapter Trying to reconnect/resume in 1 seconds! {shard=0} 
+01:04:32.758 [Javacord - Central ExecutorService - 40] INFO  EmojiReactions - In The Witness server: "race thing" message not triggered.
+2018-11-23 03:02:55.490+0000 INFO org.javacord.core.util.gateway.DiscordWebSocketAdapter Websocket closed with reason 'An I/O error occurred while a frame was being read from the web socket: Connection reset' and code VIOLATED (1008) by client! {shard=0} 
+2018-11-23 03:02:55.490+0000 INFO org.javacord.core.util.gateway.DiscordWebSocketAdapter Trying to reconnect/resume in 1 seconds! {shard=0} 
+21:10:08.234 [Javacord - Central ExecutorService - 49] INFO  EmojiReactions - New Emoji Added: <:pong:496967876222255104
+21:10:08.282 [Javacord - Central ExecutorService - 49] INFO  EmojiReactions - pong was added as a keyword for <:pong:496967876222255104
+21:10:13.288 [Javacord - Central ExecutorService - 53] WARN  EmojiReactions - No emoji found in message:<:pong:496967876222255104
+21:27:22.932 [Javacord - Central ExecutorService - 52] WARN  EmojiReactions - No emoji found in message:<:pong:496967876222255104
+04:18:02.189 [Javacord - Central ExecutorService - 58] INFO  EmojiReactions - In The Witness server: "race thing" message triggered.
+04:40:59.920 [Javacord - Central ExecutorService - 58] INFO  EmojiReactions - In The Witness server: "race thing" message not triggered.
+05:12:34.408 [Javacord - Central ExecutorService - 61] INFO  EmojiReactions - In The Witness server: "race thing" message not triggered.
+05:13:42.346 [Javacord - Central ExecutorService - 62] INFO  EmojiReactions - In The Witness server: "race thing" message not triggered.
+05:14:44.528 [Javacord - Central ExecutorService - 62] INFO  EmojiReactions - In The Witness server: "race thing" message not triggered.
+05:14:50.750 [Javacord - Central ExecutorService - 62] INFO  EmojiReactions - In The Witness server: "race thing" message not triggered.
+05:16:03.080 [Javacord - Central ExecutorService - 63] INFO  EmojiReactions - In The Witness server: "race thing" message not triggered.
+05:16:20.064 [Javacord - Central ExecutorService - 63] INFO  EmojiReactions - In The Witness server: "race thing" message not triggered.
+06:14:40.702 [Javacord - Central ExecutorService - 96] INFO  EmojiReactions - In The Witness server: "race thing" message not triggered.
+2018-11-26 17:37:22.958+0000 INFO org.javacord.core.util.gateway.DiscordWebSocketAdapter Websocket closed with reason 'unknown' and code NORMAL (1000) by server! {shard=0} 
+2018-11-26 17:37:22.960+0000 INFO org.javacord.core.util.gateway.DiscordWebSocketAdapter Trying to reconnect/resume in 1 seconds! {shard=0} 
+21:24:40.230 [Javacord - Central ExecutorService - 171] INFO  EmojiReactions - In The Witness server: "race thing" message not triggered.
+21:24:54.022 [Javacord - Central ExecutorService - 171] INFO  EmojiReactions - In The Witness server: "race thing" message not triggered.
+21:25:21.737 [Javacord - Central ExecutorService - 171] INFO  EmojiReactions - In The Witness server: "race thing" message not triggered.
+05:45:08.610 [Javacord - Central ExecutorService - 185] INFO  TodoModule - New item added to todo list: allow for multiple responses in any equals or contains humor prompt (this may require some refactoring)
+05:45:08.612 [Javacord - Central ExecutorService - 185] INFO  TodoModule - New todo data saved.
+09:20:39.827 [Javacord - Central ExecutorService - 190] INFO  EmojiReactions - In The Witness server: "race thing" message triggered.
+17:16:16.656 [Javacord - Central ExecutorService - 212] INFO  BattleManager - Battle ended for 283785595728429057.
+17:16:16.656 [Javacord - Central ExecutorService - 212] INFO  BattleManager - Battle started for 132374584086364160.
+17:16:37.273 [Javacord - Central ExecutorService - 216] INFO  BattleManager - Battle ended for 132374584086364160.
+17:16:37.273 [Javacord - Central ExecutorService - 216] INFO  BattleManager - Battle started for 132374584086364160.
+17:16:58.766 [Javacord - Central ExecutorService - 216] INFO  BattleManager - Battle ended for 132374584086364160.
+17:16:58.766 [Javacord - Central ExecutorService - 216] INFO  BattleManager - Battle started for 132374584086364160.
+17:36:34.478 [Javacord - Central ExecutorService - 215] INFO  TodoModule - Item removed from todo list: make trashbot expect file or string as token arg
+17:36:34.479 [Javacord - Central ExecutorService - 215] INFO  TodoModule - New todo data saved.
+17:37:02.653 [Javacord - Central ExecutorService - 218] INFO  TodoModule - Item removed from todo list: decaf module
+17:37:02.653 [Javacord - Central ExecutorService - 218] INFO  TodoModule - New todo data saved.
+17:37:04.628 [Javacord - Central ExecutorService - 218] INFO  TodoModule - Item removed from todo list: implement simple calculator
+17:37:04.630 [Javacord - Central ExecutorService - 218] INFO  TodoModule - New todo data saved.
+17:39:03.237 [Javacord - Central ExecutorService - 217] INFO  TodoModule - Item removed from todo list: add newline after every emoji list for !printall
+17:39:03.238 [Javacord - Central ExecutorService - 217] INFO  TodoModule - New todo data saved.
+00:13:27.982 [Javacord - Central ExecutorService - 220] INFO  BattleManager - Battle ended for 132374584086364160.
+00:13:27.983 [Javacord - Central ExecutorService - 220] INFO  BattleManager - Battle started for 132374584086364160.
+09:50:45.723 [Javacord - Central ExecutorService - 255] INFO  EmojiReactions - New Emoji Added: <:neps:491517163878744064
+09:50:45.723 [Javacord - Central ExecutorService - 255] INFO  EmojiReactions - neps was added as a keyword for <:neps:491517163878744064
+09:50:47.664 [Javacord - Central ExecutorService - 254] WARN  EmojiReactions - No emoji found in message:<:neps:491517163878744064
+09:50:55.039 [Javacord - Central ExecutorService - 254] INFO  EmojiReactions - New Emoji Added: <:staz:491146622500077568
+09:50:55.039 [Javacord - Central ExecutorService - 254] INFO  EmojiReactions - staz was added as a keyword for <:staz:491146622500077568
+09:50:56.602 [Javacord - Central ExecutorService - 255] WARN  EmojiReactions - No emoji found in message:<:staz:491146622500077568
+09:50:56.938 [Javacord - Central ExecutorService - 254] WARN  EmojiReactions - No emoji found in message:<:staz:491146622500077568
+09:51:38.037 [Javacord - Central ExecutorService - 255] WARN  EmojiReactions - No emoji found in message:<:staz:491146622500077568
+10:03:28.328 [Javacord - Central ExecutorService - 255] WARN  EmojiReactions - No emoji found in message:<:neps:491517163878744064
+10:14:23.527 [Javacord - Central ExecutorService - 259] INFO  EmojiReactions - In The Witness server: "race thing" message not triggered.
+10:14:40.662 [Javacord - Central ExecutorService - 259] INFO  EmojiReactions - In The Witness server: "race thing" message not triggered.
+10:22:25.785 [Javacord - Central ExecutorService - 262] WARN  EmojiReactions - No emoji found in message:<:neps:491517163878744064
+10:22:53.050 [Javacord - Central ExecutorService - 262] INFO  EmojiReactions - In The Witness server: "race thing" message not triggered.
+2018-11-28 13:47:35.085+0000 INFO org.javacord.core.util.gateway.DiscordWebSocketAdapter Websocket closed with reason 'CloudFlare WebSocket proxy restarting' and code AWAY (1001) by server! {shard=0} 
+2018-11-28 13:47:35.086+0000 INFO org.javacord.core.util.gateway.DiscordWebSocketAdapter Trying to reconnect/resume in 1 seconds! {shard=0} 
+23:59:02.518 [Javacord - Central ExecutorService - 268] WARN  EmojiReactions - No emoji found in message:<:neps:491517163878744064
+00:57:06.564 [Javacord - Central ExecutorService - 273] INFO  EmojiReactions - New contains response added: credit(s) and lost everything. | lol
+01:08:42.016 [Javacord - Central ExecutorService - 278] INFO  EmojiReactions - Contains response for "credit(s) and lost everything." has been removed.
+01:09:38.014 [Javacord - Central ExecutorService - 278] INFO  EmojiReactions - New contains response added: | : : :  **lost**  : : : | | lol
+01:38:06.786 [Javacord - Central ExecutorService - 278] INFO  BattleManager - Battle ended for 132374584086364160.
+01:38:25.043 [Javacord - Central ExecutorService - 281] INFO  trashbotBoot - Panic command triggered by William_Williams!
+2018-11-29 01:38:25.068+0000 INFO org.javacord.core.util.gateway.DiscordWebSocketAdapter Websocket closed with reason 'unknown' and code NORMAL (1000) by client! {shard=0} 

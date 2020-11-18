@@ -43,6 +43,7 @@ repositories {
 run{
     //specify the input stream for the run task
     standardInput=System.in
+    // replace this token in private version
     args = ["NDUwNTA3MzY0NzY4OTQwMDM0.DuDUzQ.fiBrrUAN5pd-Kw9jws3WxCke7Ts"]
 }
 

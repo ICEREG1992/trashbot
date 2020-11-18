@@ -77,7 +77,7 @@ public class UptimeModule {
             recordUptime = fileReader.nextDouble();
             fileReader.close();
         }
-        logger.info("Uptime data successfully loaded.");
+        logger.info("Uptime data loaded.");
     }
 
     private static String millisToString(double millis) {
