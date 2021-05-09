@@ -32,7 +32,7 @@ class MyClient(discord.Client):
         # send message to battlebot out here since trashbot responds to its own messages here
         
         # only attempt to respond to messages if the message doesn't come from the bot
-        if message.author != self.user:
+        if message.author != self.user and !permissions.allowed(message.author.id, "black"):
             await humor_equals.run(self, message)
             await humor_contains.run(self, message)
             await permissions.run(self, message, discord.Client)
@@ -47,7 +47,7 @@ class MyClient(discord.Client):
             if message.content.startswith("!unban "):
                 await message.channel.send(message.content[7:] + " has been unbanned. Suck it, staz!")
 
-            if message.content == '!panic' and permissions.allowed(message.author.id, "blue"):
+            if message.content == '!panic' and permissions.allowed(message.author.id, "blue", "red"):
                 await message.channel.send("ow, fuck!")
                 python = sys.executable
                 os.execl(python, python, * sys.argv)

@@ -12,7 +12,7 @@ f.close()
 class todo:
 
     async def run(self, message):
-        if (message.content.startswith("!todo ")):
+        if (message.content.startswith("!todo ") and permissions.allowed(message.author.id, "blue", "red")):
             t = message.content[6:]
             todo_list.append(t)
             await message.channel.send("added to todo list. get to work bud")
