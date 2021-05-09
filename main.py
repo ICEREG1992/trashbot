@@ -14,8 +14,8 @@ from karaoke import karaoke_manager
 
 logging.basicConfig(level=logging.INFO)
 
-f = open("key.txt", "r")
-if f.exists():
+if os.path.exists("key.txt"):
+    f = open("key.txt", "r")
     TOKEN = f.read()
     f.close()
 else:

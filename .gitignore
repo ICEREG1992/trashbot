@@ -1,1 +1,8 @@
 key.txt
+__pycache__/helperfunctions.cpython-39.pyc
+__pycache__/humor_contains.cpython-39.pyc
+__pycache__/humor_equals.cpython-39.pyc
+__pycache__/karaoke.cpython-39.pyc
+__pycache__/permissions.cpython-39.pyc
+__pycache__/todo.cpython-39.pyc
+__pycache__/uptime.cpython-39.pyc
