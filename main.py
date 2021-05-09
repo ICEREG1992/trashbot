@@ -15,8 +15,11 @@ from karaoke import karaoke_manager
 logging.basicConfig(level=logging.INFO)
 
 f = open("key.txt", "r")
-TOKEN = f.read()
-f.close()
+if f.exists():
+    TOKEN = f.read()
+    f.close()
+else:
+    TOKEN = os.environ['TRASHBOT_KEY']
 
 logging.info("Booting Trashbot v1.0.0 with token '" + TOKEN + "'")
 startTime = dt.datetime.now()
