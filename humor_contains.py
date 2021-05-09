@@ -26,6 +26,8 @@ class humor_contains:
             else:
                 keyword = message.content[16:]
                 keyphrases.pop(keyword, None)
+                if len(keyphrases[keyword]) == 0:
+                    keyphrases.pop(keyword, None)
                 humor_contains.save()
         else:
             for phrase in keyphrases:
@@ -33,7 +35,7 @@ class humor_contains:
                     await message.channel.send(pick_string(keyphrases[phrase]))
 
             if "black" in message.content:
-                if helperfunctions.chance(20):
+                if helperfunctions.chance(10):
                     await message.channel.send("why you gotta make it a race thing")
         
     def save():

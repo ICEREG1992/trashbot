@@ -32,7 +32,7 @@ class MyClient(discord.Client):
         # send message to battlebot out here since trashbot responds to its own messages here
         
         # only attempt to respond to messages if the message doesn't come from the bot
-        if message.author != self.user and not permissions.allowed(message.author.id, "black"):
+        if message.author != self.user and (not permissions.allowed(message.author.id, "black")):
             await humor_equals.run(self, message)
             await humor_contains.run(self, message)
             await permissions.run(self, message, discord.Client)

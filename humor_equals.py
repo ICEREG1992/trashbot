@@ -26,6 +26,8 @@ class humor_equals:
             else:
                 keyword = message.content[14:]
                 keyphrases.pop(keyword, None)
+                if len(keyphrases[keyword]) == 0:
+                    keyphrases.pop(keyword, None)
                 humor_equals.save()
         else:
             for phrase in keyphrases:

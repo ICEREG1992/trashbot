@@ -55,6 +55,8 @@ class permissions:
         if color in perms:
             if str(id) in perms[color]:
                 perms[color].pop(str(id))
+            if len(perms[color]) == 0:
+                perms.pop(color, None)
         permissions.save()
 
     def get_users(color):
@@ -63,7 +65,7 @@ class permissions:
 
     def allowed(id, *colors):
         for color in colors:
-            if str(id) in perms[color]:
+            if color in perms and str(id) in perms[color]:
                 return True
         return False
 
