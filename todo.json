@@ -1,13 +1,10 @@
 [
   "implement battles (make more fun)",
-  "implement speak",
   "implement benis rating",
   "implement pi module",
   "implement help module",
   "implement emojireactions",
   "implement better logging, and denial message for keycards",
-  "puzl",
-  "give sloss a ton of money",
   "implement delete server command",
-  "restrict access to todo command"
+  "figure out how to get live files on heroku"
 ]

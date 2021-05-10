@@ -64,7 +64,13 @@ class MyClient(discord.Client):
 
             return
 
-    async def on_message_edit(self, before, after):
+    async def on_reaction_add(self, reaction, user):
+        if user != self.user and reaction.emoji == "🗑️":
+            if reaction.message.author == self.user:
+                await reaction.message.delete()
+
+    # message_edit joke
+    '''async def on_message_edit(self, before, after):
         if after.author != self.user and before.content != after.content and helperfunctions.chance(10):
             await after.channel.send(helperfunctions.pick_string([
                 "LOL u made a lil fucky wucky there huh??",
@@ -72,7 +78,7 @@ class MyClient(discord.Client):
                 "press enter too soon buddy? lol lmfao",
                 "EVERYBODY LOOK THIS PERSON MADE A MISTAKE!!!",
                 "it's ok bro everyone makes mistakes just edit until it's good"
-            ]))
+            ]))'''
 
 client = MyClient()
 client.run(TOKEN)
