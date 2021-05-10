@@ -67,7 +67,7 @@ class MyClient(discord.Client):
     async def on_reaction_add(self, reaction, user):
         if user != self.user and reaction.emoji == "🗑️":
             if reaction.message.author == self.user:
-                await reaction.message.delete(0.5)
+                await reaction.message.delete(delay=0.5)
 
     # message_edit joke
     '''async def on_message_edit(self, before, after):
