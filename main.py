@@ -11,6 +11,7 @@ from permissions import permissions
 from uptime import uptime
 from todo import todo
 from karaoke import karaoke_manager
+from battle import battle_manager
 
 logging.basicConfig(level=logging.INFO)
 
@@ -30,7 +31,8 @@ class MyClient(discord.Client):
 
     async def on_message(self, message):
         # send message to battlebot out here since trashbot responds to its own messages here
-        
+        if message.author == self.user:
+            await battle_manager.run(self, message)
         # only attempt to respond to messages if the message doesn't come from the bot
         if message.author != self.user and (not permissions.allowed(message.author.id, "black")):
             await humor_equals.run(self, message)
@@ -39,6 +41,7 @@ class MyClient(discord.Client):
             await uptime.run(self, message)
             await todo.run(self, message)
             await karaoke_manager.run(self, message)
+            #await battle_manager.run(self, message)
             #emoji_reactions.run(message)
 
             if message.content.startswith("!ban "):
@@ -65,6 +68,7 @@ class MyClient(discord.Client):
             return
 
     async def on_reaction_add(self, reaction, user):
+        await battle_manager.battle(self, reaction, user)
         if user != self.user and reaction.emoji == "🗑️":
             if reaction.message.author == self.user:
                 await reaction.message.delete(delay=0.5)
