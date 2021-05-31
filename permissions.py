@@ -2,14 +2,23 @@ import json
 import os
 from helperfunctions import pick_string
 import logging
+import boto3
 
 logging.basicConfig(level=logging.INFO)
 
-f = open("permissions.json", "r")
-perms = json.loads(f.read())
-f.close()
+global db
+db = boto3.client('dynamodb', region_name='us-east-2')
+
+global perms
+perms = {}
 
 class permissions:
+
+    def init():
+        d = db.get_item(TableName="trashbot", Key={'name':{'S':'permissions'}})
+        global perms
+        perms = json.loads(d['Item']['data']['S'])
+
     async def run(self, message, client):
         if (message.content.startswith("!give ")):
             if (permissions.allowed(message.author.id, "blue")):
@@ -70,5 +79,4 @@ class permissions:
         return False
 
     def save():
-        with open("permissions.json", "w") as outfile:
-            json.dump(perms, outfile, indent=2)
+        db.put_item(TableName="trashbot", Item={'name':{'S':'permissions'}, 'data':{'S':json.dumps(perms)}})

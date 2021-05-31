@@ -4,12 +4,20 @@ import helperfunctions
 from helperfunctions import pick_string
 from permissions import permissions
 import random
+import boto3
 
-f = open("todo.json", "r")
-todo_list = json.loads(f.read())
-f.close()
+global db
+db = boto3.client('dynamodb', region_name='us-east-2')
+
+global todo_list
+todo_list = []
 
 class todo:
+
+    def init():
+        d = db.get_item(TableName="trashbot", Key={'name':{'S':'todo'}})
+        global todo_list
+        todo_list = json.loads(d['Item']['data']['S'])
 
     async def run(self, message):
         if (message.content.startswith("!todo ") and permissions.allowed(message.author.id, "blue", "red")):
@@ -32,5 +40,4 @@ class todo:
             await message.channel.send(s)
         
     def save():
-        with open("todo.json", "w") as outfile:
-            json.dump(todo_list, outfile, indent=2)
+        db.put_item(TableName="trashbot", Item={'name':{'S':'todo'}, 'data':{'S':json.dumps(todo_list)}})

@@ -23,11 +23,17 @@ else:
     TOKEN = os.environ['TRASHBOT_KEY']
 
 logging.info("Booting Trashbot v1.0.0 with token '" + TOKEN + "'")
-startTime = dt.datetime.now()
+helperfunctions.ensure_table()
 
 class MyClient(discord.Client):
     async def on_ready(self):
         logging.info('Logged on as ' + str(self.user))
+        humor_equals.init()
+        humor_contains.init()
+        permissions.init() 
+        uptime.init() 
+        todo.init() 
+        karaoke_manager.init()
 
     async def on_message(self, message):
         # send message to battlebot out here since trashbot responds to its own messages here
@@ -42,7 +48,6 @@ class MyClient(discord.Client):
             await todo.run(self, message)
             await karaoke_manager.run(self, message)
             #await battle_manager.run(self, message)
-            #emoji_reactions.run(message)
 
             if message.content.startswith("!ban "):
                 await message.channel.send(message.content[5:] + " has been banned.")

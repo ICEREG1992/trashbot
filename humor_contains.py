@@ -1,15 +1,21 @@
-import os
 import json
 import helperfunctions
 from helperfunctions import pick_string
 from permissions import permissions
-import random
+import boto3
 
-f = open("contains_phrases.json", "r")
-keyphrases = json.loads(f.read())
-f.close()
+global db
+db = boto3.client('dynamodb', region_name='us-east-2')
+
+global keyphrases
+keyphrases = {}
 
 class humor_contains:
+
+    def init():
+        d = db.get_item(TableName="trashbot", Key={'name':{'S':'contains_phrases'}})
+        global keyphrases
+        keyphrases = json.loads(d['Item']['data']['S'])
 
     async def run(self, message):
         if (message.content.startswith("!containsadd ") and permissions.allowed(message.author.id, "blue")):
@@ -39,5 +45,4 @@ class humor_contains:
                     await message.channel.send("why you gotta make it a race thing")
         
     def save():
-        with open("contains_phrases.json", "w") as outfile:
-            json.dump(keyphrases, outfile, indent=2)
+        db.put_item(TableName="trashbot", Item={'name':{'S':'contains_phrases'}, 'data':{'S':json.dumps(keyphrases)}})

@@ -3,14 +3,23 @@ import datetime as dt
 import humanize
 import helperfunctions
 from helperfunctions import pick_string
+import boto3
 
-f = open("uptime.dat", "r")
-record_uptime = dt.timedelta(seconds=float(f.readline()))
-f.close()
+global db
+db = boto3.client('dynamodb', region_name='us-east-2')
+
+global record_uptime
+record_uptime = dt.timedelta(seconds= 0)
 
 start_time = dt.datetime.now()
 
 class uptime:
+
+    def init():
+        d = db.get_item(TableName="trashbot", Key={'name':{'S':'uptime'}})
+        global record_uptime
+        record_uptime = dt.timedelta(seconds=float(d['Item']['data']['S']))
+
     async def run(self, message):
         global record_uptime
         if message.content == "!uptime":
@@ -44,5 +53,4 @@ class uptime:
                     
     
     def save(t):
-        with open("uptime.dat", "w") as outfile:
-            outfile.write(str(t.total_seconds()))
+        db.put_item(TableName="trashbot", Item={'name':{'S':'uptime'}, 'data':{'S':str(t.total_seconds())}})

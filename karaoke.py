@@ -1,14 +1,23 @@
-import os
 import helperfunctions
 from permissions import permissions
+import boto3
+import json
 
-f = open("lyrics.dat", "r")
-lyrics = f.read().split("\n")
-f.close()
+global db
+db = boto3.client('dynamodb', region_name='us-east-2')
+
+global lyrics
+lyrics = "§"
 
 k = {}
 
 class karaoke_manager:
+
+    def init():
+        d = db.get_item(TableName="trashbot", Key={'name':{'S':'lyrics'}})
+        global lyrics
+        lyrics = json.loads(d['Item']['data']['S'])
+
     async def run(self, message):
         if (message.content == "!karaoke"):
             print(message.channel)
@@ -18,8 +27,10 @@ class karaoke_manager:
             # karaoke.run takes care of setting active to False
         elif (message.content.startswith("!givelyrics ") and permissions.allowed(message.author.id, "blue", "red")):
             new_lyrics = message.content[12:]
+            global lyrics
+            lyrics = new_lyrics.split("\n")
             await message.channel.send("New lyrics loaded!")
-            karaoke_manager.save(new_lyrics)
+            karaoke_manager.save(lyrics)
 
     async def add_karaoke(channel):
         karaoke_manager.clean_karaoke()
@@ -37,8 +48,7 @@ class karaoke_manager:
             k.pop(x, None)
 
     def save(l):
-        with open("lyrics.dat", "w", encoding='utf8') as outfile:
-            outfile.write(l + "\n§")
+        db.put_item(TableName="trashbot", Item={'name':{'S':'lyrics'}, 'data':{'S':json.dumps(l)}})
 
 
 class Karaoke:
@@ -175,7 +185,7 @@ class Karaoke:
             self.next_line = ""
     
     def format(line):
-        return Karaoke.remove_punc(Karaoke.shorten(line)).lower()
+        return Karaoke.shorten(Karaoke.remove_punc(line.lower()))
 
     def sing(line, exclamation, uppercase):
         return line.upper() + ("!" * exclamation) if uppercase else line + ("!" * exclamation)
@@ -185,7 +195,10 @@ class Karaoke:
         for c in range(len(l)-1):
             if (l[c] == l[c+1]):
                 l[c] = ""
+        while l[len(l)-1] == " ":
+            l.pop(len(l)-1)
         s = "".join(l)
+        print(s)
         return s
 
     def remove_punc(line):
@@ -194,9 +207,9 @@ class Karaoke:
             char = l[i]
             if not (char.isalpha() or char in "() ？、"): #remove all body punctuation
                 l[i] = ""
-        char = l[-1]
-        if not (char.isalpha() or char in "?!"): # preserve ending ? or ! characters
-            l[len(l)-1] = ""
+        # char = l[-1]
+        # if not (char.isalpha() or char in "?!"): # preserve ending ? or ! characters
+        #     l[len(l)-1] = ""
         s = "".join(l)
         return s
 
