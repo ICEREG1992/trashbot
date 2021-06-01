@@ -195,7 +195,7 @@ class Karaoke:
         for c in range(len(l)-1):
             if (l[c] == l[c+1]):
                 l[c] = ""
-        while l[len(l)-1] == " ":
+        while l[len(l)-1] == " ": # remove trailing spaces
             l.pop(len(l)-1)
         s = "".join(l)
         print(s)
@@ -203,7 +203,7 @@ class Karaoke:
 
     def remove_punc(line):
         l = list(line)
-        for i in range(len(l)-1):
+        for i in range(len(l)):
             char = l[i]
             if not (char.isalpha() or char in "() ？、"): #remove all body punctuation
                 l[i] = ""
