@@ -9,7 +9,7 @@ class spam_train:
             # get queue
             q = channels[message.channel.id]
             # add to queue/dequeue
-            if len(q) is 3:
+            if len(q) == 3:
                 q.pop(0)
                 q.append(message.content)
                 # check if all three the same
