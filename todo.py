@@ -23,15 +23,31 @@ class todo:
         if (message.content.startswith("!todo ") and permissions.allowed(message.author.id, "blue", "red")):
             t = message.content[6:]
             todo_list.append(t)
-            await message.channel.send("added to todo list. get to work bud")
+            await message.channel.send(pick_string(["added to todo list. get to work bud",
+                "ok thats on the list now",
+                "yeah good idea probably. added to the list",
+                "sounds good, hope it doesnt take too long",
+                "i'll write that down for ya"]))
             todo.save()
         elif (message.content.startswith("!todoclear ") and permissions.allowed(message.author.id, "blue")):
             i = int(message.content[11:])-1
-            await message.channel.send("removed from todo list. good job man im proud of ya")
+            await message.channel.send(pick_string(["removed from todo list. good job man im proud of ya",
+                "scratch that one off, eh? nice",
+                "u killin it bro nice one",
+                "hell yeah. i feel better already",
+                "its lit like bic!!! turn up bro thats hella good",
+                "good work my main man! u doin it"]))
             todo_list.remove(todo_list[i])
             todo.save()
         elif (message.content == "!todo"):
-            await message.channel.send("ok here's what needs to be done")
+            await message.channel.send(pick_string(["ok here's what needs to be done",
+                "here's the list bro, knock some of em out for me",
+                "i have a list! i have a list... a list of all the bugs you've missed!",
+                "yup yup yipperee, here's some thigns u can do foorrrr meeeeee",
+                "todo list todo this:: i have a developmental disorder",
+                "do you think it'd be safer to have a child around a kinder egg or an m16? asking for a friend",
+                "why the fuck is pneumonia spelled like that?",
+                "daaaaaaaamn bro that's a lot lollllll hop to it"]))
             s = ""
             if len(todo_list) == 0:
                 s = "uuuhhhhh.... nothing! nice, man. get some sleep."

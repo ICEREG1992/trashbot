@@ -12,6 +12,7 @@ from uptime import uptime
 from todo import todo
 from karaoke import karaoke_manager
 from battle import battle_manager
+from train import spam_train
 
 logging.basicConfig(level=logging.INFO)
 
@@ -47,6 +48,7 @@ class MyClient(discord.Client):
             await uptime.run(self, message)
             await todo.run(self, message)
             await karaoke_manager.run(self, message)
+            await spam_train.run(self, message)
             #await battle_manager.run(self, message)
 
             if message.content.startswith("!ban "):
@@ -69,6 +71,11 @@ class MyClient(discord.Client):
                     "peace out bitches"
                 ]))
                 quit()
+
+            if message.content == "!cum":
+                await message.add_reaction("🇨")
+                await message.add_reaction("🇺")
+                await message.add_reaction("🇲")
 
             return
 
