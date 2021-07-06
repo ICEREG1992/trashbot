@@ -49,6 +49,7 @@ class MyClient(discord.Client):
             await todo.run(self, message)
             await karaoke_manager.run(self, message)
             await spam_train.run(self, message)
+            await logcommand.logging_manager.run(self, message)
             #await battle_manager.run(self, message)
 
             if message.content.startswith("!ban "):
