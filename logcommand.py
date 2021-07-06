@@ -1,5 +1,5 @@
 import logging
-import permissions
+from permissions import permissions
 # sorry if this is bad
 
 LOG_ENTRIES_NUM = 30
