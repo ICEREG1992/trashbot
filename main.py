@@ -24,7 +24,7 @@ else:
     TOKEN = os.environ['TRASHBOT_KEY']
 
 logging.info("Booting Trashbot v1.0.0 with token '" + TOKEN + "'")
-# helperfunctions.ensure_table()
+helperfunctions.ensure_table()
 
 class MyClient(discord.Client):
     async def on_ready(self):
