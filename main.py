@@ -13,7 +13,7 @@ from todo import todo
 from karaoke import karaoke_manager
 from battle import battle_manager
 from train import spam_train
-
+import logcommand
 logging.basicConfig(level=logging.INFO)
 
 if os.path.exists("key.txt"):
@@ -24,7 +24,7 @@ else:
     TOKEN = os.environ['TRASHBOT_KEY']
 
 logging.info("Booting Trashbot v1.0.0 with token '" + TOKEN + "'")
-helperfunctions.ensure_table()
+# helperfunctions.ensure_table()
 
 class MyClient(discord.Client):
     async def on_ready(self):
