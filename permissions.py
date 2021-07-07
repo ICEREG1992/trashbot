@@ -1,7 +1,8 @@
 import json
 import os
 from helperfunctions import pick_string
-import logcommand, logging
+from logcommand import log_globally
+import logging
 import boto3
 
 logging.basicConfig(level=logging.INFO)
@@ -29,7 +30,7 @@ class permissions:
                 name = name.name
                 permissions.add_user(id, name, color)
                 await message.channel.send("User <@" + str(id) + "> given " + color + " keycard.")
-                logcommand.log_globally(logging.INFO, message.mentions[0].name + " given " + color + " keycard by " + message.author.name)
+                log_globally(logging.INFO, message.mentions[0].name + " given " + color + " keycard by " + message.author.name)
             else:
                 await message.channel.send("You need a blue keycard to do that, " + message.author.name + ".")
         elif (message.content.startswith("!revoke ")):
@@ -39,7 +40,7 @@ class permissions:
                 id = message.raw_mentions[0]
                 permissions.remove_user(id, color)
                 await message.channel.send("<@" + str(id) + ">'s " + color + " keycard has been revoked. Sorry about that.")
-                logcommand.log_globally(logging.INFO, message.mentions[0].name + " revoked " + color + " keycard by " + message.author.name)
+                log_globally(logging.INFO, message.mentions[0].name + " revoked " + color + " keycard by " + message.author.name)
             else:
                 await message.channel.send("You need a blue keycard to do that, " + message.author.name + ".")
         elif (message.content.startswith("!keycard ")):
