@@ -82,7 +82,7 @@ class MyClient(discord.Client):
                 await message.add_reaction("🇲")
 
             if message.content == "!version":
-                await message.channel.send("u last pushed to me 7/6/2021!")
+                await message.channel.send("u last pushed to me 7/7/2021!")
             return
 
     async def on_reaction_add(self, reaction, user):
