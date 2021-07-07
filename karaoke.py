@@ -2,6 +2,7 @@ import helperfunctions
 from permissions import permissions
 import boto3
 import json
+import logcommand, logging
 
 global db
 db = boto3.client('dynamodb', region_name='us-east-2')
@@ -21,6 +22,7 @@ class karaoke_manager:
     async def run(self, message):
         if (message.content == "!karaoke"):
             print(message.channel)
+            logcommand.log_globally(logging.INFO, "Karaoke started in " + message.channel.id)
             await karaoke_manager.add_karaoke(message.channel)
         elif (message.channel.id in k and k[message.channel.id].active):
             await k[message.channel.id].run(message)
@@ -30,6 +32,7 @@ class karaoke_manager:
             global lyrics
             lyrics = new_lyrics.split("\n")
             await message.channel.send("New lyrics loaded!")
+            logcommand.log_globally(logging.INFO, "New karaoke lyrics loaded by " + message.author.name)
             karaoke_manager.save(lyrics)
 
     async def add_karaoke(channel):

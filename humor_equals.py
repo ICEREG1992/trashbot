@@ -5,6 +5,7 @@ from helperfunctions import pick_string
 from permissions import permissions
 import random
 import boto3
+import logcommand, logging
 
 global db
 db = boto3.client('dynamodb', region_name='us-east-2')
@@ -26,6 +27,7 @@ class humor_equals:
             if keyword not in keyphrases:
                 keyphrases[keyword] = []
             keyphrases[keyword].append(response)
+            logcommand.log_globally(logging.INFO, "New humor_equals response added by " + message.author.name + ", ``" + keyword + " : " + response + "``")
             humor_equals.save()
         elif (message.content.startswith("!equalsremove ") and permissions.allowed(message.author.id, "blue")):
             if "§" in message.content:
@@ -36,6 +38,7 @@ class humor_equals:
                 keyphrases.pop(keyword, None)
                 if len(keyphrases[keyword]) == 0:
                     keyphrases.pop(keyword, None)
+                logcommand.log_globally(logging.INFO, "humor_contains keyword deleted by " + message.author.name + ", ``" + keyword + "``")
                 humor_equals.save()
         else:
             for phrase in keyphrases:

@@ -1,6 +1,7 @@
 import helperfunctions
 import random
 import math
+import logcommand, logging
 
 b = {}
 
@@ -8,9 +9,11 @@ class battle_manager:
     async def run(self, message):
         if message.content == "!battle" or message.content == "!battle <@!450507364768940034>":
             # bot battle
+            logcommand.log_globally(logging.INFO, "Bot battle started by " + message.author.name)
             await battle_manager.add_bot_battle(str(message.author.id), message.channel)
         elif message.content.startswith("!battle <@"):
             # user battle
+            logcommand.log_globally(logging.INFO, "User battle started by " + message.author.name + " with " + message.mentions[0].name)
             await battle_manager.add_user_battle(str(message.author.id), str(message.raw_mentions[0]), message.channel)
         elif message.author == self.user and message.content.startswith("battle"):
             # initialize battle

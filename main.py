@@ -24,6 +24,7 @@ else:
     TOKEN = os.environ['TRASHBOT_KEY']
 
 logging.info("Booting Trashbot v1.0.0 with token '" + TOKEN + "'")
+logcommand.log_globally(logging.INFO, "Trashbot dyno spun up!")
 helperfunctions.ensure_table()
 
 class MyClient(discord.Client):
@@ -59,11 +60,13 @@ class MyClient(discord.Client):
                 await message.channel.send(message.content[7:] + " has been unbanned. Suck it, staz!")
 
             if message.content == '!panic' and permissions.allowed(message.author.id, "blue", "red"):
+                logcommand.log_globally(logging.INFO, "!panic triggered by " + message.author.name)
                 await message.channel.send("ow, fuck!")
                 python = sys.executable
                 os.execl(python, python, * sys.argv)
 
             if message.content == '!shutdown' and permissions.allowed(message.author.id, "blue"):
+                logcommand.log_globally(logging.INFO, "!shutdown triggered by " + message.author.name)
                 await message.channel.send(helperfunctions.pick_string([
                     "night, night.",
                     "\uD83D\uDECC\uD83D\uDCA4",
@@ -84,6 +87,7 @@ class MyClient(discord.Client):
         await battle_manager.battle(self, reaction, user)
         if user != self.user and reaction.emoji == "🗑️":
             if reaction.message.author == self.user:
+                logcommand.log_globally(logging.INFO, "tbot message deleted: ``" + reaction.message.content + "``")
                 await reaction.message.delete(delay=0.5)
 
     # message_edit joke

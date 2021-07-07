@@ -1,4 +1,5 @@
 import helperfunctions
+import logcommand, logging
 
 channels = {}
 
@@ -8,13 +9,14 @@ class spam_train:
         if message.channel.id in channels:
             # get queue
             q = channels[message.channel.id]
-            # add to queue/dequeue
+            # add to queue and/or dequeue
             q.append(message.content)
             if len(q) == 3:
                 # check if all three the same
                 if (q[0] == q[1] and q[1] == q[2]):
-                    # , afterwards smaller chance to add to chain
+                    # reply at third, afterwards smaller chance to add to chain
                     if not q.active or (q.active and helperfunctions.chance(20)):
+                        logcommand.log_globally(logging.INFO, "Train triggered: ``" + q[0] + "``")
                         helperfunctions.bot_wait()
                         await message.channel.send(message.content)
                     q.active = True
