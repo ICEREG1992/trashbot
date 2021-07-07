@@ -11,7 +11,7 @@ class logging_manager:
                 await message.channel.send(pick_string(["sorry bro you need a blue keycard for that",
                 "no can do homie",
                 "EHHHHHHHH. try again later lol",
-                "hahahahahahehehehehehehahahahahhehehehaheahehahaahehehe no chance in hell bro"
+                "hahahahahahehehehehehehahahahahhehehehaheahehahaahehehe no chance in hell bro",
                 "it's the opposite of yessiree for you i call it nope-iree try gettin the blue keycard and comin back",
                 "This Command Requires the Blue Keycard nd u dont have it LMFAO"]))
                 return
