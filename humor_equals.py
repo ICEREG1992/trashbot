@@ -35,11 +35,12 @@ class humor_equals:
                 return
             else:
                 keyword = message.content[14:]
-                keyphrases.pop(keyword, None)
-                if len(keyphrases[keyword]) == 0:
+                if keyword in keyphrases:
                     keyphrases.pop(keyword, None)
-                logcommand.log_globally(logging.INFO, "humor_contains keyword deleted by " + message.author.name + ", ``" + keyword + "``")
-                humor_equals.save()
+                    logcommand.log_globally(logging.INFO, "humor_contains keyword deleted by " + message.author.name + ", ``" + keyword + "``")
+                    humor_equals.save()
+                else:
+                    await message.channel.send("that one doesnt seem to exist")
         else:
             for phrase in keyphrases:
                 if phrase == message.content.lower():
