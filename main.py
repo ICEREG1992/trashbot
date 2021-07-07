@@ -13,7 +13,7 @@ from todo import todo
 from karaoke import karaoke_manager
 from battle import battle_manager
 from train import spam_train
-
+import logcommand
 logging.basicConfig(level=logging.INFO)
 
 if os.path.exists("key.txt"):
@@ -49,6 +49,7 @@ class MyClient(discord.Client):
             await todo.run(self, message)
             await karaoke_manager.run(self, message)
             await spam_train.run(self, message)
+            await logcommand.logging_manager.run(self, message)
             #await battle_manager.run(self, message)
 
             if message.content.startswith("!ban "):
