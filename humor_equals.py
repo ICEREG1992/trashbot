@@ -43,7 +43,7 @@ class humor_equals:
                     await message.channel.send("that one doesnt seem to exist")
         else:
             for phrase in keyphrases:
-                if phrase == message.content.lower():
+                if phrase.lower() == message.content.lower():
                     await message.channel.send(pick_string(keyphrases[phrase]))
         
     def save():
