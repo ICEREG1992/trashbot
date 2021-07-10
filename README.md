@@ -36,6 +36,9 @@ Any user can send the ``!todo`` command to view the todo list. Any Blue or Red k
 Channel found a new funny thing to spam? trashbot will eagerly hop on that train. After three completely similar messages, trashbot will send the same exact thing to the channel, joining in. From then on, each message that remains the same will have a small chance of trashbot jumping in again to say it.
 
 ## installation
+
+### initialization
+
 1. clone the repo.
 2. install requirements with ``pip install -r requirements.txt``
 3. configure [awscli](https://github.com/aws/aws-cli) on your system, or equivalent AWS credentials
@@ -48,3 +51,7 @@ Channel found a new funny thing to spam? trashbot will eagerly hop on that train
   }
 }
 ```
+
+### environment variables
+
+In order to function, trashbot needs a Discord bot API token and an AWS programmatic access token. When running locally, the Discord API token can be stored in the main-level directory as ``key.txt``. Alternatively, it can be stored as an environment varibale named ``TRASHBOT_KEY``. The AWS token (consisting of a key ID and secret access key) can be received by configuring [awscli](https://github.com/aws/aws-cli) on your machine or, if you're on [Heroku](https://www.heroku.com), setting config vars ``AWS_ACCESS_KEY_ID`` and ``AWS_SECRET_ACCESS_KEY`` to their appropriate values.
