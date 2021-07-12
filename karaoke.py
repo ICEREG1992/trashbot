@@ -22,7 +22,7 @@ class karaoke_manager:
     async def run(self, message):
         if (message.content == "!karaoke"):
             print(message.channel)
-            logcommand.log_globally(logging.INFO, "Karaoke started in " + message.channel.id)
+            logcommand.log_globally(logging.INFO, "Karaoke started in " + str(message.channel.id))
             await karaoke_manager.add_karaoke(message.channel)
         elif (message.channel.id in k and k[message.channel.id].active):
             await k[message.channel.id].run(message)
