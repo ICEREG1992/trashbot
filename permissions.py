@@ -25,7 +25,7 @@ class permissions:
             if (permissions.allowed(message.author.id, "blue")):
                 color_and_user = message.content[6:]
                 color = color_and_user[0:color_and_user.index("keycard ")-1]
-                id = message.raw_mentions[0]
+                id = str(message.raw_mentions[0])
                 name = await client.fetch_user(self, user_id=id)
                 name = name.name
                 permissions.add_user(id, name, color)
@@ -37,7 +37,7 @@ class permissions:
             if (permissions.allowed(message.author.id, "blue")):
                 color_and_user = message.content[8:]
                 color = color_and_user[0:color_and_user.index("keycard ")-1]
-                id = message.raw_mentions[0]
+                id = str(message.raw_mentions[0])
                 permissions.remove_user(id, color)
                 await message.channel.send("<@" + str(id) + ">'s " + color + " keycard has been revoked. Sorry about that.")
                 log_globally(logging.INFO, message.mentions[0].name + " revoked " + color + " keycard by " + message.author.name)
