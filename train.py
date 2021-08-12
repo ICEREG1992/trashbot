@@ -1,3 +1,4 @@
+import random
 import helperfunctions
 import logcommand, logging
 
@@ -9,36 +10,41 @@ class spam_train:
         if message.channel.id in channels:
             # get queue
             q = channels[message.channel.id]
-            # add to queue and/or dequeue
-            q.append(message.content)
-            if len(q) == 3:
-                # check if all three the same
-                if (q[0].lower() == q[1].lower() and q[1].lower() == q[2].lower()):
-                    # reply at third, afterwards smaller chance to add to chain
-                    if not q.active or (q.active and helperfunctions.chance(20)):
-                        logcommand.log_globally(logging.INFO, "Train triggered: ``" + q[0] + "``")
-                        helperfunctions.bot_wait()
-                        await message.channel.send(message.content)
-                    q.active = True
-                else:
-                    q.active = False
+            # have queue process the new message
+            q.proc(message)
+            # if three similar messages have been sent and they pass the varied check
+            if q.count >= q.lim and q.varied:
+                # if it's the first time (not set active yet) reply all the time, else reply 20% of the time
+                if not q.active or (q.active and helperfunctions.chance(20)):
+                    logcommand.log_globally(logging.INFO, "Train triggered: ``" + q.mem.content + "``")
+                    helperfunctions.bot_wait()
+                    await message.channel.send(message.content)
         else:
             # add channel to channels
-            channels[message.channel.id] = Feed()
-            channels[message.channel.id].append(message.content)
+            channels[message.channel.id] = Feed(mem = message)
 
 class Feed:
-    def __init__(self, queue=[], active=False):
-        self.queue = queue
+    def __init__(self, mem=None, active=False):
+        self.mem = mem
         self.active = active
+        self.varied = False
+        self.count = 0
+        self.lim = random.choice([2, 3])
 
-    def __getitem__(self, key):
-        return self.queue[key]
-
-    def append(self, msg):
-        self.queue.append(msg)
-        if len(self) > 3:
-            self.queue.pop(0)
-
-    def __len__(self):
-        return len(self.queue)
+    def proc(self, msg):
+        if self.mem.content.lower() == msg.content.lower():
+            self.count += 1
+            if self.count > self.lim: # strictly greater as we don't want this happening on first trigger
+                self.active = True
+            if self.mem.author != msg.author:
+                self.varied = True
+            # for the edge case that a person spams a message
+            # we want the message which satasfies the "varied" rec to also spur the tbot train
+            if self.count == self.lim and self.varied == False:
+                self.count = self.lim - 1
+        else:
+            self.count = 0
+            self.active = False
+            self.varied = False
+            self.lim = random.choice([2, 3])
+        self.mem = msg
