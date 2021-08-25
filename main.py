@@ -76,7 +76,7 @@ class MyClient(discord.Client):
                 ]))
                 quit()
 
-            if message.content == "!cum":
+            if message.content == "!cum" or permissions.allowed(message.author.id, "cum"):
                 await message.add_reaction("🇨")
                 await message.add_reaction("🇺")
                 await message.add_reaction("🇲")
