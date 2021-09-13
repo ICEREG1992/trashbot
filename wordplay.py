@@ -25,7 +25,7 @@ class wordplay:
             response = message.content[message.content.index("§")+2:]
             if keyword not in keyphrases:
                 keyphrases[keyword] = [response]
-                keyphrases[keyword].append(keyword)
+                # keyphrases[keyword].append(keyword)
             else:
                 await message.channel.send("yea u already have a wordplay for that keyword lol cut it out")
             logcommand.log_globally(logging.INFO, "New wordplay keyword added by " + message.author.name + ", ``" + keyword + "``, response ``" + response + "``")
@@ -51,7 +51,7 @@ class wordplay:
                     # filter down to just the words containing the keyword
                     matches = [a for a in words if phrase in a]
                     for match in matches:
-                        if match not in keyphrases[phrase][1:]:
+                        if match not in keyphrases[phrase][1:] and match != phrase:
                             keyphrases[phrase].append(match)
                             wordplay.save()
                             await message.channel.send(keyphrases[phrase][0])
