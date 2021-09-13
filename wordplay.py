@@ -55,6 +55,8 @@ class wordplay:
                             keyphrases[phrase].append(match)
                             wordplay.save()
                             await message.channel.send(keyphrases[phrase][0])
+                        elif match == phrase:
+                            await message.channel.send(keyphrases[phrase][0])
                     
 
     def save():
