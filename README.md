@@ -35,6 +35,9 @@ Any user can send the ``!todo`` command to view the todo list. Any Blue or Red k
 ### spam train
 Channel found a new funny thing to spam? trashbot will eagerly hop on that train. After three completely similar messages, trashbot will send the same exact thing to the channel, joining in. From then on, each message that remains the same will have a small chance of trashbot jumping in again to say it.
 
+### wordplay
+Reward clever usages of words by having trashbot give a response when you hide a particular word within another in a unique way! In example, if "Ian" is a keyword, then "variant" would trigger a response, but only once! Admittedly a niche feature, but this bot's for me not for you. Add a new wordplay keyword with ``!wordplayadd [keyword] § [response]`` and remove the keyword with ``!wordplayremove [keyword]``.
+
 ## installation
 
 ### initialization

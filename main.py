@@ -13,6 +13,7 @@ from karaoke import karaoke_manager
 from battle import battle_manager
 from train import spam_train
 from log_manager import logging_manager
+from wordplay import wordplay
 import logcommand, logging
 logging.basicConfig(level=logging.INFO)
 
@@ -36,6 +37,7 @@ class MyClient(discord.Client):
         uptime.init() 
         todo.init() 
         karaoke_manager.init()
+        wordplay.init()
 
     async def on_message(self, message):
         # send message to battlebot out here since trashbot responds to its own messages here
@@ -51,6 +53,7 @@ class MyClient(discord.Client):
             await karaoke_manager.run(self, message)
             await spam_train.run(self, message)
             await logging_manager.run(self, message)
+            await wordplay.run(self, message)
             #await battle_manager.run(self, message)
 
             if message.content.startswith("!ban "):

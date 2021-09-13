@@ -33,4 +33,4 @@ def log_globally(level, message):
 
 async def print_log(log, channel):
     string = "\n".join(log.log)
-    await channel.send(string if len(string) != 0 else "Log is empty sorry")
+    await channel.send(string[-2000:] if len(string) != 0 else "Log is empty sorry")
