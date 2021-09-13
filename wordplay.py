@@ -55,7 +55,7 @@ class wordplay:
                             keyphrases[phrase].append(match)
                             wordplay.save()
                             await message.channel.send(keyphrases[phrase][0])
-                        elif match == phrase:
+                        elif match not in keyphrases[phrase][1:] and match == phrase:
                             await message.channel.send(keyphrases[phrase][0])
                     
 
