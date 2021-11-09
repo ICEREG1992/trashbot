@@ -14,6 +14,7 @@ from battle import battle_manager
 from train import spam_train
 from log_manager import logging_manager
 from wordplay import wordplay
+from mcplayers import mcplayers
 import logcommand, logging
 logging.basicConfig(level=logging.INFO)
 
@@ -54,6 +55,7 @@ class MyClient(discord.Client):
             await spam_train.run(self, message)
             await logging_manager.run(self, message)
             await wordplay.run(self, message)
+            await mcplayers.run(self, message)
             #await battle_manager.run(self, message)
 
             if message.content.startswith("!ban "):
@@ -85,7 +87,8 @@ class MyClient(discord.Client):
                 await message.add_reaction("🇲")
 
             if message.content == "!version":
-                await message.channel.send("u last pushed to me 9/12/2021!")
+                await message.channel.send("u last pushed to me 11/8/2021!")
+
             return
 
     async def on_reaction_add(self, reaction, user):
