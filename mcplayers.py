@@ -6,6 +6,8 @@ if os.path.exists("ip.txt"):
     f = open("ip.txt", "r")
     ip = f.read()
     f.close()
+elif "MC_IP" in os.environ:
+    ip = os.environ['MC_IP']
 else:
     ip = ""
 
