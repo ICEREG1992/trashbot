@@ -38,6 +38,9 @@ Channel found a new funny thing to spam? trashbot will eagerly hop on that train
 ### wordplay
 Reward clever usages of words by having trashbot give a response when you hide a particular word within another in a unique way! In example, if "Ian" is a keyword, then "variant" would trigger a response, but only once! Admittedly a niche feature, but this bot's for me not for you. Add a new wordplay keyword with ``!wordplayadd [keyword] § [response]`` and remove the keyword with ``!wordplayremove [keyword]``.
 
+### mcplayers
+Running a Minecraft server and want a quick way to check if anybody's on? Trashbot can help you out. The pinged server can be set through environment variables or a text file as defined below. Trigger a check with ``!whosuprn``.
+
 ## installation
 
 ### initialization
@@ -57,4 +60,4 @@ Reward clever usages of words by having trashbot give a response when you hide a
 
 ### environment variables
 
-In order to function, trashbot needs a Discord bot API token and an AWS programmatic access token. When running locally, the Discord API token can be stored in the main-level directory as ``key.txt``. Alternatively, it can be stored as an environment varibale named ``TRASHBOT_KEY``. The AWS token (consisting of a key ID and secret access key) can be received by configuring [awscli](https://github.com/aws/aws-cli) on your machine or, if you're on [Heroku](https://www.heroku.com), setting config vars ``AWS_ACCESS_KEY_ID`` and ``AWS_SECRET_ACCESS_KEY`` to their appropriate values.
+In order to function, trashbot needs a Discord bot API token and an AWS programmatic access token. When running locally, the Discord API token can be stored in the main-level directory as ``key.txt``. Alternatively, it can be stored as an environment varibale named ``TRASHBOT_KEY``. The AWS token (consisting of a key ID and secret access key) can be received by configuring [awscli](https://github.com/aws/aws-cli) on your machine or, if you're on [Heroku](https://www.heroku.com), setting config vars ``AWS_ACCESS_KEY_ID`` and ``AWS_SECRET_ACCESS_KEY`` to their appropriate values. The Minecraft server pinged by mcplayers can be set through the variable ``MC_IP`` or by a file named ``ip.txt``.

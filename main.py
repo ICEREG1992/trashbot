@@ -14,7 +14,7 @@ from battle import battle_manager
 from train import spam_train
 from log_manager import logging_manager
 from wordplay import wordplay
-# from mcplayers import mcplayers
+from mcplayers import mcplayers
 import logcommand, logging
 logging.basicConfig(level=logging.INFO)
 
@@ -55,7 +55,7 @@ class MyClient(discord.Client):
             await spam_train.run(self, message)
             await logging_manager.run(self, message)
             await wordplay.run(self, message)
-            # await mcplayers.run(self, message)
+            await mcplayers.run(self, message)
             #await battle_manager.run(self, message)
 
             if message.content.startswith("!ban "):
