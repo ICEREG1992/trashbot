@@ -10,10 +10,12 @@ trashbot comes with very few programmed responses, permissions, and commands, ot
 ### permissions
 Since trashbot can be heavily modified at runtime, some access control is needed to keep him free of bad actors. The Keycard system implemented does just that, and is scalable to your needs if you decide to fork trashbot. Currently, the only keycard colors in use are Blue (admin), Red (trusted), and Black (banned). By importing the permissions class and calling ``permissions.allowed(id, *colors)``, you can check any user's message for any arbitrarily named keycard color.
 
-Any Blue keycard user can give or revoke keycards using the commands ``!give [color] keycard [@mention]`` or ``!revoke [color] keycard [@mention]`` respectively. Any user can see who has what color keycard by sending the command ``!keycard [color]``.
+Any Blue keycard user can give or revoke keycards using the commands ``!give [color] keycard [@mention]`` or ``!revoke [color] keycard [@mention]`` respectively. Any user can see who has what color keycard by sending the command ``!keycard [color]``, or what keycards a user has by mentioning a user, like ``!keycard [@mention]``.
 
 ### instant humor
 The instant humor modules (contains and equals) allow for the quick implementation of indiscriminant responses to phrases or words. As the names imply, the humor_contains module will respond to any message which contains one of the user-defined keywords with a randomly selected user-defined resposne for that keyword. The humor_equals module does the same thing, except only if the message matches exactly to one of the keywords, with no extra characters.
+
+instant humor also supports a limited list of escape characters, which can be used to inject info about the triggerer into the response. Use them like any other escape sequence. ``$u`` injects the users username, ``$n`` does the same with nickname. ``$m`` injects a ping for the first user the triggerer mentioned, and ``$ms`` just injects the mentioned user's nickname (mention silent).
 
 Blue keycard holders can add a new keyword by sending ``!containsadd [keyword] § [response]`` or ``!equalsadd [keyword] § [response]`` anywhere in a trashbot-joined server. Entire keywords can be removed (but not individual responses) with the commands ``!containsremove [keyword]`` or ``!equalsremove [keyword]``.
 
