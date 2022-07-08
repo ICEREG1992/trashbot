@@ -22,21 +22,21 @@ def chance(rate):
     return random.uniform(0,100) < rate
 
 def humor_escape(msg, text):
-    text.replace("$u", msg.author.name)
+    text = text.replace("$u", msg.author.name)
 
     if hasattr(msg.author, 'nick'):
-        text.replace("$n", msg.author.nick)
+        text = text.replace("$n", msg.author.nick)
     else:
-        text.replace("$n", msg.author.name)
+        text = text.replace("$n", msg.author.name)
 
     if len(msg.mentions) > 0:
-        text.replace("$m", msg.mentions[0].mention)
+        text = text.replace("$m", msg.mentions[0].mention)
 
     if len(msg.mentions) > 0 and hasattr(msg.mentions[0], 'nick'):
-        text.replace("$ms", msg.mentions[0].nick)
-    else:
-        text.replace("$ms", msg.mentions[0].user)
-        
+        text = text.replace("$ms", msg.mentions[0].nick)
+    elif len(msg.mentions) > 0:
+        text = text.replace("$ms", msg.mentions[0].user)
+    
     return text
 
 def ensure_table():
