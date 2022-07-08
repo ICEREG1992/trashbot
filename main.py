@@ -35,10 +35,10 @@ class MyClient(discord.Client):
         humor_equals.init()
         humor_contains.init()
         permissions.init() 
-        uptime.init() 
         todo.init() 
-        karaoke_manager.init()
-        wordplay.init()
+        # karaoke_manager.init()
+        # wordplay.init()
+        # uptime.init()
 
     async def on_message(self, message):
         # send message to battlebot out here since trashbot responds to its own messages here
