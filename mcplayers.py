@@ -20,11 +20,11 @@ class mcplayers:
             if o['online']:
                 n = str(o['players']['online'])
                 if (n == '0'):
-                    await message.channel.send(helperfunctions.pick_string(["nah nobody up rn", "not rn sorry", "nope", "pokemon go to *schleep* bro", "u r the imposter rn", "bro everyone is asleep chill out"]))
+                    await message.channel.send(helperfunctions.pick_string(["nah nobody up rn", "not rn sorry", "nope", "nothing much whos uprn with u", "nah", "negative"]))
                 else:
                     out = ""
                     for p in o['players']['list']:
                         out += p + "\n"
                     await message.channel.send(out)
             else:
-                await message.channel.send(helperfunctions.pick_string(["uh oh server down", "someone ping ian lol @ian hehe ummmmm ha ha @ian hahahahehehe", "whoa whoa whoa waho whoa whao smmmm ummmmmmmmm server??? server??? servv?er??", "WHOOPS UH OH HEHEHE", "server is the impossssstor"]))
+                await message.channel.send(helperfunctions.pick_string(["uh oh server down", "haha ummmmm i kicked something back here hehe oops uhhh", "whoa whoa whoa waho whoa whao smmmm ummmmmmmmm server??? server??? servv?er??", "WHOOPS UH OH HEHEHE", "server is sorta sus rn ngl"]))

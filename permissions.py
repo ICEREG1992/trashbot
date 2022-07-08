@@ -43,7 +43,7 @@ class permissions:
                 log_globally(logging.INFO, message.mentions[0].name + " revoked " + color + " keycard by " + message.author.name)
             else:
                 await message.channel.send("You need a blue keycard to do that, " + message.author.name + ".")
-        elif (message.content.startswith("!keycard ")):
+        elif (message.content.startswith("!keycard ") and len(message.mentions) == 0):
             color = message.content[9:]
             await message.channel.send(
                 pick_string([
@@ -55,6 +55,14 @@ class permissions:
                 ]) + str(permissions.get_users(color))
             )
             return
+        elif (message.content.startswith("!keycard ")):
+            user = message.mentions[0].id
+            await message.channel.send(
+                pick_string([
+                    "**here's all the keycards " + message.mentions[0].nick + "has:**"
+                ]) + str(permissions.get_colors(user))
+            )
+            
         return
 
     def add_user(id, name, color):
@@ -74,6 +82,13 @@ class permissions:
     def get_users(color):
         if color in perms:
             return perms[color]
+
+    def get_colors(user):
+        out = []
+        for color in perms:
+            if str(user) in perms[color]:
+                out.append(color)
+        return out
 
     def allowed(id, *colors):
         for color in colors:

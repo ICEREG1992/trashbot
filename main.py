@@ -25,7 +25,7 @@ if os.path.exists("key.txt"):
 else:
     TOKEN = os.environ['TRASHBOT_KEY']
 
-logging.info("Booting Trashbot v1.0.0 with token '" + TOKEN + "'")
+logging.info("Booting Trashbot v1.1.0 with token '" + TOKEN + "'")
 logcommand.log_globally(logging.INFO, "Trashbot dyno spun up!")
 helperfunctions.ensure_table()
 
