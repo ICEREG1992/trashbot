@@ -29,13 +29,13 @@ def humor_escape(msg, text):
     else:
         text = text.replace("$n", msg.author.name)
 
-    if len(msg.mentions) > 0:
-        text = text.replace("$m", msg.mentions[0].mention)
-
     if len(msg.mentions) > 0 and hasattr(msg.mentions[0], 'nick') and msg.author.nick is not None:
         text = text.replace("$ms", msg.mentions[0].nick)
     elif len(msg.mentions) > 0:
         text = text.replace("$ms", msg.mentions[0].user)
+
+    if len(msg.mentions) > 0:
+        text = text.replace("$m", msg.mentions[0].mention)
     
     return text
 
