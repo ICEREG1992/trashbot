@@ -49,15 +49,15 @@ class MyClient(discord.Client):
             await humor_equals.run(self, message)
             await humor_contains.run(self, message)
             await permissions.run(self, message, discord.Client)
-            await uptime.run(self, message)
             await todo.run(self, message)
-            await karaoke_manager.run(self, message)
             await spam_train.run(self, message)
             await logging_manager.run(self, message)
-            await wordplay.run(self, message)
             await mcplayers.run(self, message)
-            #await battle_manager.run(self, message)
-
+            # await battle_manager.run(self, message)
+            # await uptime.run(self, message)
+            # await wordplay.run(self, message)
+            # await karaoke_manager.run(self, message)
+            
             if message.content.startswith("!ban "):
                 await message.channel.send(message.content[5:] + " has been banned.")
 
@@ -87,7 +87,7 @@ class MyClient(discord.Client):
                 await message.add_reaction("🇲")
 
             if message.content == "!version":
-                await message.channel.send("u last pushed to me 11/8/2021!")
+                await message.channel.send("u last pushed to me 7/7/2022!")
 
             return
 
@@ -97,17 +97,6 @@ class MyClient(discord.Client):
             if reaction.message.author == self.user:
                 logcommand.log_globally(logging.INFO, "tbot message deleted: ``" + reaction.message.content + "``")
                 await reaction.message.delete(delay=0.5)
-
-    # message_edit joke
-    '''async def on_message_edit(self, before, after):
-        if after.author != self.user and before.content != after.content and helperfunctions.chance(10):
-            await after.channel.send(helperfunctions.pick_string([
-                "LOL u made a lil fucky wucky there huh??",
-                "LMFAO ok let's all just pretend we didn't see that typo",
-                "press enter too soon buddy? lol lmfao",
-                "EVERYBODY LOOK THIS PERSON MADE A MISTAKE!!!",
-                "it's ok bro everyone makes mistakes just edit until it's good"
-            ]))'''
 
 client = MyClient()
 client.run(TOKEN)

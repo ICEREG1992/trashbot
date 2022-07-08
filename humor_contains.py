@@ -1,6 +1,6 @@
 import json
 import helperfunctions
-from helperfunctions import pick_string
+from helperfunctions import pick_string, humor_escape
 from permissions import permissions
 import boto3
 import logcommand, logging
@@ -42,7 +42,7 @@ class humor_contains:
         else:
             for phrase in keyphrases:
                 if phrase.lower() in message.content.lower():
-                    await message.channel.send(pick_string(keyphrases[phrase]))
+                    await message.channel.send(humor_escape(message, pick_string(keyphrases[phrase])))
 
             '''
             if "black" in message.content:

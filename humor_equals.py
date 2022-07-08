@@ -1,7 +1,7 @@
 import os
 import json
 import helperfunctions
-from helperfunctions import pick_string
+from helperfunctions import pick_string, humor_escape
 from permissions import permissions
 import random
 import boto3
@@ -44,7 +44,7 @@ class humor_equals:
         else:
             for phrase in keyphrases:
                 if phrase.lower() == message.content.lower():
-                    await message.channel.send(pick_string(keyphrases[phrase]))
+                    await message.channel.send(humor_escape(message, pick_string(keyphrases[phrase])))
         
     def save():
         db.put_item(TableName="trashbot", Item={'name':{'S':'equals_phrases'}, 'data':{'S':json.dumps(keyphrases)}})

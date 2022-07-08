@@ -21,6 +21,12 @@ def bot_wait_short():
 def chance(rate):
     return random.uniform(0,100) < rate
 
+def humor_escape(msg, text):
+    text.replace("$n", msg.author.nick)
+    text.replace("$u", msg.author.name)
+    text.replace("$m". msg.mentions[0].mention)
+    text.replace("$ms". msg.mentions[0].nick)
+    return text
 
 def ensure_table():
     db = boto3.client('dynamodb', region_name="us-east-2")
