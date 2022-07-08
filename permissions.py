@@ -59,7 +59,7 @@ class permissions:
             user = message.mentions[0].id
             await message.channel.send(
                 pick_string([
-                    "**here's all the keycards " + message.mentions[0].nick + "has:**"
+                    "**here's all the keycards " + message.mentions[0].name + " has:**\n"
                 ]) + str(permissions.get_colors(user))
             )
             
