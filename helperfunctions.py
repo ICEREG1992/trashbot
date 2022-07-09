@@ -34,7 +34,7 @@ def humor_escape(msg, text):
     elif len(msg.mentions) > 0:
         text = text.replace("$ms", msg.mentions[0].name)
     else:
-        text = text.replace("$ms", "<@450507364768940034>")
+        text = text.replace("$ms", "Trashbot")
 
     if len(msg.mentions) > 0:
         text = text.replace("$m", msg.mentions[0].mention)
@@ -79,8 +79,8 @@ def ensure_table():
 
 def fill_defaults(db):
     # fill empty required values with defaults
-    keynames = ["contains_phrases", "equals_phrases", "lyrics", "permissions", "uptime", "todo", "wordplay_keywords"]
-    defaults = ["{}", "{}", "•", "{}", "0", "[]", "{}"]
+    keynames = ["contains_phrases", "equals_phrases", "lyrics", "mc_ip", "permissions", "uptime", "todo", "wordplay_keywords"]
+    defaults = ["{}", "{}", "•", "", "{}", "0", "[]", "{}"]
     for i in range(len(keynames)):
         n = db.get_item(TableName="trashbot", Key={'name':{'S':keynames[i]}})
         if ('Item' not in n):
