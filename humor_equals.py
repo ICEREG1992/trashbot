@@ -22,15 +22,15 @@ class humor_equals:
 
     async def run(self, message):
         if (message.content.startswith("!equalsadd ") and permissions.allowed(message.author.id, "blue")):
-            keyword = message.content[11 : message.content.index("§")-1].lower()
-            response = message.content[message.content.index("§")+2:]
+            keyword = message.content[11 : message.content.index("•")-1].lower()
+            response = message.content[message.content.index("•")+2:]
             if keyword not in keyphrases:
                 keyphrases[keyword] = []
             keyphrases[keyword].append(response)
             logcommand.log_globally(logging.INFO, "New humor_equals response added by " + message.author.name + ", ``" + keyword + " : " + response + "``")
             humor_equals.save()
         elif (message.content.startswith("!equalsremove ") and permissions.allowed(message.author.id, "blue")):
-            if "§" in message.content:
+            if "•" in message.content:
                 await message.channel.send("hold up there buddy, only a keyword can be deleted with this command")
                 return
             else:

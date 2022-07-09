@@ -20,15 +20,15 @@ class humor_contains:
 
     async def run(self, message):
         if (message.content.startswith("!containsadd ") and permissions.allowed(message.author.id, "blue")):
-            keyword = message.content[13 : message.content.index("§")-1]
-            response = message.content[message.content.index("§")+2:]
+            keyword = message.content[13 : message.content.index("•")-1]
+            response = message.content[message.content.index("•")+2:]
             if keyword not in keyphrases:
                 keyphrases[keyword] = []
             keyphrases[keyword].append(response)
             logcommand.log_globally(logging.INFO, "New humor_contains response added by " + message.author.name + ", ``" + keyword + " : " + response + "``")
             humor_contains.save()
         elif (message.content.startswith("!containsremove ") and permissions.allowed(message.author.id, "blue")):
-            if "§" in message.content:
+            if "•" in message.content:
                 await message.channel.send("hold up there buddy, only a keyword can be deleted with this command")
                 return
             else:

@@ -21,8 +21,8 @@ class wordplay:
 
     async def run(self, message):
         if (message.content.startswith("!wordplayadd ") and permissions.allowed(message.author.id, "blue")):
-            keyword = message.content[13 : message.content.index("§")-1]
-            response = message.content[message.content.index("§")+2:]
+            keyword = message.content[13 : message.content.index("•")-1]
+            response = message.content[message.content.index("•")+2:]
             if keyword not in keyphrases:
                 keyphrases[keyword] = [response]
                 # keyphrases[keyword].append(keyword)
@@ -31,7 +31,7 @@ class wordplay:
             logcommand.log_globally(logging.INFO, "New wordplay keyword added by " + message.author.name + ", ``" + keyword + "``, response ``" + response + "``")
             wordplay.save()
         elif (message.content.startswith("!wordplayremove ") and permissions.allowed(message.author.id, "blue")):
-            if "§" in message.content:
+            if "•" in message.content:
                 await message.channel.send("hold up there buddy, only a keyword can be deleted with this command")
                 return
             else:

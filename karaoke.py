@@ -8,7 +8,7 @@ global db
 db = boto3.client('dynamodb', region_name='us-east-2')
 
 global lyrics
-lyrics = "§"
+lyrics = "•"
 
 k = {}
 
@@ -184,7 +184,7 @@ class Karaoke:
         self.next_line = self.lyrics.pop(0)
         if (len(self.next_line) == 0):
             self.next_line = self.lyrics.pop(0)
-        if (self.next_line == "§"):
+        if (self.next_line == "•"):
             self.next_line = ""
     
     def format(line):

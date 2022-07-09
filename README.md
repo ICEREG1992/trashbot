@@ -17,7 +17,7 @@ The instant humor modules (contains and equals) allow for the quick implementati
 
 instant humor also supports a limited list of escape characters, which can be used to inject info about the triggerer into the response. Use them like any other escape sequence. ``$u`` injects the users username, ``$n`` does the same with nickname. ``$m`` injects a ping for the first user the triggerer mentioned, and ``$ms`` just injects the mentioned user's nickname (mention silent).
 
-Blue keycard holders can add a new keyword by sending ``!containsadd [keyword] § [response]`` or ``!equalsadd [keyword] § [response]`` anywhere in a trashbot-joined server. Entire keywords can be removed (but not individual responses) with the commands ``!containsremove [keyword]`` or ``!equalsremove [keyword]``.
+Blue keycard holders can add a new keyword by sending ``!containsadd [keyword] • [response]`` or ``!equalsadd [keyword] • [response]`` anywhere in a trashbot-joined server. Entire keywords can be removed (but not individual responses) with the commands ``!containsremove [keyword]`` or ``!equalsremove [keyword]``.
 
 ### karaoke
 The karaoke module allows you to screamtype your favorite songs along with trashbot. Using an extremely flexible word-matching system, trashbot will know if you stop in the middle of a line, do multiple lines at once, hooooooolddd yourrrrr wooooooordsssss likee ethisssssss, or accidentally flub a few words, and the song will go on like nothing happened. trashbot will also match!!! your!!! excitement!!! or even go into ALL CAPS IF YOU DO!!!
@@ -38,7 +38,7 @@ Any user can send the ``!todo`` command to view the todo list. Any Blue or Red k
 Channel found a new funny thing to spam? trashbot will eagerly hop on that train. After three completely similar messages, trashbot will send the same exact thing to the channel, joining in. From then on, each message that remains the same will have a small chance of trashbot jumping in again to say it.
 
 ### wordplay
-Reward clever usages of words by having trashbot give a response when you hide a particular word within another in a unique way! In example, if "Ian" is a keyword, then "variant" would trigger a response, but only once! Admittedly a niche feature, but this bot's for me not for you. Add a new wordplay keyword with ``!wordplayadd [keyword] § [response]`` and remove the keyword with ``!wordplayremove [keyword]``.
+Reward clever usages of words by having trashbot give a response when you hide a particular word within another in a unique way! In example, if "Ian" is a keyword, then "variant" would trigger a response, but only once! Admittedly a niche feature, but this bot's for me not for you. Add a new wordplay keyword with ``!wordplayadd [keyword] • [response]`` and remove the keyword with ``!wordplayremove [keyword]``.
 
 ### mcplayers
 Running a Minecraft server and want a quick way to check if anybody's on? Trashbot can help you out. The pinged server can be set through environment variables or a text file as defined below. Trigger a check with ``!whosuprn``.
