@@ -43,10 +43,10 @@ class todo:
             await message.channel.send(pick_string(["ok here's what needs to be done",
                 "here's the list bro, knock some of em out for me",
                 "i have a list! i have a list... a list of all the bugs you've missed!",
-                "yup yup yipperee, here's some thigns u can do foorrrr meeeeee",
-                "todo list todo this:: i have a developmental disorder",
-                "do you think it'd be safer to have a child around a kinder egg or an m16? asking for a friend",
-                "why the fuck is pneumonia spelled like that?",
+                "todo.. todo.. todo todo todo todo todoooooooooo",
+                "yo check dis out",
+                "i got a big brain wit " + len(todo_list) + " things inside it",
+                "i am trashbot, hear my plea:",
                 "daaaaaaaamn bro that's a lot lollllll hop to it"]))
             s = ""
             if len(todo_list) == 0:
