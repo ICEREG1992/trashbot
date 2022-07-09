@@ -33,10 +33,14 @@ def humor_escape(msg, text):
         text = text.replace("$ms", msg.mentions[0].nick)
     elif len(msg.mentions) > 0:
         text = text.replace("$ms", msg.mentions[0].name)
+    else:
+        text = text.replace("$ms", "<@450507364768940034>")
 
     if len(msg.mentions) > 0:
         text = text.replace("$m", msg.mentions[0].mention)
-    print(text)
+    else:
+        text = text.replace("$m", "<@450507364768940034>")
+    
     return text
 
 def ensure_table():
