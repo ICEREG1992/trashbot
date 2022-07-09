@@ -45,7 +45,7 @@ class todo:
                 "i have a list! i have a list... a list of all the bugs you've missed!",
                 "todo.. todo.. todo todo todo todo todoooooooooo",
                 "yo check dis out",
-                "i got a big brain wit " + len(todo_list) + " things inside it",
+                "i got a big brain wit " + str(len(todo_list)) + " things inside it",
                 "i am trashbot, hear my plea:",
                 "daaaaaaaamn bro that's a lot lollllll hop to it"]))
             s = ""

@@ -18,6 +18,7 @@ class mcplayers:
         mcIP = d['Item']['data']['S']
 
     async def run(self, message):
+        global mcIP
         if mcIP and message.content == "!whosuprn":
             r = requests.get('https://api.mcsrvstat.us/2/' + mcIP)
             o = r.json()
@@ -35,10 +36,11 @@ class mcplayers:
         elif message.content.startswith("!setwhosup ") and permissions.allowed(message.author.id, "blue"):
             i = message.content[11:]
             mcIP = i
-            await message.channel.send(pick_string(["ok i'll watch " + mcIP + " for ya",
+            await message.channel.send(helperfunctions.pick_string(["ok i'll watch " + mcIP + " for ya",
                 "ok sure minecraft ip set to " + mcIP,
                 "New IP Set! haha wasnt that goofy"]))
             mcplayers.save()
 
     def save():
+        global mcIP
         db.put_item(TableName="trashbot", Item={'name':{'S':'mc_ip'}, 'data':{'S':mcIP}})
