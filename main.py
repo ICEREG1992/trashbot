@@ -15,6 +15,7 @@ from train import spam_train
 from log_manager import logging_manager
 from wordplay import wordplay
 from mcplayers import mcplayers
+from powerswitch import powerswitch
 import logcommand, logging
 logging.basicConfig(level=logging.INFO)
 
@@ -37,60 +38,53 @@ class MyClient(discord.Client):
         permissions.init() 
         todo.init()
         mcplayers.init()
+        powerswitch.init()
         # karaoke_manager.init()
         # wordplay.init()
         # uptime.init()
 
     async def on_message(self, message):
-        # send message to battlebot out here since trashbot responds to its own messages here
-        if message.author == self.user:
-            await battle_manager.run(self, message)
-        # only attempt to respond to messages if the message doesn't come from the bot
-        if message.author != self.user and (not permissions.allowed(message.author.id, "black")):
-            await humor_equals.run(self, message)
-            await humor_contains.run(self, message)
-            await permissions.run(self, message, discord.Client)
-            await todo.run(self, message)
-            await spam_train.run(self, message)
-            await logging_manager.run(self, message)
-            await mcplayers.run(self, message)
-            # await battle_manager.run(self, message)
-            # await uptime.run(self, message)
-            # await wordplay.run(self, message)
-            # await karaoke_manager.run(self, message)
-            
-            if message.content.startswith("!ban "):
-                await message.channel.send(message.content[5:] + " has been banned.")
+        # check if trashbot is on
+        await powerswitch.run(self, message)
+        if powerswitch.on():
+            # send message to battlebot out here since trashbot responds to its own messages here
+            if message.author == self.user:
+                await battle_manager.run(self, message)
+            # only attempt to respond to messages if the message doesn't come from the bot
+            if message.author != self.user and (not permissions.allowed(message.author.id, "black")):
+                await humor_equals.run(self, message)
+                await humor_contains.run(self, message)
+                await permissions.run(self, message, discord.Client)
+                await todo.run(self, message)
+                await spam_train.run(self, message)
+                await logging_manager.run(self, message)
+                await mcplayers.run(self, message)
+                # await battle_manager.run(self, message)
+                # await uptime.run(self, message)
+                # await wordplay.run(self, message)
+                # await karaoke_manager.run(self, message)
+                
+                if message.content.startswith("!ban "):
+                    await message.channel.send(message.content[5:] + " has been banned.")
 
-            if message.content.startswith("!unban "):
-                await message.channel.send(message.content[7:] + " has been unbanned. Suck it, staz!")
+                if message.content.startswith("!unban "):
+                    await message.channel.send(message.content[7:] + " has been unbanned. Suck it, staz!")
 
-            if message.content == '!panic' and permissions.allowed(message.author.id, "blue", "red"):
-                logcommand.log_globally(logging.INFO, "!panic triggered by " + message.author.name)
-                await message.channel.send("ow, fuck!")
-                python = sys.executable
-                os.execl(python, python, * sys.argv)
+                if message.content == '!panic' and permissions.allowed(message.author.id, "blue", "red"):
+                    logcommand.log_globally(logging.INFO, "!panic triggered by " + message.author.name)
+                    await message.channel.send("ow, fuck!")
+                    python = sys.executable
+                    os.execl(python, python, * sys.argv)
 
-            if message.content == '!shutdown' and permissions.allowed(message.author.id, "blue"):
-                logcommand.log_globally(logging.INFO, "!shutdown triggered by " + message.author.name)
-                await message.channel.send(helperfunctions.pick_string([
-                    "night, night.",
-                    "\uD83D\uDECC\uD83D\uDCA4",
-                    "ok bye guys",
-                    "good call cya",
-                    "peace out bitches"
-                ]))
-                quit()
+                if message.content == "!cum" or permissions.allowed(message.author.id, "cum"):
+                    await message.add_reaction("🇨")
+                    await message.add_reaction("🇺")
+                    await message.add_reaction("🇲")
 
-            if message.content == "!cum" or permissions.allowed(message.author.id, "cum"):
-                await message.add_reaction("🇨")
-                await message.add_reaction("🇺")
-                await message.add_reaction("🇲")
+                if message.content == "!version":
+                    await message.channel.send("u last pushed to me 7/22/2022!")
 
-            if message.content == "!version":
-                await message.channel.send("u last pushed to me 7/8/2022!")
-
-            return
+        return
 
     async def on_reaction_add(self, reaction, user):
         await battle_manager.battle(self, reaction, user)
