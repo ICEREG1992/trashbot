@@ -84,6 +84,9 @@ class MyClient(discord.Client):
                 if message.content == "!version":
                     await message.channel.send("u last pushed to me 7/22/2022!")
 
+                if helperfunctions.chance(.01):
+                    await message.channel.send("Error")
+
         return
 
     async def on_reaction_add(self, reaction, user):
