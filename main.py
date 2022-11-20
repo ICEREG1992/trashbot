@@ -96,5 +96,6 @@ class MyClient(discord.Client):
                 logcommand.log_globally(logging.INFO, "tbot message deleted: ``" + reaction.message.content + "``")
                 await reaction.message.delete(delay=0.5)
 
-client = MyClient()
+intents = discord.Intents.all()
+client = MyClient(intents=intents)
 client.run(TOKEN)
