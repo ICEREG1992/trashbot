@@ -87,6 +87,9 @@ class MyClient(discord.Client):
                 if helperfunctions.chance(.002):
                     await message.channel.send("Error")
 
+                if message.content.contains("trashbot") and message.content.contains ("back"):
+                    await message.channel.send(file=discord.File("AW YEAH.mp3"))
+
         return
 
     async def on_reaction_add(self, reaction, user):
