@@ -26,7 +26,7 @@ class permissions:
                 color_and_user = message.content[6:]
                 color = color_and_user[0:color_and_user.index("keycard ")-1]
                 id = str(message.raw_mentions[0])
-                name = await client.fetch_user(id)
+                name = await client.fetch_user(self, id)
                 name = name.name
                 permissions.add_user(id, name, color)
                 await message.channel.send("User <@" + str(id) + "> given " + color + " keycard.")
