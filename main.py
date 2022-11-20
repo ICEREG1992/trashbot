@@ -87,7 +87,7 @@ class MyClient(discord.Client):
                 if helperfunctions.chance(.002):
                     await message.channel.send("Error")
 
-                if message.content.contains("trashbot") and message.content.contains ("back"):
+                if "trashbot" in message.content and "back" in message.content:
                     await message.channel.send(file=discord.File("AW YEAH.mp3"))
 
         return
