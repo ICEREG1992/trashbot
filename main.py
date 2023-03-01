@@ -2,7 +2,6 @@ import os
 import sys
 import discord
 import humanize
-import datetime as dt
 import helperfunctions
 from humor_contains import humor_contains
 from humor_equals import humor_equals
@@ -41,7 +40,7 @@ class MyClient(discord.Client):
         powerswitch.init()
         # karaoke_manager.init()
         # wordplay.init()
-        # uptime.init()
+        uptime.init()
 
     async def on_message(self, message):
         # check if trashbot is on
@@ -59,8 +58,9 @@ class MyClient(discord.Client):
                 await spam_train.run(self, message)
                 await logging_manager.run(self, message)
                 await mcplayers.run(self, message)
-                # await battle_manager.run(self, message)
-                # await uptime.run(self, message)
+                await battle_manager.run(self, message)
+                await uptime.run(self, message)
+                await food.run(self, message)
                 # await wordplay.run(self, message)
                 # await karaoke_manager.run(self, message)
                 
