@@ -1,11 +1,13 @@
-import helperfunctions
+from helperfunctions import pick_string
 import logcommand, logging
 import datetime as dt
 
-t = 0
+global t
+t = dt.datetime.min
 
 class food:
     async def run(self, message):
+        global t
         if (message.content.startswith("!feed")):
             if (t > dt.datetime.now() - dt.timedelta(hours=6)):
                 await message.channel.send(pick_string([
@@ -24,7 +26,7 @@ class food:
                 t = dt.datetime.now()
                 await message.channel.send(pick_string([
                     "oh my god i've been starving hand it over mnomnomnomnomnmonnmonmonmonmonnomnomnomnonm scrumptious",
-                    "holy shit is that a " + (message.content[message.content.index(' '):] if message.content.length > 6 else "bowl of seeds for me") + "wowie wowie wowie thank you thats perfect",
+                    "holy shit is that a " + (message.content[message.content.index(' '):] if len(message.content) > 6 else "bowl of seeds for me") + "wowie wowie wowie thank you thats perfect",
                     "about time i got some seeds in here ive been sooooooooooooooooooooooooooooo hungry",
                     "YES YES YES YES ohmygod YES YES FINALLY",
                     "manna from heaven... ACK!!"
@@ -32,18 +34,19 @@ class food:
             else:
                 t = dt.datetime.now()
                 await message.channel.send(pick_string([
-                    "Oh fuck yes it's a " + (message.content[message.content.index(' '):] if message.content.length > 6 else "little bowl of seeds") + "for me",
+                    "Oh fuck yes it's a " + (message.content[message.content.index(' '):] if len(message.content) > 6 else "little bowl of seeds") + "for me",
                     "AW YEAH all abourt the gravy train TOOT TOOT im eatin good tonite",
                     "booyah booyah booyah weehaw so good and tasty and yummy",
                     "ohhh hh hhhh h mmmmmmmmm im eating it up im just eating it all up it's so scrumptious thank you mwah mwah mwah oh yeah",
                     "ohhhh yeah ive been a hungry boy thank you oh so very much",
                     "MMMMMMMMMMMMMMMMMmmmmmmmm how did u know. i have wanted this so bad.",
-                    "need a bucket and a mop for dis " + (message.content[message.content.index(' '):] if message.content.length > 6 else "little bowl of seeds"),
+                    "need a bucket and a mop for dis " + (message.content[message.content.index(' '):] if len(message.content) > 6 else "little bowl of seeds"),
                     "DELISH!!!!!",
                     "nom nom nom nom nom nom nom nom hehe xd ty",
-                    "omg can't wait to enjoy this " + (message.content[message.content.index(' '):] if message.content.length > 6 else "little bowl of seeds") + " s gonna be so good"
+                    "omg can't wait to enjoy this " + (message.content[message.content.index(' '):] if len(message.content) > 6 else "little bowl of seeds") + " s gonna be so good"
                 ]))
         elif (message.content == "!unfeed"):
+            t = dt.datetime.min
             await message.channel.send(pick_string([
                 "What's your problem?",
                 "fuck is your issue?",

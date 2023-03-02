@@ -18,7 +18,8 @@ class uptime:
     def init():
         d = db.get_item(TableName="trashbot", Key={'name':{'S':'uptime'}})
         global record_uptime
-        record_uptime = dt.timedelta(seconds=float(d['Item']['data']['S']))
+        if ('data' in d['Item']):
+            record_uptime = dt.timedelta(seconds=float(d['Item']['data']['S']))
 
     async def run(self, message):
         global record_uptime

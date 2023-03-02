@@ -8,6 +8,7 @@ from humor_equals import humor_equals
 from permissions import permissions
 from uptime import uptime
 from todo import todo
+from food import food
 from karaoke import karaoke_manager
 from battle import battle_manager
 from train import spam_train
