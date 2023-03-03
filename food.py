@@ -26,7 +26,7 @@ class food:
                 t = dt.datetime.now()
                 await message.channel.send(pick_string([
                     "oh my god i've been starving hand it over mnomnomnomnomnmonnmonmonmonmonnomnomnomnonm scrumptious",
-                    "holy shit is that a " + (message.content[message.content.index(' '):] if len(message.content) > 6 else "bowl of seeds for me") + "wowie wowie wowie thank you thats perfect",
+                    "holy shit is that a " + (message.content[message.content.index(' '):] if len(message.content) > 6 else "bowl of seeds for me") + " wowie wowie wowie thank you thats perfect",
                     "about time i got some seeds in here ive been sooooooooooooooooooooooooooooo hungry",
                     "YES YES YES YES ohmygod YES YES FINALLY",
                     "manna from heaven... ACK!!"
