@@ -46,7 +46,7 @@ class food:
                     "omg can't wait to enjoy this " + (message.content[message.content.index(' '):] if len(message.content) > 6 else "little bowl of seeds") + " s gonna be so good"
                 ]))
         elif (message.content == "!unfeed"):
-            t = dt.datetime.min
+            t = dt.datetime.now() - dt.timedelta(hours=6)
             await message.channel.send(pick_string([
                 "What's your problem?",
                 "fuck is your issue?",
