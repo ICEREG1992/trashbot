@@ -21,7 +21,7 @@ class battle_manager:
 
     async def battle(self, reaction, user):
         uid = str(user.id)
-        print("Reaction received: " + uid + " with emoji " + reaction.emoji)
+        # print("Reaction received: " + uid + " with emoji " + reaction.emoji)
         if uid in b:
             await b[uid].battle(uid, reaction)
 
