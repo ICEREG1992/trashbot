@@ -47,6 +47,10 @@ class powerswitch:
         global on
         return on
 
+    def poweroff():
+        global on
+        on = False
+
     def save():
         global on
         db.put_item(TableName="trashbot", Item={'name':{'S':'on'}, 'data':{'S':str(on)}})
