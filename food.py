@@ -1,6 +1,9 @@
 from helperfunctions import pick_string
 import logcommand, logging
 import datetime as dt
+import humanize
+from permissions import permissions
+import discord
 
 global t
 t = dt.datetime.min
@@ -8,8 +11,9 @@ t = dt.datetime.min
 class food:
     async def run(self, message):
         global t
+        # send messages if fed
         if (message.content.startswith("!feed")):
-            if (t > dt.datetime.now() - dt.timedelta(hours=6)):
+            if (t > dt.datetime.utcnow() - dt.timedelta(hours=6)):
                 await message.channel.send(pick_string([
                     "bluuouohuhgghghghh hoghg hghg  ghgooh hh oh hh h hh ohohhohohhohhh  goddd hoohhhh god oh fuck no i can't",
                     "omg im so full i cant have another bite",
@@ -22,8 +26,8 @@ class food:
                     "STOP IT QUIT IT I HAVE ENOUGH",
                     "im GOOD i DON'T NEED ANY OF THAT"
                 ]))
-            elif (t < dt.datetime.now() - dt.timedelta(days=3)):
-                t = dt.datetime.now()
+            elif (t < dt.datetime.utcnow() - dt.timedelta(days=3)):
+                t = dt.datetime.utcnow()
                 await message.channel.send(pick_string([
                     "oh my god i've been starving hand it over mnomnomnomnomnmonnmonmonmonmonnomnomnomnonm scrumptious",
                     "holy shit is that a " + (message.content[message.content.index(' '):] if len(message.content) > 6 else "bowl of seeds for me") + " wowie wowie wowie thank you thats perfect",
@@ -32,7 +36,7 @@ class food:
                     "manna from heaven... ACK!!"
                 ]))
             else:
-                t = dt.datetime.now()
+                t = dt.datetime.utcnow()
                 await message.channel.send(pick_string([
                     "Oh fuck yes it's a " + (message.content[message.content.index(' '):] if len(message.content) > 6 else "little bowl of seeds") + "for me",
                     "AW YEAH all abourt the gravy train TOOT TOOT im eatin good tonite",
@@ -45,8 +49,8 @@ class food:
                     "nom nom nom nom nom nom nom nom hehe xd ty",
                     "omg can't wait to enjoy this " + (message.content[message.content.index(' '):] if len(message.content) > 6 else "little bowl of seeds") + " s gonna be so good"
                 ]))
-        elif (message.content == "!unfeed"):
-            t = dt.datetime.now() - dt.timedelta(hours=6)
+        elif (message.content == "!unfeed" and (permissions.allowed(message.author.id, "blue") or (permissions.allowed(message.author.id, "red")))):
+            t = dt.datetime.utcnow() - dt.timedelta(hours=6)
             await message.channel.send(pick_string([
                 "What's your problem?",
                 "fuck is your issue?",
@@ -56,3 +60,11 @@ class food:
                 "bruh moment",
                 "omg i was gonna eat that wtf"
             ]))
+        # update status on message receive
+        if (t > dt.datetime.utcnow() - dt.timedelta(hours=6)):
+            # full
+            await self.change_presence(status=None, activity=discord.Game(name='Full for ' + humanize.naturaldelta(dt.datetime.utcnow() - t)))
+        elif (t < dt.datetime.utcnow() - dt.timedelta(days=3)):
+            await self.change_presence(status=None, activity=discord.Game(name='Starving for ' + humanize.naturaldelta(dt.datetime.utcnow() - t)))
+        else:
+            await self.change_presence(status=None, activity=discord.Game(name='Hungry for ' + humanize.naturaldelta((dt.datetime.utcnow() - dt.timedelta(hours=6)) - t)))
