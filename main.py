@@ -99,6 +99,10 @@ class MyClient(discord.Client):
             if reaction.message.author == self.user:
                 logcommand.log_globally(logging.INFO, "tbot message deleted: ``" + reaction.message.content + "``")
                 await reaction.message.delete(delay=0.5)
+        elif user != self.user and reaction.emoji == "🐘":
+            if reaction.message.author == self.user:
+                logcommand.log_globally(logging.INFO, "tbot adding elephant to own message: ``" + reaction.message.content + "``")
+                await reaction.message.add_reaction("🐘")
 
 intents = discord.Intents.default()
 intents.message_content = True
