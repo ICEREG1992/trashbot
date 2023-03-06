@@ -23,8 +23,9 @@ def chance(rate):
 
 def humor_escape(msg, text):
     text = text.replace("$u", msg.author.name)
-
-    text = text.replace("$pc", msg.content[msg.content.index(' '):])
+    
+    if (' ' in msg.content):
+        text = text.replace("$pc", msg.content[msg.content.index(' '):])
 
     if hasattr(msg.author, 'nick') and msg.author.nick is not None:
         text = text.replace("$n", msg.author.nick)

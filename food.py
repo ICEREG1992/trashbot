@@ -37,7 +37,7 @@ class food:
             else:
                 t = dt.datetime.utcnow()
                 await message.channel.send(pick_string([
-                    "Oh fuck yes it's a " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds") + "for me",
+                    "Oh fuck yes it's a " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds") + " for me",
                     "AW YEAH all abourt the gravy train TOOT TOOT im eatin good tonite",
                     "booyah booyah booyah weehaw so good and tasty and yummy",
                     "ohhh hh hhhh h mmmmmmmmm im eating it up im just eating it all up it's so scrumptious thank you mwah mwah mwah oh yeah",
