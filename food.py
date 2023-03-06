@@ -6,7 +6,7 @@ from permissions import permissions
 import discord
 from powerswitch import powerswitch
 global t
-t = dt.datetime.min
+t = dt.datetime.utcnow() - dt.timedelta(hours=6)
 
 class food:
     async def run(self, message):
