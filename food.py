@@ -4,12 +4,11 @@ import datetime as dt
 import humanize
 from permissions import permissions
 import discord
-from powerswitch import powerswitch
+import powerswitch
 global t
 t = dt.datetime.utcnow() - dt.timedelta(hours=6)
-
 class food:
-    async def run(self, message):
+    async def run(self, message, switch):
         global t
         # send messages if fed
         if (message.content.startswith("!feed")):
@@ -65,10 +64,10 @@ class food:
         if (t > dt.datetime.utcnow() - dt.timedelta(hours=6)):
             # full
             await self.change_presence(status=None, activity=discord.Game(name='Full for now'))
-        elif (t < dt.datetime.utcnow() - dt.timedelta(days=3)):
-            await self.change_presence(status=None, activity=discord.Game(name='Starving for ' + humanize.naturaldelta(dt.datetime.utcnow() - t)))
         elif (t < dt.datetime.utcnow() - dt.timedelta(days=7)):
-            await self.change_presence(status=discord.Status.offline, activity=discord.Game(name='Trashbot has died.'))
-            powerswitch.poweroff()
+            await self.change_presence(status=discord.Status.dnd, activity=discord.Game(name='Trashbot has died.'))
+            switch.poweroff()
+        elif (t < dt.datetime.utcnow() - dt.timedelta(days=3)):
+            await self.change_presence(status=discord.Status.idle, activity=discord.Game(name='Starving for ' + humanize.naturaldelta(dt.datetime.utcnow() - t)))
         else:
             await self.change_presence(status=None, activity=discord.Game(name='Hungry for ' + humanize.naturaldelta((dt.datetime.utcnow() - dt.timedelta(hours=6)) - t)))

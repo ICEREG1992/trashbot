@@ -61,7 +61,7 @@ class MyClient(discord.Client):
                 await mcplayers.run(self, message)
                 await battle_manager.run(self, message)
                 await uptime.run(self, message)
-                await food.run(self, message)
+                await food.run(self, message, powerswitch)
                 # await wordplay.run(self, message)
                 # await karaoke_manager.run(self, message)
                 
@@ -94,15 +94,16 @@ class MyClient(discord.Client):
         return
 
     async def on_reaction_add(self, reaction, user):
-        await battle_manager.battle(self, reaction, user)
-        if user != self.user and reaction.emoji == "🗑️":
-            if reaction.message.author == self.user:
-                logcommand.log_globally(logging.INFO, "tbot message deleted: ``" + reaction.message.content + "``")
-                await reaction.message.delete(delay=0.5)
-        elif user != self.user and reaction.emoji == "🐘":
-            if reaction.message.author == self.user:
-                logcommand.log_globally(logging.INFO, "tbot adding elephant to own message: ``" + reaction.message.content + "``")
-                await reaction.message.add_reaction("🐘")
+        if powerswitch.on():
+            await battle_manager.battle(self, reaction, user)
+            if user != self.user and reaction.emoji == "🗑️":
+                if reaction.message.author == self.user:
+                    logcommand.log_globally(logging.INFO, "tbot message deleted: ``" + reaction.message.content + "``")
+                    await reaction.message.delete(delay=0.5)
+            elif user != self.user and reaction.emoji == "🐘":
+                if reaction.message.author == self.user:
+                    logcommand.log_globally(logging.INFO, "tbot adding elephant to own message: ``" + reaction.message.content + "``")
+                    await reaction.message.add_reaction("🐘")
 
 intents = discord.Intents.default()
 intents.message_content = True
