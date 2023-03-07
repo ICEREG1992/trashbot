@@ -25,7 +25,7 @@ class food:
                     "STOP IT QUIT IT I HAVE ENOUGH",
                     "im GOOD i DON'T NEED ANY OF THAT"
                 ]))
-            elif (t < dt.datetime.utcnow() - dt.timedelta(days=3)):
+            elif (t < dt.datetime.utcnow() - dt.timedelta(days=2)):
                 t = dt.datetime.utcnow()
                 await message.channel.send(pick_string([
                     "oh my god i've been starving hand it over mnomnomnomnomnmonnmonmonmonmonnomnomnomnonm scrumptious",
@@ -64,10 +64,10 @@ class food:
         if (t > dt.datetime.utcnow() - dt.timedelta(hours=6)):
             # full
             await self.change_presence(status=None, activity=discord.Game(name='Full for now'))
-        elif (t < dt.datetime.utcnow() - dt.timedelta(days=7)):
+        elif (t < dt.datetime.utcnow() - dt.timedelta(days=5)):
             await self.change_presence(status=discord.Status.dnd, activity=discord.Game(name='Trashbot has died.'))
             switch.poweroff()
-        elif (t < dt.datetime.utcnow() - dt.timedelta(days=3)):
+        elif (t < dt.datetime.utcnow() - dt.timedelta(days=2)):
             await self.change_presence(status=discord.Status.idle, activity=discord.Game(name='Starving for ' + humanize.naturaldelta(dt.datetime.utcnow() - t)))
         else:
             await self.change_presence(status=None, activity=discord.Game(name='Hungry for ' + humanize.naturaldelta((dt.datetime.utcnow() - dt.timedelta(hours=6)) - t)))
