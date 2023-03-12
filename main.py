@@ -16,6 +16,7 @@ from log_manager import logging_manager
 from wordplay import wordplay
 from mcplayers import mcplayers
 from powerswitch import powerswitch
+from rdj import rdj
 import logcommand, logging
 logging.basicConfig(level=logging.INFO)
 
@@ -62,6 +63,7 @@ class MyClient(discord.Client):
                 await battle_manager.run(self, message)
                 await uptime.run(self, message)
                 await food.run(self, message, powerswitch)
+                await rdj.run(self, message)
                 # await wordplay.run(self, message)
                 # await karaoke_manager.run(self, message)
                 

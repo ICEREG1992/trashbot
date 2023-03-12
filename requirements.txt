@@ -4,3 +4,4 @@ humanize >= 3.5.0
 boto3 >= 1.17.76
 awscli >= 1.19.80
 requests >= 2.26.0
+Pillow >= 9.4.0
