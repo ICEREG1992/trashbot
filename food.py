@@ -26,15 +26,22 @@ class food:
                     "im GOOD i DON'T NEED ANY OF THAT"
                 ]))
             elif (t < dt.datetime.utcnow() - dt.timedelta(days=2)):
+                logcommand.log_globally(logging.INFO, "I was fed `" + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds") +
+                "` by user " + message.author.name + "after starving for " + str(humanize.precisedelta((dt.datetime.utcnow() - dt.timedelta(hours=6) - t), suppress=['milliseconds','microseconds'])) )
                 t = dt.datetime.utcnow()
                 await message.channel.send(pick_string([
                     "oh my god i've been starving hand it over mnomnomnomnomnmonnmonmonmonmonnomnomnomnonm scrumptious",
                     "holy shit is that a " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds for me") + " wowie wowie wowie thank you thats perfect",
                     "about time i got some " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "seeds") + " in here ive been sooooooooooooooooooooooooooooo hungry",
                     "YES YES YES YES ohmygod YES YES FINALLY",
-                    "manna from heaven... ACK!!"
+                    "manna from heaven... ACK!!",
+                    "IVE BEEN SO HUNGRY THANNK YOU",
+                    "AAAAAAAAAAHHHHHHHHHH!!!!!!!!",
+                    "im eating it im eating it im eating it im eating it im eating it im eating it im eating it im eating it"
                 ]))
             else:
+                logcommand.log_globally(logging.INFO, "I was fed `" + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds") +
+                "` by user " + message.author.name + " after being hungry for " + str(humanize.precisedelta((dt.datetime.utcnow() - dt.timedelta(hours=6) - t), suppress=['milliseconds','microseconds'])))
                 t = dt.datetime.utcnow()
                 await message.channel.send(pick_string([
                     "Oh fuck yes it's a " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds") + " for me",
@@ -68,6 +75,6 @@ class food:
             await self.change_presence(status=discord.Status.dnd, activity=discord.Game(name='Trashbot has died.'))
             switch.poweroff()
         elif (t < dt.datetime.utcnow() - dt.timedelta(days=2)):
-            await self.change_presence(status=discord.Status.idle, activity=discord.Game(name='Starving for ' + humanize.naturaldelta(dt.datetime.utcnow() - t)))
+            await self.change_presence(status=discord.Status.idle, activity=discord.Game(name='Starving for ' + humanize.naturaldelta((dt.datetime.utcnow() - dt.timedelta(hours=6)) - t)))
         else:
             await self.change_presence(status=None, activity=discord.Game(name='Hungry for ' + humanize.naturaldelta((dt.datetime.utcnow() - dt.timedelta(hours=6)) - t)))
