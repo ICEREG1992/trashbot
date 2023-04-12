@@ -16,7 +16,7 @@ class spam_train:
             if q.count >= q.lim and q.varied:
                 # if it's the first time (not set active yet) reply all the time, else reply 20% of the time
                 if not q.active or (q.active and helperfunctions.chance(20)):
-                    logcommand.log_globally(logging.INFO, "Train triggered: ``" + q.mem.content + "``")
+                    logcommand.log_globally(logging.INFO, "Train triggered: `" + q.mem.content + "`")
                     helperfunctions.bot_wait()
                     await message.channel.send(message.content)
         else:
