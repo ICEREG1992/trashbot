@@ -40,7 +40,7 @@ class MyClient(discord.Client):
         todo.init()
         mcplayers.init()
         powerswitch.init()
-        # karaoke_manager.init()
+        karaoke_manager.init()
         # wordplay.init()
         uptime.init()
 
@@ -65,7 +65,7 @@ class MyClient(discord.Client):
                 await food.run(self, message, powerswitch)
                 await rdj.run(self, message)
                 # await wordplay.run(self, message)
-                # await karaoke_manager.run(self, message)
+                await karaoke_manager.run(self, message)
                 
                 if message.content.startswith("!ban "):
                     await message.channel.send(message.content[5:] + " has been banned.")
