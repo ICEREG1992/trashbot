@@ -30,14 +30,20 @@ class todo:
                 "i'll write that down for ya"]))
             todo.save()
         elif (message.content.startswith("!todoclear ") and permissions.allowed(message.author.id, "blue")):
-            i = int(message.content[11:])-1
+            i = message.content[11:]
+            if i.contains(","):
+                i = i.split(',')
+                i.sort(reverse=True, key=int)
+                for n in i:
+                    todo_list.remove(todo_list[int(n)-1])
+            else:
+                todo_list.remove(todo_list[int(i)-1])
             await message.channel.send(pick_string(["removed from todo list. good job man im proud of ya",
                 "scratch that one off, eh? nice",
                 "u killin it bro nice one",
                 "hell yeah. i feel better already",
                 "its lit like bic!!! turn up bro thats hella good",
                 "good work my main man! u doin it"]))
-            todo_list.remove(todo_list[i])
             todo.save()
         elif (message.content == "!todo"):
             await message.channel.send(pick_string(["ok here's what needs to be done",
