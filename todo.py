@@ -58,7 +58,7 @@ class todo:
             if len(todo_list) == 0:
                 s = "uuuhhhhh.... nothing! nice, man. get some sleep."
             for t in range(len(todo_list)):
-                s += "**" + str(t+1) + "**: " + todo_list[t] + "\n"
+                s += str(t+1) + ". " + todo_list[t] + "\n"
             await message.channel.send(s)
         
     def save():
