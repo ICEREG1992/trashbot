@@ -31,7 +31,7 @@ class todo:
             todo.save()
         elif (message.content.startswith("!todoclear ") and permissions.allowed(message.author.id, "blue")):
             i = message.content[11:]
-            if i.contains(","):
+            if "," in i:
                 i = i.split(',')
                 i.sort(reverse=True, key=int)
                 for n in i:
