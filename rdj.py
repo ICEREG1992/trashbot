@@ -12,7 +12,7 @@ class rdj:
             rdj_img = Image.open("rdj.png")
             draw = ImageDraw.Draw(rdj_img)
             font = ImageFont.truetype('ARLRDBD.TTF', 36)
-            text = message.content[4:]
+            text = message.content[5:]
             offset = 100
             for line in textwrap.wrap(text, width=20):
                 draw.text((60, offset), line, font=font, fill="black")
