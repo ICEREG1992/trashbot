@@ -14,8 +14,8 @@ class spam_train:
             q.proc(message)
             # if three similar messages have been sent and they pass the varied check
             if q.count >= q.lim and q.varied:
-                # if it's the first time (not set active yet) reply all the time, else reply 20% of the time
-                if not q.active or (q.active and helperfunctions.chance(20)):
+                # if it's the first time (not set active yet) reply all the time, else reply 10% of the time
+                if not q.active or (q.active and helperfunctions.chance(10)):
                     logcommand.log_globally(logging.INFO, "Train triggered: `" + q.mem.content + "`")
                     helperfunctions.bot_wait()
                     await message.channel.send(message.content)
