@@ -32,7 +32,14 @@ class mcplayers:
                         out += p + "\n"
                     await message.channel.send(out)
             else:
-                await message.channel.send(helperfunctions.pick_string(["uh oh server down", "haha ummmmm i kicked something back here hehe oops uhhh", "whoa whoa whoa waho whoa whao smmmm ummmmmmmmm server??? server??? servv?er??", "WHOOPS UH OH HEHEHE", "server is sorta sus rn ngl"]))
+                await message.channel.send(helperfunctions.pick_string([
+                    "uh oh server down (down)",
+                    "haha ummmmm i kicked something back here hehe oops uhhh (down)",
+                    "whoa whoa whoa waho whoa whao smmmm ummmmmmmmm server??? server??? servv?er?? (down)",
+                    "WHOOPS UH OH HEHEHE (down)",
+                    "server is sorta sus rn ngl (down)",
+                    "server is down (down) (down) (epic down)",
+                    "it is down (down)"]))
         elif message.content.startswith("!setwhosup ") and permissions.allowed(message.author.id, "blue"):
             i = message.content[11:]
             mcIP = i
