@@ -5,9 +5,22 @@ import humanize
 from permissions import permissions
 import discord
 import powerswitch
+import boto3
+
+global db
+db = boto3.client('dynamodb', region_name='us-east-2')
+
 global t
 t = dt.datetime.utcnow() - dt.timedelta(hours=6)
+
 class food:
+    
+    def init():
+        d = db.get_item(TableName="trashbot", Key={'name':{'S':'hunger'}})
+        global t
+        if ('data' in d['Item']):
+            t = dt.datetime.fromtimestamp(int(d['Item']['data']['S']))
+
     async def run(self, message, switch):
         global t
         # send messages if fed
@@ -29,6 +42,7 @@ class food:
                 logcommand.log_globally(logging.INFO, "I was fed `" + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds") +
                 "` by user " + message.author.name + " after starving for " + str(humanize.precisedelta((dt.datetime.utcnow() - dt.timedelta(hours=6) - t), suppress=['milliseconds','microseconds'])) )
                 t = dt.datetime.utcnow()
+                food.save(t)
                 await message.channel.send(pick_string([
                     "oh my god i've been starving hand it over mnomnomnomnomnmonnmonmonmonmonnomnomnomnonm scrumptious",
                     "holy shit is that a " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds for me") + " wowie wowie wowie thank you thats perfect",
@@ -43,6 +57,7 @@ class food:
                 logcommand.log_globally(logging.INFO, "I was fed `" + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds") +
                 "` by user " + message.author.name + " after being hungry for " + str(humanize.precisedelta((dt.datetime.utcnow() - dt.timedelta(hours=6) - t), suppress=['milliseconds','microseconds'])))
                 t = dt.datetime.utcnow()
+                food.save(t)
                 await message.channel.send(pick_string([
                     "Oh fuck yes it's a " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds") + " for me",
                     "AW YEAH all abourt the gravy train TOOT TOOT im eatin good tonite",
@@ -59,6 +74,7 @@ class food:
         elif (message.content == "!unfeed" and (permissions.allowed(message.author.id, "blue") or (permissions.allowed(message.author.id, "red")))):
             if (t > dt.datetime.utcnow() - dt.timedelta(hours=6)):
                 t = dt.datetime.utcnow() - dt.timedelta(hours=6)
+                food.save(t)
             await message.channel.send(pick_string([
                 "What's your problem?",
                 "fuck is your issue?",
@@ -79,3 +95,6 @@ class food:
             await self.change_presence(status=discord.Status.idle, activity=discord.Game(name='Starving for ' + humanize.naturaldelta((dt.datetime.utcnow() - dt.timedelta(hours=6)) - t)))
         else:
             await self.change_presence(status=None, activity=discord.Game(name='Hungry for ' + humanize.naturaldelta((dt.datetime.utcnow() - dt.timedelta(hours=6)) - t)))
+    
+    def save(t):
+        db.put_item(TableName="trashbot", Item={'name':{'S':'hunger'}, 'data':{'S':str(t.timestamp())}})
