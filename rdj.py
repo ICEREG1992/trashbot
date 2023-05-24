@@ -10,6 +10,8 @@ class rdj:
     async def run(self, message):
         if (message.content.startswith("!rdj ")):
             rdj_img = Image.open("rdj.png")
+            if ('nightmare' in message.content.lower()):
+                rdj_img = Image.open("evilrdj.png")
             draw = ImageDraw.Draw(rdj_img)
             font = ImageFont.truetype('ARLRDBD.TTF', 36)
             text = message.content[5:]
