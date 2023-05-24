@@ -10,14 +10,16 @@ class rdj:
     async def run(self, message):
         if (message.content.startswith("!rdj ")):
             rdj_img = Image.open("rdj.png")
+            color = "black"
             if ('nightmare' in message.content.lower()):
                 rdj_img = Image.open("evilrdj.png")
+                color = "white"
             draw = ImageDraw.Draw(rdj_img)
             font = ImageFont.truetype('ARLRDBD.TTF', 36)
             text = message.content[5:]
             offset = 100
             for line in textwrap.wrap(text, width=20):
-                draw.text((60, offset), line, font=font, fill="black")
+                draw.text((60, offset), line, font=font, fill=color)
                 offset += font.getsize(line)[1]
             await rdj.send_image(rdj_img, message.channel)
         elif (message.content.startswith("!rdj")):
