@@ -40,6 +40,7 @@ class MyClient(discord.Client):
         todo.init()
         mcplayers.init()
         powerswitch.init()
+        food.init()
         # karaoke_manager.init()
         # wordplay.init()
         uptime.init()
