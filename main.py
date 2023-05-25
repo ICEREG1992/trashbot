@@ -40,10 +40,10 @@ class MyClient(discord.Client):
         todo.init()
         mcplayers.init()
         powerswitch.init()
-        food.init()
         # karaoke_manager.init()
         # wordplay.init()
         uptime.init()
+        await food.init()
 
     async def on_message(self, message):
         # check if trashbot is on

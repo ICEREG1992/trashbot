@@ -14,7 +14,7 @@ on = True
 
 class powerswitch:
 
-    def init():
+    async def init():
         d = db.get_item(TableName="trashbot", Key={'name':{'S':'on'}})
         global on
         on = True if d['Item']['data']['S'] == "True" else False
