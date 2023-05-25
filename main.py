@@ -108,6 +108,13 @@ class MyClient(discord.Client):
                     log = reaction.message.content if len(reaction.message.content) < 21 else reaction.message.content[0:20]
                     logcommand.log_globally(logging.INFO, "tbot adding elephant to own message: `" + log + "`")
                     await reaction.message.add_reaction("🐘")
+            elif user != self.user and reaction.emoji == "🚫":
+                for r in reaction.message.reactions:
+                    if user in r.users() and r.emoji == "🐘":
+                        log = reaction.message.content if len(reaction.message.content) < 21 else reaction.message.content[0:20]
+                        logcommand.log_globally(logging.INFO, "tbot removing elephant from own message: `" + log + "`")
+                        r.remove(self.user)
+                
 
 intents = discord.Intents.default()
 intents.message_content = True
