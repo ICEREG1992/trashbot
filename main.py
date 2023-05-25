@@ -43,7 +43,7 @@ class MyClient(discord.Client):
         # wordplay.init()
         uptime.init()
         food.init()
-        powerswitch.init()
+        await powerswitch.init()
 
     async def on_message(self, message):
         # check if trashbot is on
