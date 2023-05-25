@@ -19,7 +19,7 @@ class food:
         d = db.get_item(TableName="trashbot", Key={'name':{'S':'hunger'}})
         global t
         if ('data' in d['Item']):
-            t = dt.datetime.fromtimestamp(int(d['Item']['data']['S']))
+            t = dt.datetime.fromtimestamp(float(d['Item']['data']['S']))
 
     async def run(self, message, switch):
         global t
