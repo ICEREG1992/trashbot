@@ -30,6 +30,7 @@ class powerswitch:
                 "good call cya",
                 "peace out bitches"
             ]))
+            helperfunctions.bot_wait_long()
             await self.change_presence(status=discord.Status.dnd, activity=discord.Game(name='Trashbot is powered off.'))
             powerswitch.save()
         elif message.content == "!poweron" and not on and permissions.allowed(message.author.id, "blue"):
