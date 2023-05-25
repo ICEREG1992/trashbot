@@ -4,6 +4,7 @@ from permissions import permissions
 import logcommand
 import logging
 import boto3
+import discord
 
 global db
 db = boto3.client('dynamodb', region_name='us-east-2')
