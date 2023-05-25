@@ -39,11 +39,11 @@ class MyClient(discord.Client):
         permissions.init() 
         todo.init()
         mcplayers.init()
-        powerswitch.init()
         # karaoke_manager.init()
         # wordplay.init()
         uptime.init()
-        await food.init()
+        food.init()
+        powerswitch.init()
 
     async def on_message(self, message):
         # check if trashbot is on
