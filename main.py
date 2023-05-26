@@ -102,7 +102,7 @@ class MyClient(discord.Client):
             if user != self.user and reaction.emoji == "🗑️":
                 if reaction.message.author == self.user:
                     log = reaction.message.content if len(reaction.message.content) < 21 else reaction.message.content[0:20]
-                    logcommand.log_globally(logging.INFO, "tbot message deleted: `" + log + "`")
+                    logcommand.log_globally(logging.INFO, "tbot message deleted by " + user.name + ": `" + log + "`")
                     await reaction.message.delete(delay=0.5)
             elif user != self.user and reaction.emoji == "🐘":
                 ok = True
