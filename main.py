@@ -105,16 +105,21 @@ class MyClient(discord.Client):
                     logcommand.log_globally(logging.INFO, "tbot message deleted: `" + log + "`")
                     await reaction.message.delete(delay=0.5)
             elif user != self.user and reaction.emoji == "🐘":
-                if reaction.message.author == self.user:
+                ok = True
+                for r in reaction.message.reactions:
+                    if r.emoji == "🚫":
+                        ok = False
+                if ok and reaction.message.author == self.user:
                     log = reaction.message.content if len(reaction.message.content) < 21 else reaction.message.content[0:20]
                     logcommand.log_globally(logging.INFO, "tbot adding elephant to own message: `" + log + "`")
                     await reaction.message.add_reaction("🐘")
             elif user != self.user and reaction.emoji == "🚫":
                 for r in reaction.message.reactions:
-                    if user in r.users() and r.emoji == "🐘":
+                    users = [user async for user in r.users()]
+                    if user in users and r.emoji == "🐘":
                         log = reaction.message.content if len(reaction.message.content) < 21 else reaction.message.content[0:20]
                         logcommand.log_globally(logging.INFO, "tbot removing elephant from own message: `" + log + "`")
-                        r.remove(self.user)
+                        await r.remove(self.user)
                 
 
 intents = discord.Intents.default()
