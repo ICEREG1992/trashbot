@@ -24,6 +24,9 @@ class humor_equals:
         if (message.content.startswith("!equalsadd ") and permissions.allowed(message.author.id, "blue")):
             keyword = message.content[11 : message.content.index("•")-1].lower()
             response = message.content[message.content.index("•")+2:]
+            if len(keyword) < 1 or len(response) < 1:
+                await message.channel.send("something doesn't look right...")
+                return
             if keyword not in keyphrases:
                 keyphrases[keyword] = []
             keyphrases[keyword].append(response)
