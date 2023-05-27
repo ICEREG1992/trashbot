@@ -22,6 +22,9 @@ class humor_contains:
         if (message.content.startswith("!containsadd ") and permissions.allowed(message.author.id, "blue")):
             keyword = message.content[13 : message.content.index("•")-1]
             response = message.content[message.content.index("•")+2:]
+            if len(keyword) < 1 or len(response) < 1:
+                await message.channel.send("something doesn't look right...")
+                return
             if keyword not in keyphrases:
                 keyphrases[keyword] = []
             keyphrases[keyword].append(response)
