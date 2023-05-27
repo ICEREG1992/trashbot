@@ -12,12 +12,15 @@ Since trashbot can be heavily modified at runtime, some access control is needed
 
 Any Blue keycard user can give or revoke keycards using the commands ``!give [color] keycard [@mention]`` or ``!revoke [color] keycard [@mention]`` respectively. Any user can see who has what color keycard by sending the command ``!keycard [color]``, or what keycards a user has by mentioning a user, like ``!keycard [@mention]``.
 
+### food
+Inspired by (this classic tumblr post)[https://cdn.discordapp.com/attachments/132379732393066497/1081834856297803796/lrx3xgin70291.jpg], Trashbot needs to be fed to stay alive. After being fed, he will remain full for 6 hours. After 3 days without food, trashbot will begin to starve, and after 5 days without food, he will die, and power off. Use ``!feed (food)`` to feed trashbot, and ``!unfeed`` to unfeed him, resetting his food clock.
+
 ### instant humor
 The instant humor modules (contains and equals) allow for the quick implementation of indiscriminant responses to phrases or words. As the names imply, the humor_contains module will respond to any message which contains one of the user-defined keywords with a randomly selected user-defined resposne for that keyword. The humor_equals module does the same thing, except only if the message matches exactly to one of the keywords, with no extra characters.
 
-instant humor also supports a limited list of escape characters, which can be used to inject info about the triggerer into the response. Use them like any other escape sequence. ``$u`` injects the users username, ``$n`` does the same with nickname. ``$m`` injects a ping for the first user the triggerer mentioned, and ``$ms`` just injects the mentioned user's nickname (mention silent).
+instant humor also supports a limited list of escape characters, which can be used to inject info about the triggerer into the response. Use them like any other escape sequence. ``$u`` injects the users username, ``$n`` does the same with nickname. ``$m`` injects a ping for the first user the triggerer mentioned, and ``$ms`` (for 'mention silent') just injects the mentioned user's nickname. ``$pc`` (for post-command) injects all of the triggering message's text past the first space character.
 
-Blue keycard holders can add a new keyword by sending ``!containsadd [keyword] • [response]`` or ``!equalsadd [keyword] • [response]`` anywhere in a trashbot-joined server. Entire keywords can be removed (but not individual responses) with the commands ``!containsremove [keyword]`` or ``!equalsremove [keyword]``.
+Blue keycard holders can add a new keyword by sending ``!containsadd [keyword] • [response]`` or ``!equalsadd [keyword] • [response]`` anywhere in a trashbot-joined server. Entire keywords can be removed (but not individual responses) with the commands ``!containsremove [keyword]`` or ``!equalsremove [keyword]``. The ``•`` character can be easily typed by using alt+7, and should come standard on most phone keyboards.
 
 ### karaoke
 The karaoke module allows you to screamtype your favorite songs along with trashbot. Using an extremely flexible word-matching system, trashbot will know if you stop in the middle of a line, do multiple lines at once, hooooooolddd yourrrrr wooooooordsssss likee ethisssssss, or accidentally flub a few words, and the song will go on like nothing happened. trashbot will also match!!! your!!! excitement!!! or even go into ALL CAPS IF YOU DO!!!
@@ -32,16 +35,16 @@ For more information on logging commands, a Blue keycard holder can send ``!log 
 ### todo
 Notice a bug of yours? Make a note of it so you can get to fixing it later.
 
-Any user can send the ``!todo`` command to view the todo list. Any Blue or Red keycard holder can send ``!todo [msg]`` to a trashbot-joined channel to add an item to the todo list. Any Blue keycard holder can send ``!todoclear [number]`` to wipe a particular item off the todo list.
+Any user can send the ``!todo`` command to view the todo list. Any Blue or Red keycard holder can send ``!todo [msg]`` to a trashbot-joined channel to add an item to the todo list. Any Blue keycard holder can send ``!todoclear [number]`` to wipe a particular item off the todo list. ``!todoclear`` can also take a comma-separated list of numbers to clear multiple items.
 
 ### spam train
-Channel found a new funny thing to spam? trashbot will eagerly hop on that train. After three completely similar messages, trashbot will send the same exact thing to the channel, joining in. From then on, each message that remains the same will have a small chance of trashbot jumping in again to say it.
+Channel found a new funny thing to spam? trashbot will eagerly hop on that train. After three to five completely similar messages, trashbot will send the same exact thing to the channel, joining in. From then on, each message that remains the same will have a small chance of trashbot jumping in again to say it.
 
 ### wordplay
 Reward clever usages of words by having trashbot give a response when you hide a particular word within another in a unique way! In example, if "Ian" is a keyword, then "variant" would trigger a response, but only once! Admittedly a niche feature, but this bot's for me not for you. Add a new wordplay keyword with ``!wordplayadd [keyword] • [response]`` and remove the keyword with ``!wordplayremove [keyword]``.
 
 ### mcplayers
-Running a Minecraft server and want a quick way to check if anybody's on? Trashbot can help you out. The pinged server can be set through environment variables or a text file as defined below. Trigger a check with ``!whosuprn``.
+Running a Minecraft server and want a quick way to check if anybody's on? Trashbot can help you out. Trigger a check with ``!whosuprn``, change the stored server ip with ``!setwhosup [ip]``.
 
 ## installation
 
@@ -50,8 +53,9 @@ Running a Minecraft server and want a quick way to check if anybody's on? Trashb
 1. clone the repo.
 2. install requirements with ``pip install -r requirements.txt``
 3. configure [awscli](https://github.com/aws/aws-cli) on your system, or equivalent AWS credentials
-4. run ``main.py``, which will initialize the ``trashbot`` table in DynamoDB
-5. add yourself to the "blue" permissions tier using the AWS dashboard, like this:
+4. configure your Discord api key
+5. run ``main.py``, which will initialize the ``trashbot`` table in DynamoDB
+6. add yourself to the "blue" permissions tier using the AWS dashboard, like this:
 ```
 {
   "blue": {
@@ -59,6 +63,7 @@ Running a Minecraft server and want a quick way to check if anybody's on? Trashb
   }
 }
 ```
+7. restart trashbot so it can load you as a blue keycard holder.
 
 ### environment variables
 
