@@ -12,6 +12,9 @@ Since trashbot can be heavily modified at runtime, some access control is needed
 
 Any Blue keycard user can give or revoke keycards using the commands ``!give [color] keycard [@mention]`` or ``!revoke [color] keycard [@mention]`` respectively. Any user can see who has what color keycard by sending the command ``!keycard [color]``, or what keycards a user has by mentioning a user, like ``!keycard [@mention]``.
 
+### powerswitch
+If you need to disable trashbot so he doesn't respond to any messages, you can use ``!shutdown`` or ``!poweroff``. To turn him back on again, use ``!poweron``. If you need to quickly restart the python process running trashbot, use ``!panic``. Blue keycard holders can shutdown and restart trashbot, red keycard holders can only restart him.
+
 ### food
 Inspired by (this classic tumblr post)[https://cdn.discordapp.com/attachments/132379732393066497/1081834856297803796/lrx3xgin70291.jpg], Trashbot needs to be fed to stay alive. After being fed, he will remain full for 6 hours. After 3 days without food, trashbot will begin to starve, and after 5 days without food, he will die, and power off. Use ``!feed (food)`` to feed trashbot, and ``!unfeed`` to unfeed him, resetting his food clock.
 
