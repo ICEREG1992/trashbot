@@ -101,8 +101,10 @@ class MyClient(discord.Client):
             await battle_manager.battle(self, reaction, user)
             if user != self.user and reaction.emoji == "🗑️":
                 if reaction.message.author == self.user:
-                    log = reaction.message.content if len(reaction.message.content) < 50 else reaction.message.content[0:50]
-                    logcommand.log_globally(logging.INFO, "tbot message deleted by " + user.name + ": `" + log.replace('`', '') + "`")
+                    log = reaction.message.content.replace('`', '')
+                    if len(reaction.message.content) > 50 :
+                        reaction.message.content[0:50]
+                    logcommand.log_globally(logging.INFO, "tbot message deleted by " + user.name + ": `" + log + "`")
                     await reaction.message.delete(delay=0.5)
             elif user != self.user and reaction.emoji == "🐘":
                 ok = True
@@ -110,15 +112,19 @@ class MyClient(discord.Client):
                     if r.emoji == "🚫":
                         ok = False
                 if ok and reaction.message.author == self.user:
-                    log = reaction.message.content if len(reaction.message.content) < 50 else reaction.message.content[0:50]
-                    logcommand.log_globally(logging.INFO, "tbot adding elephant to own message: `" + log.replace('`', '') + "`")
+                    log = reaction.message.content.replace('`', '')
+                    if len(reaction.message.content) > 50 :
+                        reaction.message.content[0:50]
+                    logcommand.log_globally(logging.INFO, "tbot adding elephant to own message: `" + log + "`")
                     await reaction.message.add_reaction("🐘")
             elif user != self.user and reaction.emoji == "🚫":
                 for r in reaction.message.reactions:
                     users = [user async for user in r.users()]
                     if user in users and r.emoji == "🐘":
-                        log = reaction.message.content if len(reaction.message.content) < 50 else reaction.message.content[0:50]
-                        logcommand.log_globally(logging.INFO, "tbot removing elephant from own message: `" + log.replace('`', '') + "`")
+                        log = reaction.message.content.replace('`', '')
+                    if len(reaction.message.content) > 50 :
+                        reaction.message.content[0:50]
+                        logcommand.log_globally(logging.INFO, "tbot removing elephant from own message: `" + log + "`")
                         await r.remove(self.user)
                 
 
