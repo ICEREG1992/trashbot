@@ -102,7 +102,7 @@ class MyClient(discord.Client):
             if user != self.user and reaction.emoji == "🗑️":
                 if reaction.message.author == self.user:
                     log = reaction.message.content if len(reaction.message.content) < 21 else reaction.message.content[0:20]
-                    logcommand.log_globally(logging.INFO, "tbot message deleted by " + user.name + ": `" + log + "`")
+                    logcommand.log_globally(logging.INFO, "tbot message deleted by " + user.name + ": `" + log.replace('`', '') + "`")
                     await reaction.message.delete(delay=0.5)
             elif user != self.user and reaction.emoji == "🐘":
                 ok = True
@@ -111,14 +111,14 @@ class MyClient(discord.Client):
                         ok = False
                 if ok and reaction.message.author == self.user:
                     log = reaction.message.content if len(reaction.message.content) < 21 else reaction.message.content[0:20]
-                    logcommand.log_globally(logging.INFO, "tbot adding elephant to own message: `" + log + "`")
+                    logcommand.log_globally(logging.INFO, "tbot adding elephant to own message: `" + log.replace('`', '') + "`")
                     await reaction.message.add_reaction("🐘")
             elif user != self.user and reaction.emoji == "🚫":
                 for r in reaction.message.reactions:
                     users = [user async for user in r.users()]
                     if user in users and r.emoji == "🐘":
                         log = reaction.message.content if len(reaction.message.content) < 21 else reaction.message.content[0:20]
-                        logcommand.log_globally(logging.INFO, "tbot removing elephant from own message: `" + log + "`")
+                        logcommand.log_globally(logging.INFO, "tbot removing elephant from own message: `" + log.replace('`', '') + "`")
                         await r.remove(self.user)
                 
 
