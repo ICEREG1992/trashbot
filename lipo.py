@@ -48,7 +48,7 @@ class lipo:
                     words = re.split('\W+', message.content.lower())
                     # filter down to just the words containing the keyword
                     matches = [a for a in words if participants[message.author.id]['c'] in a]
-                    if len(matches) = 0:
+                    if len(matches) == 0:
                         matches = ["https://media.discordapp.net/attachments/555540666776813568/1122654677574635530/293.jpg"]
                     await message.channel.send(pick_string(["epic fail (" + str(participants[message.author.id]['points']) + " points)",
                     "lipogram challenge failed (" + str(participants[message.author.id]['points']) + " points)",
