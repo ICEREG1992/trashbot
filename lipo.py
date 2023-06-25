@@ -22,16 +22,15 @@ class lipo:
     async def run(self, message):
         global participants
         if (message.content.startswith("!lipo")):
-            l = message.content[message.content.index(' ')+1:]
             if ' ' not in message.content:
                 az = list(map(chr, range(97, 123)))
                 c = pick_string(az)
-            elif len(l) == 1 and l.isascii():
-                c = l
-            elif len(l) > 1:
+            elif len(message.content[message.content.index(' ')+1:]) == 1 and message.content[message.content.index(' ')+1:].isascii():
+                c = message.content[message.content.index(' ')+1:]
+            elif len(message.content[message.content.index(' ')+1:]) > 1:
                 await message.channel.send("you can only start a lipogram challenge on a single character")
                 return
-            elif not l.isascii():
+            elif not message.content[message.content.index(' ')+1:].isascii():
                 await message.channel.send("ascii characters only please. blame sloss and panic")
             if message.author.id not in participants:
                 participants[message.author.id] = {}
