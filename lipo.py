@@ -52,11 +52,11 @@ class lipo:
                         matches = [participants[message.author.id]['c']]
                     await message.channel.send(pick_string(["epic fail (" + str(participants[message.author.id]['points']) + " points)",
                     "lipogram challenge failed (" + str(participants[message.author.id]['points']) + " points)",
-                    "it was a good try but you failed after " + str(participants[message.author.id]['points']) + "messages",
+                    "it was a good try but you failed after " + str(participants[message.author.id]['points']) + " messages",
                     "no dice, i see a `" + participants[message.author.id]['c'] + "` in there (" + str(participants[message.author.id]['points']) + " points)",
                     "sadly you're not allowed to say `" + pick_string(matches) + "` (" + str(participants[message.author.id]['points']) + " points)",
                     "lol this user said " + pick_string(matches) + " (" + str(participants[message.author.id]['points']) + " points)",
-                    "laugh at this user they used letter" + participants[message.author.id]['c'] + " (" + str(participants[message.author.id]['points']) + " points)",
+                    "laugh at this user they used letter " + participants[message.author.id]['c'] + " (" + str(participants[message.author.id]['points']) + " points)",
                     "YOU CAN\"T SAY `" + pick_string(matches) + "` LOLLLLLLL (" + str(participants[message.author.id]['points']) + " points)"]))
                     logcommand.log_globally(logging.INFO, "`" + participants[message.author.id]['c'] + "` lipogram challenge for " + message.author.name + " has ended with `" + str(participants[message.author.id]['points']) + "` points.")
                     participants.pop(message.author.id, None)
