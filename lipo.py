@@ -25,13 +25,11 @@ class lipo:
             if ' ' not in message.content:
                 az = list(map(chr, range(97, 123)))
                 c = pick_string(az)
-            elif len(message.content[message.content.index(' ')+1:]) == 1 and message.content[message.content.index(' ')+1:].isascii():
+            elif len(message.content[message.content.index(' ')+1:]) == 1:
                 c = message.content[message.content.index(' ')+1:].lower()
             elif len(message.content[message.content.index(' ')+1:]) > 1:
                 await message.channel.send("you can only start a lipogram challenge on a single character")
                 return
-            elif not message.content[message.content.index(' ')+1:].isascii():
-                await message.channel.send("ascii characters only please. blame sloss and panic")
             if message.author.id not in participants:
                 participants[message.author.id] = {}
                 participants[message.author.id]['c'] = c
