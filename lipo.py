@@ -20,7 +20,6 @@ class lipo:
         participants = json.loads(d['Item']['data']['S'])
 
     async def run(self, message):
-        global participants
         if (message.content.startswith("!lipo")):
             if ' ' not in message.content:
                 az = list(map(chr, range(97, 123)))
