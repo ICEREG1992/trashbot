@@ -26,7 +26,7 @@ class lipo:
                 az = list(map(chr, range(97, 123)))
                 c = pick_string(az)
             elif len(message.content[message.content.index(' ')+1:]) == 1 and message.content[message.content.index(' ')+1:].isascii():
-                c = message.content[message.content.index(' ')+1:].tolower()
+                c = message.content[message.content.index(' ')+1:].lower()
             elif len(message.content[message.content.index(' ')+1:]) > 1:
                 await message.channel.send("you can only start a lipogram challenge on a single character")
                 return
