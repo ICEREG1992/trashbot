@@ -44,9 +44,9 @@ class lipo:
                 # LENIENT VERSION (all links): re.match(r'[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)', str)
                 return # idk feel free to reward points i dont think it should count lol
             if message.author.id in participants:
-                if participants[message.author.id]['c'] in :
+                if participants[message.author.id]['c'] in str:
                     # extract all of the character words found in the string
-                    words = re.split('\W+', message.content.lower())
+                    words = re.split('\W+', str)
                     # filter down to just the words containing the keyword
                     matches = [a for a in words if participants[message.author.id]['c'] in a]
                     if len(matches) == 0:
