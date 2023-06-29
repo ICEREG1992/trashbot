@@ -53,4 +53,4 @@ class qat:
                             for word in line.split(" ") ]
 
             # send results
-            await message.channel.send(resultWords.join(' '))
+            await message.channel.send(' '.join(resultWords))
