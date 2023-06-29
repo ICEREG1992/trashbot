@@ -25,8 +25,8 @@ class lipo:
             if ' ' not in message.content:
                 az = list(map(chr, range(97, 123)))
                 c = pick_string(az)
-            elif len(message.content[message.content.index(' ')+1:]) == 1:
-                c = message.content[message.content.index(' ')+1:].lower()
+            elif len(message.content[6:]) >= 1:
+                c = message.content[6:].lower()
             if message.author.id not in participants:
                 participants[message.author.id] = {}
                 participants[message.author.id]['c'] = c
