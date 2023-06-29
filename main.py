@@ -122,10 +122,10 @@ class MyClient(discord.Client):
             elif user != self.user and reaction.emoji == "🚫":
                 for r in reaction.message.reactions:
                     users = [user async for user in r.users()]
-                    if user in users and r.emoji == "🐘":
+                    if self.user in users and r.emoji == "🐘":
                         log = reaction.message.content.replace('`', '')
-                    if len(log) > 60 :
-                        log = log[0:60]
+                        if len(log) > 60 :
+                            log = log[0:60]
                         logcommand.log_globally(logging.INFO, "tbot removing elephant from own message: `" + log + "`")
                         await r.remove(self.user)
                 
