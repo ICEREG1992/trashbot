@@ -1,5 +1,6 @@
 import json
 import helperfunctions
+import datetime as dt
 from helperfunctions import pick_string
 from permissions import permissions
 import boto3
@@ -30,6 +31,9 @@ class lipo:
                 participants[message.author.id] = {}
                 participants[message.author.id]['c'] = c
                 participants[message.author.id]['points'] = 0
+                participants[message.author.id]['name'] = message.author.name
+                participants[message.author.id]['start'] = dt.datetime.utcnow()
+                participants[message.author.id]['best'] = ""
                 if len(c) > 1:
                     await message.channel.send(message.author.mention + ", you have started a lipogram challenge for the letters in `" + c + "`. Have fun!")
                 else:
@@ -72,6 +76,8 @@ class lipo:
                     participants.pop(message.author.id, None)
                 else:
                     participants[message.author.id]['points'] += 1
+                    if 'best' in participants[message.author.id] len(st) > len(participants[message.author.id]['best']):
+                        participants[message.author.id]['best'] = st
                 lipo.save()
                     
     def save():
