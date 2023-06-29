@@ -5,7 +5,7 @@ import sys
 # thx kube
 
 class qat:
-    
+
     async def run(self, message):
         if message.content.lower().startswith("!qat "):
             s = message.content[5:]
@@ -26,7 +26,7 @@ class qat:
 
             # Anticipate start and end of results block
             startOffset = 0
-            if (re.match(r".*([A-Z]).*", args.pat)):
+            if (re.match(r".*([A-Z]).*", s)):
                 startString, endString = "</form>", "</table>"
                 startOffset = 2
             else:
