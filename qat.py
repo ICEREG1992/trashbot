@@ -53,4 +53,7 @@ class qat:
                             for word in line.split(" ") ]
 
             # send results
-            await message.channel.send(' '.join(resultWords))
+            if len(resultWords) > 0:
+                await message.channel.send(' '.join(resultWords))
+            else:
+                await message.channel.send('i got nothin boss')
