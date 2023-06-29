@@ -39,10 +39,14 @@ class lipo:
             else:
                 await message.channel.send("you're doing a lipo challenge for letter `" + participants[message.author.id]['c'] + "` with `" + str(participants[message.author.id]['points']) + " points`")
         else:
+            str = message.content.lower();
+            if re.fullmatch(r'https?:\/\/(?:www\.)?(?:(?:t(?:e|x)nor\.com\/vi(?:e|x)w\/)|(?:giphy\.com\/gifs\/)|(?:[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)\.(jpg|jpeg|png|gif|gifv|webm|mp4|mov)))(?:\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*))?', str): # should cover most image embed type that shows up on discord, doesnt match if the text is not shown (WILL MATCH 'message [link]' AND WHATNOT, WILL MATCH YT/TWITTER/SPOTIFY LINKS)
+                return # idk feel free to reward points i dont think it should count lol
+            # LENIENT VERSION (all links): str = re.sub(r'[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)', '', str)
             if message.author.id in participants:
-                if participants[message.author.id]['c'] in message.content.lower():
+                if participants[message.author.id]['c'] in str:
                     # extract all of the character words found in the string
-                    words = re.split('\W+', message.content.lower())
+                    words = re.split('\W+', str)
                     # filter down to just the words containing the keyword
                     matches = [a for a in words if participants[message.author.id]['c'] in a]
                     if len(matches) == 0:
