@@ -60,8 +60,8 @@ class lipo:
                         words = re.split('\W+', st)
                         # filter down to just the words containing the keyword
                         matches = [[a for a in words if n in a], n]
-                        if len(matches) == 0:
-                            matches = [n, n]
+                        if len(matches[0]) == 0:
+                            matches[0] = n
                         break
                 if matches:
                     await message.channel.send(pick_string(["epic fail (" + str(participants[message.author.id]['points']) + " points)",
