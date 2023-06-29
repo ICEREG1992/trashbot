@@ -54,6 +54,6 @@ class qat:
 
             # send results
             if len(resultWords) > 0:
-                await message.channel.send(' '.join(resultWords))
+                await message.channel.send(' '.join(resultWords)[0:2000])
             else:
                 await message.channel.send('i got nothin boss')
