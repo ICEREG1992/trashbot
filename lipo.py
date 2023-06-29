@@ -32,7 +32,7 @@ class lipo:
                 participants[message.author.id]['c'] = c
                 participants[message.author.id]['points'] = 0
                 participants[message.author.id]['name'] = message.author.name
-                participants[message.author.id]['start'] = dt.datetime.utcnow()
+                participants[message.author.id]['start'] = dt.datetime.utcnow().timestamp()
                 participants[message.author.id]['best'] = ""
                 if len(c) > 1:
                     await message.channel.send(message.author.mention + ", you have started a lipogram challenge for the letters in `" + c + "`. Have fun!")
