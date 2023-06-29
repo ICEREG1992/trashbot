@@ -76,7 +76,7 @@ class lipo:
                     participants.pop(message.author.id, None)
                 else:
                     participants[message.author.id]['points'] += 1
-                    if 'best' in participants[message.author.id] len(st) > len(participants[message.author.id]['best']):
+                    if 'best' in participants[message.author.id] and len(st) > len(participants[message.author.id]['best']):
                         participants[message.author.id]['best'] = st
                 lipo.save()
                     
