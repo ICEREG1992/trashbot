@@ -16,6 +16,10 @@ class qat:
                 message.channel.send("qat says: `Error: pattern too long or too complex`")
                 return
 
+            if ("Error: unexpected character in pattern" in allText):
+                message.channel.send("qat says: `Error: unexpected character in pattern`")
+                return
+
             # Replace strings in text
             replacements = [["<br>", ""], ["<td>", ""], 
                             ["<tr>", ""], ["</tr>", ""], 
