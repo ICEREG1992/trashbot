@@ -12,6 +12,10 @@ class qat:
             r = requests.post("https://www.quinapalus.com/cgi-bin/qat", params={"ent": "Search", "pat": s, "dict": 0})
             allText = r.text
 
+            if ("Error: pattern too long or too complex" in allText):
+                message.channel.send("qat says: `Error: pattern too long or too complex`")
+                return
+
             # Replace strings in text
             replacements = [["<br>", ""], ["<td>", ""], 
                             ["<tr>", ""], ["</tr>", ""], 
