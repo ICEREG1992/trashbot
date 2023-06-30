@@ -13,11 +13,11 @@ class qat:
             allText = r.text
 
             if ("Error: pattern too long or too complex" in allText):
-                await message.channel.send("qat says: `Error: pattern too long or too complex`")
+                await message.channel.send("qat says `Error: pattern too long or too complex`")
                 return
 
             if ("Error: unexpected character in pattern" in allText):
-                await message.channel.send("qat says: `Error: unexpected character in pattern`")
+                await message.channel.send("qat says `Error: unexpected character in pattern`")
                 return
 
             # Replace strings in text
