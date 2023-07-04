@@ -22,7 +22,7 @@ class lipo:
 
     async def run(self, message):
         uid = str(message.author.id)
-        if (message.content.startswith("!lipo")):
+        if (message.content.startswith("!lipo ")):
             if ' ' not in message.content:
                 az = list(map(chr, range(97, 123)))
                 c = pick_string(az)
