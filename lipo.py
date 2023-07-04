@@ -53,7 +53,7 @@ class lipo:
             "here's currently lipos:\n",
             "check check check check it out:\n"])
             for uid in participants:
-                out += "**" + participants[uid]['name'] + "**: " + str(participants[uid]['points']) + " points on `" + participants[uid]['c'] + "`\n")
+                out += "**" + participants[uid]['name'] + "**: " + str(participants[uid]['points']) + " points on `" + participants[uid]['c'] + "`\n"
             await message.channel.send(out)
         else:
             st = message.content.lower()
