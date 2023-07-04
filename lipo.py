@@ -73,7 +73,7 @@ class lipo:
                             matches[0] = n
                         break
                 if matches:
-                    if (participants[uid]['points'] = 0):
+                    if (participants[uid]['points'] == 0):
                         await message.channel.send(pick_string(["YOU DON'T HAVE TO DO A LIPO IF YOU DON'T WANT TO (" + str(participants[uid]['points']) + " points)",
                         "THE JOKE ISN'T FUNNY. YOU LOSE. (" + str(participants[uid]['points']) + " points)",
                         "DID YOU ENJOY YOURSELF? (" + str(participants[uid]['points']) + " points)",
