@@ -68,15 +68,6 @@ class lipo:
             # if re.fullmatch(r'https?:\/\/(?:www\.)?(?:(?:t(?:e|x)nor\.com\/vi(?:e|x)w\/)|(?:giphy\.com\/gifs\/)|(?:[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)\.(jpg|jpeg|png|gif|gifv|webm|mp4|mov)))(?:\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*))?', str): # should cover most image embed type that shows up on discord, doesnt match if the text is not shown (WILL MATCH 'message [link]' AND WHATNOT, WILL MATCH YT/TWITTER/SPOTIFY LINKS)
                 # return # idk feel free to reward points i dont think it should count lol
             st = re.sub(r'https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)', '', st) # erase all URLs
-            '''
-            # lol
-            for mentioned_user in message.mentions:
-                st += " @" + mentioned_user.display_name
-            for mentioned_role in message.role_mentions:
-                st += " @&" + mentioned_role.name
-            for mentioned_channel in message.channel_mentions:
-                st += " #" + mentioned_channel.name
-            '''
             st = re.sub(r'<(?:(?:a?:\w+:)|(?:\@\&?)|\#)\d{1,19}>', '', st) # erase emojis, channel tags and user/role mentions
             if uid in participants:
                 matches = None
