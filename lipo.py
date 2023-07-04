@@ -47,6 +47,14 @@ class lipo:
                     await message.channel.send("you're doing a lipo challenge for the letters in `" + c + "` with `" + str(participants[uid]['points']) + " points`")
                 else:
                     await message.channel.send("you're doing a lipo challenge for letter `" + c + "` with `" + str(participants[uid]['points']) + " points`")
+        elif: (message.content.startswith("!lipoboard")):
+            out = pick_string(["currently running lipo challenges:\n",
+            "get a load a these nerds:\n",
+            "here's currently lipos:\n",
+            "check check check check it out:\n"])
+            for uid in participants:
+                out += "**" + participants[uid]['name'] + "**: " + str(participants[uid]['points'] + " points on `" + participants[uid]['c'] + "`\n")
+            await message.channel.send(out)
         else:
             st = message.content.lower()
             # if re.fullmatch(r'https?:\/\/(?:www\.)?(?:(?:t(?:e|x)nor\.com\/vi(?:e|x)w\/)|(?:giphy\.com\/gifs\/)|(?:[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)\.(jpg|jpeg|png|gif|gifv|webm|mp4|mov)))(?:\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*))?', str): # should cover most image embed type that shows up on discord, doesnt match if the text is not shown (WILL MATCH 'message [link]' AND WHATNOT, WILL MATCH YT/TWITTER/SPOTIFY LINKS)
@@ -65,6 +73,12 @@ class lipo:
                             matches[0] = n
                         break
                 if matches:
+                    if (participants[uid]['points'] = 0):
+                        await message.channel.send(pick_string(["YOU DON'T HAVE TO DO A LIPO IF YOU DON'T WANT TO (" + str(participants[uid]['points']) + " points)",
+                        "THE JOKE ISN'T FUNNY. YOU LOSE. (" + str(participants[uid]['points']) + " points)",
+                        "DID YOU ENJOY YOURSELF? (" + str(participants[uid]['points']) + " points)",
+                        "HAHAHAHAHAHAHA GOOD ONE I LIKED THAT ONE SEE YOU STARTED A LIPO THEN IMMEDIATELY FAILED SO FUNNY (" + str(participants[uid]['points']) + " points)",
+                        "BRUH (" + str(participants[uid]['points']) + " points)"]))
                     await message.channel.send(pick_string(["epic fail (" + str(participants[uid]['points']) + " points)",
                     "lipogram challenge failed (" + str(participants[uid]['points']) + " points)",
                     "it was a good try but you failed after " + str(participants[uid]['points']) + " messages",
