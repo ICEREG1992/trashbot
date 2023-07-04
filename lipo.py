@@ -47,7 +47,7 @@ class lipo:
                     await message.channel.send("you're doing a lipo challenge for the letters in `" + c + "` with `" + str(participants[uid]['points']) + " points`")
                 else:
                     await message.channel.send("you're doing a lipo challenge for letter `" + c + "` with `" + str(participants[uid]['points']) + " points`")
-        elif: (message.content.startswith("!lipoboard")):
+        elif (message.content.startswith("!lipoboard")):
             out = pick_string(["currently running lipo challenges:\n",
             "get a load a these nerds:\n",
             "here's currently lipos:\n",
