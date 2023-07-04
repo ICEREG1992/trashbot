@@ -1,8 +1,11 @@
 import json
+import discord
 import helperfunctions
+import humanize
 import datetime as dt
 from helperfunctions import pick_string
 from permissions import permissions
+from operator import attrgetter
 import boto3
 import logcommand, logging
 import re
@@ -48,13 +51,18 @@ class lipo:
                 else:
                     await message.channel.send("you're doing a lipo challenge for letter `" + c + "` with `" + str(participants[uid]['points']) + " points`")
         elif (message.content.startswith("!lipoboard")):
-            out = pick_string(["currently running lipo challenges:\n",
-            "get a load a these nerds:\n",
-            "here's currently lipos:\n",
-            "check check check check it out:\n"])
-            for uid in participants:
-                out += "**" + participants[uid]['name'] + "**: " + str(participants[uid]['points']) + " points on `" + participants[uid]['c'] + "`\n"
-            await message.channel.send(out)
+            t = pick_string(["🏆 currently running lipo challenges:\n",
+            "🏆 get a load a these top 8 nerds:\n",
+            "🏆 here's currently lipos:\n",
+            "🏆 check check check check it out:\n",
+            "🏆 eight"])
+            embed = discord.Embed(title=t)
+            for l in sorted(participants.items(), key=lambda item: item[1]['points'], reverse=True)[0:8]:
+                embed.add_field(name=l[1]['name'], value=str(l[1]['points']) + " points", inline=True)
+                embed.add_field(name="lipo", value=l[1]['c'], inline=True)
+                embed.add_field(name="for", value=humanize.precisedelta(dt.timedelta(seconds=dt.datetime.utcnow().timestamp()-l[1]['start']), minimum_unit='hours', suppress=['microseconds','seconds','minutes']))
+                # out += "**" + participants[uid]['name'] + "**: " + str(participants[uid]['points']) + " points on `" + participants[uid]['c'] + "`\n"
+            await message.channel.send(embed=embed)
         else:
             st = message.content.lower()
             # if re.fullmatch(r'https?:\/\/(?:www\.)?(?:(?:t(?:e|x)nor\.com\/vi(?:e|x)w\/)|(?:giphy\.com\/gifs\/)|(?:[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)\.(jpg|jpeg|png|gif|gifv|webm|mp4|mov)))(?:\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*))?', str): # should cover most image embed type that shows up on discord, doesnt match if the text is not shown (WILL MATCH 'message [link]' AND WHATNOT, WILL MATCH YT/TWITTER/SPOTIFY LINKS)
