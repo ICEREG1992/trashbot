@@ -87,14 +87,15 @@ class lipo:
                         "DID YOU ENJOY YOURSELF? (" + str(participants[uid]['points']) + " points)",
                         "HAHAHAHAHAHAHA GOOD ONE I LIKED THAT ONE SEE YOU STARTED A LIPO THEN IMMEDIATELY FAILED SO FUNNY (" + str(participants[uid]['points']) + " points)",
                         "BRUH (" + str(participants[uid]['points']) + " points)"]))
-                    await message.channel.send(pick_string(["epic fail (" + str(participants[uid]['points']) + " points)",
-                    "lipogram challenge failed (" + str(participants[uid]['points']) + " points)",
-                    "it was a good try but you failed after " + str(participants[uid]['points']) + " messages",
-                    "no dice, i see a `" + matches[1] + "` in there (" + str(participants[uid]['points']) + " points)",
-                    "sadly you're not allowed to say `" + pick_string(matches[0]) + "` (" + str(participants[uid]['points']) + " points)",
-                    "lol this user said " + pick_string(matches[0]) + " (" + str(participants[uid]['points']) + " points)",
-                    "laugh at this user they used letter " + matches[1] + " (" + str(participants[uid]['points']) + " points)",
-                    "YOU CAN\"T SAY `" + pick_string(matches[0]) + "` LOLLLLLLL (" + str(participants[uid]['points']) + " points)"]))
+                    else:
+                        await message.channel.send(pick_string(["epic fail (" + str(participants[uid]['points']) + " points)",
+                        "lipogram challenge failed (" + str(participants[uid]['points']) + " points)",
+                        "it was a good try but you failed after " + str(participants[uid]['points']) + " messages",
+                        "no dice, i see a `" + matches[1] + "` in there (" + str(participants[uid]['points']) + " points)",
+                        "sadly you're not allowed to say `" + pick_string(matches[0]) + "` (" + str(participants[uid]['points']) + " points)",
+                        "lol this user said " + pick_string(matches[0]) + " (" + str(participants[uid]['points']) + " points)",
+                        "laugh at this user they used letter " + matches[1] + " (" + str(participants[uid]['points']) + " points)",
+                        "YOU CAN\"T SAY `" + pick_string(matches[0]) + "` LOLLLLLLL (" + str(participants[uid]['points']) + " points)"]))
                     logcommand.log_globally(logging.INFO, "`" + participants[uid]['c'] + "` lipogram challenge for " + message.author.name + " has ended with `" + str(participants[uid]['points']) + "` points.")
                     participants.pop(uid, None)
                 else:
