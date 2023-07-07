@@ -33,7 +33,7 @@ class lipo:
             "🏆 eight"])
             embed = discord.Embed(title=t)
             for l in sorted(participants.items(), key=lambda item: item[1]['points'], reverse=True)[0:8]:
-                embed.add_field(name=l[1]['name'], value=str(l[1]['points']) + " points for `" + l[1]['c'] + "` since <t:" + str(int(l[1]['start'])) + ">", inline=False)
+                embed.add_field(name=l[1]['name'], value=str(l[1]['points']) + " points for `" + (l[1]['c'] if len(l[1]['c']) <= 26 else (l[1]['c'][0:26] + "...")) + "` since <t:" + str(int(l[1]['start'])) + ">", inline=False)
                 # embed.add_field(name="lipo", value=l[1]['c'], inline=True)
                 # embed.add_field(name="for", value=humanize.precisedelta(dt.timedelta(seconds=dt.datetime.utcnow().timestamp()-l[1]['start']), minimum_unit='hours', suppress=['microseconds','seconds','minutes']))
                 # out += "**" + participants[uid]['name'] + "**: " + str(participants[uid]['points']) + " points on `" + participants[uid]['c'] + "`\n"
