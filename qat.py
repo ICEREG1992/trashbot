@@ -2,6 +2,10 @@ import re
 import requests
 import sys
 
+e = ("Error: pattern too long or too complex",
+    "Error: unexpected character in pattern",
+    "Error: expected } at end of tagged item")
+
 # thx kube
 
 class qat:
@@ -12,13 +16,10 @@ class qat:
             r = requests.post("https://www.quinapalus.com/cgi-bin/qat", params={"ent": "Search", "pat": s, "dict": 0})
             allText = r.text
 
-            if ("Error: pattern too long or too complex" in allText):
-                await message.channel.send("qat says `Error: pattern too long or too complex`")
-                return
-
-            if ("Error: unexpected character in pattern" in allText):
-                await message.channel.send("qat says `Error: unexpected character in pattern`")
-                return
+            for error in e:
+                if (error in allText):
+                    await message.channel.send("qat says `" + error + "`")
+                    return
 
             # Replace strings in text
             replacements = [["<br>", ""], ["<td>", ""], 
