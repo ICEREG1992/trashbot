@@ -27,7 +27,7 @@ class lipo:
         uid = str(message.author.id)
         if (message.content.startswith("!lipoboard")):
             t = pick_string(["🏆 currently running lipo challenges:\n",
-            "🏆 get a load a these top 8 nerds:\n",
+            "🏆 get a load a these top " + (str(len(participants)) if len(participants) < 9 else "eight") + " nerds:\n",
             "🏆 here's currently lipos:\n",
             "🏆 check check check check it out:\n",
             "🏆 eight"])
