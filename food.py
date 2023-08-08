@@ -1,4 +1,4 @@
-from helperfunctions import pick_string
+from helperfunctions import pick_string,chance
 import logcommand, logging
 import datetime as dt
 import humanize
@@ -26,18 +26,28 @@ class food:
         # send messages if fed
         if (message.content.startswith("!feed")):
             if (t > dt.datetime.utcnow() - dt.timedelta(hours=6)):
-                await message.channel.send(pick_string([
-                    "bluuouohuhgghghghh hoghg hghg  ghgooh hh oh hh h hh ohohhohohhohhh  goddd hoohhhh god oh fuck no i can't",
-                    "omg im so full i cant have another bite",
-                    "noooooooo pls no more",
-                    "already had some of that",
-                    "bleeeuehehehhhgeghghggehghhhhh hh thats me thats me when i vomit im vomiting",
-                    "throwing up vomiting puking spewing this is terrible this is so bad",
-                    "too full cant eat cannot do it stop it",
-                    "okay ENOUGH that's GOOD im FULL IT'S ENOUGH FOOD",
-                    "STOP IT QUIT IT I HAVE ENOUGH",
-                    "im GOOD i DON'T NEED ANY OF THAT"
-                ]))
+                if chance(5):
+                    await message.channel.send(pick_string([
+                        "i guess i could have a bite but i wont",
+                        "no thanks",
+                        "ehhh im a little full",
+                        "can you box it up to go please",
+                        "maybe later",
+                        "uhhh"
+                    ]))
+                else:
+                    await message.channel.send(pick_string([
+                        "bluuouohuhgghghghh hoghg hghg  ghgooh hh oh hh h hh ohohhohohhohhh  goddd hoohhhh god oh fuck no i can't",
+                        "omg im so full i cant have another bite",
+                        "noooooooo pls no more",
+                        "already had some of that",
+                        "bleeeuehehehhhgeghghggehghhhhh hh thats me thats me when i vomit im vomiting",
+                        "throwing up vomiting puking spewing this is terrible this is so bad",
+                        "too full cant eat cannot do it stop it",
+                        "okay ENOUGH that's GOOD im FULL IT'S ENOUGH FOOD",
+                        "STOP IT QUIT IT I HAVE ENOUGH",
+                        "im GOOD i DON'T NEED ANY OF THAT"
+                    ]))
             elif (t < dt.datetime.utcnow() - dt.timedelta(days=2)):
                 logcommand.log_globally(logging.INFO, "I was fed `" + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds") +
                 "` by user " + message.author.name + " after starving for " + str(humanize.precisedelta((dt.datetime.utcnow() - dt.timedelta(hours=6) - t), suppress=['milliseconds','microseconds'])) )
@@ -58,19 +68,33 @@ class food:
                 "` by user " + message.author.name + " after being hungry for " + str(humanize.precisedelta((dt.datetime.utcnow() - dt.timedelta(hours=6) - t), suppress=['milliseconds','microseconds'])))
                 t = dt.datetime.utcnow()
                 food.save(t)
-                await message.channel.send(pick_string([
-                    "Oh fuck yes it's a " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds") + " for me",
-                    "AW YEAH all abourt the gravy train TOOT TOOT im eatin good tonite",
-                    "booyah booyah booyah weehaw so good and tasty and yummy",
-                    "ohhh hh hhhh h mmmmmmmmm im eating it up im just eating it all up it's so scrumptious thank you mwah mwah mwah oh yeah",
-                    "ohhhh yeah ive been a hungry boy thank you oh so very much",
-                    "MMMMMMMMMMMMMMMMMmmmmmmmm how did u know. i have wanted this so bad.",
-                    "need a bucket and a mop for dis " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds"),
-                    "DELISH!!!!!",
-                    "nom nom nom nom nom nom nom nom hehe xd ty",
-                    "omg can't wait to enjoy this " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds") + " s gonna be so good",
-                    "great big ol " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds") + " just for me"
-                ]))
+                if chance(8):
+                    await message.channel.send(pick_string([
+                        "yea sure that's okay",
+                        "it tastes fine",
+                        "thx i guess",
+                        "mm yum yeah ok that's alright",
+                        "yumbly in my tumbly",
+                        "it's alright for me",
+                        "sure i could have that",
+                        "monch monch ehhhh its a little dry",
+                        "a little underseasoned to my taste. i mean ill still eat it though",
+                        "sorry i dont really like it it's fine though"
+                    ]))
+                else:
+                    await message.channel.send(pick_string([
+                        "Oh fuck yes it's a " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds") + " for me",
+                        "AW YEAH all abourt the gravy train TOOT TOOT im eatin good tonite",
+                        "booyah booyah booyah weehaw so good and tasty and yummy",
+                        "ohhh hh hhhh h mmmmmmmmm im eating it up im just eating it all up it's so scrumptious thank you mwah mwah mwah oh yeah",
+                        "ohhhh yeah ive been a hungry boy thank you oh so very much",
+                        "MMMMMMMMMMMMMMMMMmmmmmmmm how did u know. i have wanted this so bad.",
+                        "need a bucket and a mop for dis " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds"),
+                        "DELISH!!!!!",
+                        "nom nom nom nom nom nom nom nom hehe xd ty",
+                        "omg can't wait to enjoy this " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds") + " s gonna be so good",
+                        "great big ol " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds") + " just for me"
+                    ]))
         elif (message.content == "!unfeed" and (permissions.allowed(message.author.id, "blue") or (permissions.allowed(message.author.id, "red")))):
             if (t > dt.datetime.utcnow() - dt.timedelta(hours=6)):
                 t = dt.datetime.utcnow() - dt.timedelta(hours=6)
