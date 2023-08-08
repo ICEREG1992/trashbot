@@ -6,14 +6,27 @@ e = ("Error: pattern too long or too complex",
     "Error: unexpected character in pattern",
     "Error: expected } at end of tagged item")
 
+dicts = ("UKACD",
+        "YAWL",
+        "ABLE",
+        "Moby",
+        "PDL",
+        "BNC",
+        "Broda",
+        "Union")
+
+global dict
+dict = 0
+
 # thx kube
 
 class qat:
 
     async def run(self, message):
+        global dict
         if message.content.lower().startswith("!qat "):
             s = message.content[5:]
-            r = requests.post("https://www.quinapalus.com/cgi-bin/qat", params={"ent": "Search", "pat": s, "dict": 0})
+            r = requests.post("https://www.quinapalus.com/cgi-bin/qat", params={"ent": "Search", "pat": s, "dict": dict})
             allText = r.text
 
             for error in e:
@@ -66,3 +79,14 @@ class qat:
                 await message.channel.send(' '.join(resultWords)[0:2000])
             else:
                 await message.channel.send('i got nothin boss')
+        elif message.content.lower().startswith("!dict"):
+            if len(message.content) > 6:
+                pc = message.content[6:]
+                if pc in dicts:
+                    dict = dicts.index(pc)
+                    await message.channel.send('successfully set qat dictionary to ' + dicts[dict])
+                else:
+                    await message.channe.send('thats not a dictionary')
+            else:
+                await message.channel.send('qat dictionary currently set to `' + dicts[dict] + '`.\navailable dictionaries: `UKACD`, `YAWL`, `ABLE`, `Moby`, `PDL`, `BNC`, `Broda`, `Union`. the default is `UKACD`. ')
+                
