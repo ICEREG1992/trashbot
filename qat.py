@@ -86,7 +86,7 @@ class qat:
                     dict = dicts.index(pc)
                     await message.channel.send('successfully set qat dictionary to ' + dicts[dict])
                 else:
-                    await message.channe.send('thats not a dictionary')
+                    await message.channel.send('thats not a dictionary')
             else:
                 await message.channel.send('qat dictionary currently set to `' + dicts[dict] + '`.\navailable dictionaries: `UKACD`, `YAWL`, `ABLE`, `Moby`, `PDL`, `BNC`, `Broda`, `Union`. the default is `UKACD`. ')
                 
