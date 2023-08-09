@@ -81,10 +81,10 @@ class qat:
                 await message.channel.send('i got nothin boss')
         elif message.content.lower().startswith("!dict"):
             if len(message.content) > 6:
-                pc = message.content[6:]
-                if pc in dicts:
+                pc = message.content.lower()[6:]
+                if pc in [a.lower() for a in dicts]:
                     dict = dicts.index(pc)
-                    await message.channel.send('successfully set qat dictionary to ' + dicts[dict])
+                    await message.channel.send('successfully set qat dictionary to `' + dicts[dict] + '`')
                 else:
                     await message.channel.send('thats not a dictionary')
             else:
