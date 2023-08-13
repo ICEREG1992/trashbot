@@ -16,7 +16,7 @@ dicts = ("UKACD",
         "Union")
 
 global dict
-dict = 0
+dict = 4
 
 # thx kube
 
