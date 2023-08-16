@@ -6,14 +6,14 @@ e = ("Error: pattern too long or too complex",
     "Error: unexpected character in pattern",
     "Error: expected } at end of tagged item")
 
-dicts = ("UKACD",
+dicts = ["UKACD",
         "YAWL",
         "ABLE",
         "Moby",
         "PDL",
         "BNC",
         "Broda",
-        "Union")
+        "Union"]
 
 global dict
 dict = 4
@@ -82,8 +82,9 @@ class qat:
         elif message.content.lower().startswith("!dict"):
             if len(message.content) > 6:
                 pc = message.content.lower()[6:]
-                if pc in [a.lower() for a in dicts]:
-                    dict = dicts.index(pc)
+                ld = [a.lower() for a in dicts]
+                if pc in ld:
+                    dict = ld.index(pc)
                     await message.channel.send('successfully set qat dictionary to `' + dicts[dict] + '`')
                 else:
                     await message.channel.send('thats not a dictionary')
