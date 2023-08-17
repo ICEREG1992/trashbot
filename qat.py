@@ -24,7 +24,7 @@ class qat:
 
     async def run(self, message):
         global dict
-        if message.content.lower().startswith("!qat "):
+        if message.content.lower().startswith("!qat ") or message.content.lower().startswith("!taq "):
             s = message.content[5:]
             r = requests.post("https://www.quinapalus.com/cgi-bin/qat", params={"ent": "Search", "pat": s, "dict": dict})
             allText = r.text
@@ -76,6 +76,8 @@ class qat:
 
             # send results
             if len(resultWords) > 0:
+                if (message.content.lower().startswith("!taq")):
+                    resultWords.reverse()
                 await message.channel.send(' '.join(resultWords)[0:2000])
             else:
                 await message.channel.send('i got nothin boss')
