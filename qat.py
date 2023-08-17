@@ -48,7 +48,7 @@ class qat:
 
             # Anticipate start and end of results block
             startOffset = 0
-            if (re.match(r".*([A-Z]).*", s)):
+            if (re.match(r".*(([A-Z])|(;)).*", args.pat)):
                 startString, endString = "</form>", "</table>"
                 startOffset = 2
             else:
