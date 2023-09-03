@@ -22,7 +22,7 @@ class humor_regex:
 
     async def run(self, message):
         if (message.content.startswith("!regexadd ") and permissions.allowed(message.author.id, "blue")):
-            keyword = message.content[13 : message.content.index("•")-1]
+            keyword = message.content[10 : message.content.index("•")-1]
             response = message.content[message.content.index("•")+2:]
             if len(keyword) < 1 or len(response) < 1:
                 await message.channel.send("something doesn't look right...")
