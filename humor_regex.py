@@ -30,10 +30,8 @@ class humor_regex:
             try:
                 re.compile(keyword)
             except re.error:
-                if keyword[0] in string.punctuation:
-                    await message.channel.send("that doesn't look like valid regex, try adding a backslash to the front")
-                else:
-                    await message.channel.send("that doesn't look like valid regex...")
+                await message.channel.send("that doesn't look like valid regex...")
+                return
             if keyword not in keyphrases:
                 keyphrases[keyword] = []
             keyphrases[keyword].append(response)
