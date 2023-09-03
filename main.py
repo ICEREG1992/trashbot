@@ -5,6 +5,7 @@ import humanize
 import helperfunctions
 from humor_contains import humor_contains
 from humor_equals import humor_equals
+from humor_regex import humor_regex
 from permissions import permissions
 from uptime import uptime
 from todo import todo
@@ -38,6 +39,7 @@ class MyClient(discord.Client):
         logging.info('Logged on as ' + str(self.user))
         humor_equals.init()
         humor_contains.init()
+        humor_regex.init()
         permissions.init() 
         todo.init()
         mcplayers.init()
@@ -59,6 +61,7 @@ class MyClient(discord.Client):
             if message.author != self.user and (not permissions.allowed(message.author.id, "black")):
                 await humor_equals.run(self, message)
                 await humor_contains.run(self, message)
+                await humor_regex.run(self, message)
                 await permissions.run(self, message, discord.Client)
                 await todo.run(self, message)
                 await spam_train.run(self, message)
