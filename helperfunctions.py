@@ -3,6 +3,7 @@ import random
 import time
 import boto3
 import logging
+import re
 
 logging.basicConfig(level=logging.INFO)
 
@@ -21,8 +22,12 @@ def bot_wait_short():
 def chance(rate):
     return random.uniform(0,100) < rate
 
-def humor_escape(msg, text):
+def humor_escape(msg, text, match=None):
     text = text.replace("$u", msg.author.name)
+
+    if match:
+        for i in range(len(match.groups())):
+            text = text.replace("$" + str(i+1), match[i+1])
     
     if (' ' in msg.content):
         text = text.replace("$pc", msg.content[msg.content.index(' '):])
@@ -82,8 +87,8 @@ def ensure_table():
 
 def fill_defaults(db):
     # fill empty required values with defaults
-    keynames = ["contains_phrases", "equals_phrases", "hunger", "lyrics", "mc_ip", "permissions", "uptime", "todo", "wordplay_keywords", "on", "lipo"]
-    defaults = ["{}", "{}", "0", "•", "", "{}", "0", "[]", "{}", "True", "{}"]
+    keynames = ["contains_phrases", "equals_phrases", "regex_phrases", "hunger", "lyrics", "mc_ip", "permissions", "uptime", "todo", "wordplay_keywords", "on", "lipo"]
+    defaults = ["{}", "{}", "{}", "0", "•", "", "{}", "0", "[]", "{}", "True", "{}"]
     for i in range(len(keynames)):
         n = db.get_item(TableName="trashbot", Key={'name':{'S':keynames[i]}})
         if ('Item' not in n):
