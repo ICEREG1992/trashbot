@@ -61,6 +61,7 @@ class food:
                     "manna from heaven... ACK!!",
                     "IVE BEEN SO HUNGRY THANNK YOU",
                     "AAAAAAAAAAHHHHHHHHHH!!!!!!!!",
+                    "scrumptious (this message written by user noneuclidean)"
                     "im eating it im eating it im eating it im eating it im eating it im eating it im eating it im eating it"
                 ]))
             else:
