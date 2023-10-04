@@ -26,6 +26,10 @@ class qat:
         global dict
         if message.content.lower().startswith("!qat ") or message.content.lower().startswith("!taq "):
             s = message.content[5:]
+            spoilerResult = False
+            if s.startswith("||") and s.endswith("||"):
+                spoilerResult = True
+                s = s[2:-2] 
             r = requests.get("https://www.quinapalus.com/cgi-bin/qat", params={"ent": "Search", "pat": s, "dict": dict}, headers={"User-Agent": "qat-cli/1.0.0"})
             allText = r.text
 
@@ -78,7 +82,10 @@ class qat:
             if len(resultWords) > 0:
                 if (message.content.lower().startswith("!taq")):
                     resultWords.reverse()
-                await message.channel.send(' '.join(resultWords)[0:2000])
+                resultText = ' '.join(resultWords)[0:(1996 if spoilerResult else 2000)]
+                if spoilerResult:
+                    resultText = "||" + resultText + "||"
+                await message.channel.send(resultText)
             else:
                 await message.channel.send('i got nothin boss')
         elif message.content.lower().startswith("!dict"):
