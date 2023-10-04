@@ -26,7 +26,7 @@ class qat:
         global dict
         if message.content.lower().startswith("!qat ") or message.content.lower().startswith("!taq "):
             s = message.content[5:]
-            r = requests.post("https://www.quinapalus.com/cgi-bin/qat", params={"ent": "Search", "pat": s, "dict": dict})
+            r = requests.get("https://www.quinapalus.com/cgi-bin/qat", params={"ent": "Search", "pat": s, "dict": dict}, headers={"User-Agent": "qat-cli/1.0.0"})
             allText = r.text
 
             for error in e:
