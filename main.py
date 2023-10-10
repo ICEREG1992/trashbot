@@ -3,7 +3,6 @@ import sys
 import discord
 import humanize
 import helperfunctions
-import unicodedata
 from humor_contains import humor_contains
 from humor_equals import humor_equals
 from humor_regex import humor_regex
@@ -135,9 +134,9 @@ class MyClient(discord.Client):
                         logcommand.log_globally(logging.INFO, "tbot removing elephant from own message: `" + log + "`")
                         await r.remove(self.user)
             # n-[emoji] logic
-            if user != self.user and reaction.count == 5:
-                if helperfunctions.chance(100):
-                    await reaction.message.reply("#n-" + unicodedata.name(reaction.emoji).lower().replace(" ","-"))
+            if user != self.user and reaction.count == 1:
+                if helperfunctions.chance(10):
+                    await reaction.message.reply("#n-" + reaction.emoji.name.lower().replace(" ","-"))
                 
 
 intents = discord.Intents.default()
