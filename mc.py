@@ -59,7 +59,7 @@ class mc:
                     "\*inhales\*",
                     "ok one sec"
                 ]))
-                server = subprocess.Popen(['java', '-Xmx1024M', '-Xms1024M', '-jar', 'server.jar' ,'nogui'], cwd=r'/home/william/trashbot/server/' stdin=subprocess.PIPE)
+                server = subprocess.Popen(['java', '-Xmx1024M', '-Xms1024M', '-jar', 'server.jar' ,'nogui'], cwd=r'/home/william/trashbot/server/', stdin=subprocess.PIPE)
                 helperfunctions.bot_wait_long()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
