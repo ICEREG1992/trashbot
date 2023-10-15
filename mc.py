@@ -52,7 +52,7 @@ class mc:
                 "New IP Set! haha wasnt that goofy"]))
             mcplayers.save()
         elif message.content == "!hostmc" and permissions.allowed(message.author.id, "blue"):
-            if (server):
+            if server is None:
                 await message.channel.send(helperfunctions.pick_string([
                     "NO!!!!!!!!!!",
                     "WAIT YOUR TURN",
