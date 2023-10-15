@@ -10,7 +10,7 @@ db = boto3.client('dynamodb', region_name='us-east-2')
 global mcIP
 mcIP = ""
 
-class mcplayers:
+class mc:
 
     def init():
         d = db.get_item(TableName="trashbot", Key={'name':{'S':'mc_ip'}})
@@ -47,6 +47,19 @@ class mcplayers:
                 "ok sure minecraft ip set to " + mcIP,
                 "New IP Set! haha wasnt that goofy"]))
             mcplayers.save()
+        elif message.content == "!hostmc" and permissions.allowed(message.author.id, "blue"):
+            await message.channel.send(helperfunctions.pick_string([
+                "hhhhnnnnnnngggggg...",
+                "\*inhales\*",
+                "ok one sec"
+            ]))
+            os.system("nohup java -Xmx1024M -Xms1024M -jar server.jar nogui")
+            helperfunctions.bot_wait_long()
+            await message.channel.send(helperfunctions.pick_string([
+                "ok im runnin",
+                "epic minecraft",
+                "aw yeah b sure to mine some dimonds for me :)"
+            ]))
 
     def save():
         global mcIP

@@ -14,7 +14,7 @@ def bot_wait():
     time.sleep(1.5)
 
 def bot_wait_long():
-    time.sleep(3)
+    time.sleep(60)
 
 def bot_wait_short():
     time.sleep(.3)
