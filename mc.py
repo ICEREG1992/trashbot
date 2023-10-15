@@ -3,12 +3,15 @@ import helperfunctions
 from permissions import permissions
 import os
 import boto3
+import subprocess
 
 global db
 db = boto3.client('dynamodb', region_name='us-east-2')
 
 global mcIP
 mcIP = ""
+
+global server
 
 class mc:
 
@@ -19,6 +22,7 @@ class mc:
 
     async def run(self, message):
         global mcIP
+        global server
         if mcIP and message.content == "!whosuprn":
             r = requests.get('https://api.mcsrvstat.us/2/' + mcIP)
             o = r.json()
@@ -48,18 +52,28 @@ class mc:
                 "New IP Set! haha wasnt that goofy"]))
             mcplayers.save()
         elif message.content == "!hostmc" and permissions.allowed(message.author.id, "blue"):
-            await message.channel.send(helperfunctions.pick_string([
-                "hhhhnnnnnnngggggg...",
-                "\*inhales\*",
-                "ok one sec"
-            ]))
-            os.system("nohup java -Xmx1024M -Xms1024M -jar /home/william/minecraft/server.jar nogui")
-            helperfunctions.bot_wait_long()
-            await message.channel.send(helperfunctions.pick_string([
-                "ok im runnin",
-                "epic minecraft",
-                "aw yeah b sure to mine some dimonds for me :)"
-            ]))
+            if (server):
+                await message.channel.send(helperfunctions.pick_string([
+                    "NO!!!!!!!!!!",
+                    "WAIT YOUR TURN",
+                    "one at a time pls"
+                ]))
+            else:
+                await message.channel.send(helperfunctions.pick_string([
+                    "hhhhnnnnnnngggggg...",
+                    "\*inhales\*",
+                    "ok one sec"
+                ]))
+                server = subprocess.Popen('java -Xmx1024M -Xms1024M -jar /home/william/minecraft/server.jar nogui', stdin=subprocess.PIPE, shell=True)
+                helperfunctions.bot_wait_long()
+                await message.channel.send(helperfunctions.pick_string([
+                    "ok im runnin",
+                    "epic minecraft",
+                    "aw yeah b sure to mine some dimonds for me :)"
+                ]))
+            
+        elif message.content == "!stophost" and permissions.allowed(message.author.id, "blue"):
+            server.kill()
 
     def save():
         global mcIP
