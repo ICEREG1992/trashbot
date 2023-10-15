@@ -55,12 +55,6 @@ class mc:
         elif message.content == "!hostmc" and permissions.allowed(message.author.id, "blue"):
             if server is None:
                 await message.channel.send(helperfunctions.pick_string([
-                    "NO!!!!!!!!!!",
-                    "WAIT YOUR TURN",
-                    "one at a time pls"
-                ]))
-            else:
-                await message.channel.send(helperfunctions.pick_string([
                     "hhhhnnnnnnngggggg...",
                     "\*inhales\*",
                     "ok one sec"
@@ -71,6 +65,12 @@ class mc:
                     "ok im runnin",
                     "epic minecraft",
                     "aw yeah b sure to mine some dimonds for me :)"
+                ]))
+            else:
+                await message.channel.send(helperfunctions.pick_string([
+                    "NO!!!!!!!!!!",
+                    "WAIT YOUR TURN",
+                    "one at a time pls"
                 ]))
             
         elif message.content == "!stophost" and permissions.allowed(message.author.id, "blue"):
