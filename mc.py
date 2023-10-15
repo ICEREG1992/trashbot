@@ -12,6 +12,7 @@ global mcIP
 mcIP = ""
 
 global server
+server = None
 
 class mc:
 
