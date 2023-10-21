@@ -94,7 +94,7 @@ class MyClient(discord.Client):
                     await message.add_reaction("🇲")
 
                 if message.content == "!version":
-                    await message.channel.send("u last pushed to me §DATE")
+                    await message.channel.send("u last pushed to me •DATE")
 
                 if helperfunctions.chance(.002):
                     await message.channel.send("Error")
