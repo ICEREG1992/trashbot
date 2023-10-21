@@ -20,7 +20,7 @@ class rdj:
             offset = 100
             for line in textwrap.wrap(text, width=20):
                 draw.text((60, offset), line, font=font, fill=color)
-                offset += font.getsize(line)[1]
+                offset += font.getlength(line)
             await rdj.send_image(rdj_img, message.channel)
         elif (message.content.startswith("!rdj")):
             rdj_img = Image.open("rdj.png")
