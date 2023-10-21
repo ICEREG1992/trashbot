@@ -7,8 +7,13 @@ jobs:
   update-version:
     runs-on: ubuntu-latest
     steps:
-      - name: see files
-        run: ls
-      - name: update-version
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Update Version
         run: |
           sed -i "s/§DATE/$(date +\%Y-\%m-\%d)/g" main.py
+      - name: Commit and Push
+        run: |
+          git add main.py
+          git commit -m "github actions $(date +\%Y-\%m-\%d)"
+          git push
