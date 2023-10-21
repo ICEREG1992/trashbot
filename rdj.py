@@ -20,7 +20,8 @@ class rdj:
             offset = 100
             for line in textwrap.wrap(text, width=20):
                 draw.text((60, offset), line, font=font, fill=color)
-                offset += font.getlength(line)
+                bbox = font.getbbox(line)
+                offset += bbox[3]-bbox[1]
             await rdj.send_image(rdj_img, message.channel)
         elif (message.content.startswith("!rdj")):
             rdj_img = Image.open("rdj.png")
@@ -40,7 +41,8 @@ class rdj:
             offset = 100
             for line in textwrap.wrap(text, width=20):
                 draw.text((60, offset), line, font=font, fill="black")
-                offset += font.getlength(line)
+                bbox = font.getbbox(line)
+                offset += bbox[3]-bbox[1]
             await rdj.send_image(rdj_img, message.channel)
 
     async def send_image(img, channel):
