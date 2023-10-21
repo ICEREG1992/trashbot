@@ -1,6 +1,7 @@
 import re
 import requests
 import sys
+import helperfunctions
 
 e = ("Error: pattern too long or too complex",
     "Error: unexpected character in pattern",
@@ -87,7 +88,15 @@ class qat:
                     resultText = "||" + resultText + "||"
                 await message.channel.send(resultText)
             else:
-                await message.channel.send('i got nothin boss')
+                await message.channel.send(helperfunctions.pick_string([
+                    'i got nothin boss',
+                    'computer says no',
+                    "qat told me to tell you that there's nothing like that",
+                    "i dunno i dunno",
+                    "reply hazy, try again",
+                    "my sources say no",
+                    "outlook not so good"
+                ]))
         elif message.content.lower().startswith("!dict"):
             if len(message.content) > 6:
                 pc = message.content.lower()[6:]
