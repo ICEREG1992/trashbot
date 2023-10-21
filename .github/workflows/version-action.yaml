@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Update Version
         run: |
           sed -i "s/§DATE/$(date +\%Y-\%m-\%d)/g" main.py
@@ -19,3 +19,12 @@ jobs:
           git add main.py
           git commit -m "github actions $(date +\%Y-\%m-\%d)"
           git push
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: "[GitHub Actions] replace string with date"
+          title: "[GitHub Actions] Replace String with date"
+      - name: Approve Pull Request
+        uses: juliangruber/approve-pull-request-action@v2.0.0
+        with:
+          number: $(echo "${{ steps.cpr.outputs.pull-request }}" | awk -F/ '{print $NF}')
