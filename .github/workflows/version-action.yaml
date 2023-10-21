@@ -12,13 +12,12 @@ jobs:
       - name: Update Version
         run: |
           sed -i "s/§DATE/$(date +\%Y-\%m-\%d)/g" main.py
-      - name: Commit and Push
+      - name: Commit changes
         run: |
           git config --global user.email "actions@github.com"
           git config --global user.name "GitHub Actions"
           git add main.py
           git commit -m "github actions $(date +\%Y-\%m-\%d)"
-          git push
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
