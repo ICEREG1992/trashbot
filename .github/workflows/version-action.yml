@@ -1,0 +1,9 @@
+name: update version
+run-name: ${{ github.actor }} is changing last update date
+on: [push]
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+        sed -i "s/§DATE/$(date +\%Y-\%m-\%d)/g" main.py
