@@ -7,6 +7,8 @@ jobs:
   update-version:
     runs-on: ubuntu-latest
     steps:
+      - name: see files
+        run: ls
       - name: update-version
         run: |
           sed -i "s/§DATE/$(date +\%Y-\%m-\%d)/g" main.py
