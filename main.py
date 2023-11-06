@@ -96,10 +96,10 @@ class MyClient(discord.Client):
                 if message.content == "!version":
                     await message.channel.send("u last pushed to me _DATE_")
 
-                if message.content == "!join"
+                if message.content == "!join":
                     await message.author.voice.channel.connect()
 
-                if message.content == "!fuckoff"
+                if message.content == "!fuckoff":
                     await message.author.voice.channel.disconnect()
 
                 if helperfunctions.chance(.002):
