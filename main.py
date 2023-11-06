@@ -99,7 +99,7 @@ class MyClient(discord.Client):
                 if message.content == "!join":
                     await message.author.voice.channel.connect(self_mute=helperfunctions.chance(50), self_deaf=helperfunctions.chance(5))
 
-                if message.content == "!fuckoff":
+                if message.content == "!leave":
                     vcs = self.voice_clients
                     print(vcs)
                     for c in vcs:
