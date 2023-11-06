@@ -97,10 +97,14 @@ class MyClient(discord.Client):
                     await message.channel.send("u last pushed to me _DATE_")
 
                 if message.content == "!join":
-                    await message.author.voice.channel.connect()
+                    await message.author.voice.channel.connect(self_mute=helperfunctions.chance(50), self_deaf=helperfunctions.chance(5))
 
                 if message.content == "!fuckoff":
-                    await message.author.voice.channel.disconnect()
+                    vcs = self.voice_clients
+                    print(vcs)
+                    for c in vcs:
+                        await c.disconnect(force=True)
+                        await c.cleanup()
 
                 if helperfunctions.chance(.002):
                     await message.channel.send("Error")
