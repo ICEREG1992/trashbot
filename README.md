@@ -16,12 +16,14 @@ Any Blue keycard user can give or revoke keycards using the commands ``!give [co
 If you need to disable trashbot so he doesn't respond to any messages, you can use ``!shutdown`` or ``!poweroff``. To turn him back on again, use ``!poweron``. If you need to quickly restart the python process running trashbot, use ``!panic``. Blue keycard holders can shutdown and restart trashbot, red keycard holders can only restart him.
 
 ### food
-Inspired by (this classic tumblr post)[https://cdn.discordapp.com/attachments/132379732393066497/1081834856297803796/lrx3xgin70291.jpg], Trashbot needs to be fed to stay alive. After being fed, he will remain full for 6 hours. After 3 days without food, trashbot will begin to starve, and after 5 days without food, he will die, and power off. Use ``!feed (food)`` to feed trashbot, and ``!unfeed`` to unfeed him, resetting his food clock.
+Inspired by [this classic tumblr post](https://cdn.discordapp.com/attachments/132379732393066497/1081834856297803796/lrx3xgin70291.jpg), Trashbot needs to be fed to stay alive. After being fed, he will remain full for 6 hours. After 3 days without food, trashbot will begin to starve, and after 5 days without food, he will die, and power off. Use ``!feed [food]`` to feed trashbot.
 
 ### instant humor
-The instant humor modules (contains and equals) allow for the quick implementation of indiscriminant responses to phrases or words. As the names imply, the humor_contains module will respond to any message which contains one of the user-defined keywords with a randomly selected user-defined resposne for that keyword. The humor_equals module does the same thing, except only if the message matches exactly to one of the keywords, with no extra characters.
+The instant humor modules (contains, equals, and regex) allow for the quick implementation of indiscriminant responses to phrases or words. As the names imply, the humor_contains module will respond to any message which contains one of the user-defined keywords with a randomly selected user-defined resposne for that keyword. The humor_equals module does the same thing, except only if the message matches exactly to one of the keywords, with no extra characters.
 
 instant humor also supports a limited list of escape characters, which can be used to inject info about the triggerer into the response. Use them like any other escape sequence. ``$u`` injects the users username, ``$n`` does the same with nickname. ``$m`` injects a ping for the first user the triggerer mentioned, and ``$ms`` (for 'mention silent') just injects the mentioned user's nickname. ``$pc`` (for post-command) injects all of the triggering message's text past the first space character.
+
+the regex module allows for more complex matching for instant humor. capture groups can be accessed by escaping the number of the capture group you're looking to access, like ``$1``.
 
 Blue keycard holders can add a new keyword by sending ``!containsadd [keyword] • [response]`` or ``!equalsadd [keyword] • [response]`` anywhere in a trashbot-joined server. Entire keywords can be removed (but not individual responses) with the commands ``!containsremove [keyword]`` or ``!equalsremove [keyword]``. The ``•`` character can be easily typed by using alt+7, and should come standard on most phone keyboards.
 
@@ -46,8 +48,28 @@ Channel found a new funny thing to spam? trashbot will eagerly hop on that train
 ### wordplay
 Reward clever usages of words by having trashbot give a response when you hide a particular word within another in a unique way! In example, if "Ian" is a keyword, then "variant" would trigger a response, but only once! Admittedly a niche feature, but this bot's for me not for you. Add a new wordplay keyword with ``!wordplayadd [keyword] • [response]`` and remove the keyword with ``!wordplayremove [keyword]``.
 
-### mcplayers
+### mc
 Running a Minecraft server and want a quick way to check if anybody's on? Trashbot can help you out. Trigger a check with ``!whosuprn``, change the stored server ip with ``!setwhosup [ip]``.
+
+for some reason I coded this module to be able to run a dedicated Minecraft server from trashbot's instance. blue keycard holders can use ``!hostmc`` to start the dedicated server (this may take a while), and ``!stophost`` to kill the server process. You will need to place the location of your server.jar at line 62 for this module to work properly.
+
+### rdj
+This module will generate RDJ images on the fly, because that's funny I guess. if your rdj caption includes the word `nightmare` it will use the evilrdj.png for some reason
+
+### misc
+Here's some other modules that trashbot has
+- !uptime for current uptime
+- !qat for a [QAT](https://www.quinapalus.com/cgi-bin/qat) api, along with !dict
+- !lipo for user-defined lipogram challenges and integrated leaderboard
+
+Here's some other features you might want to be aware of
+- "cum keycard" where if you give it to a user trashbot reacts with 🇨,🇺, and 🇲 emojis on all of their messages
+- trashbot can !join and !leave the vc channel you are in
+- fake !ban and !unban messages that should probably be moved to the instanthumor modules
+- trashbot has a 1/20000 chance to say "Error" at a random time
+- anyone can use a 🗑️ react to delete any trashbot message
+- if you react with an 🐘 to a trashbot message, trashbot will do the same
+- anybody reacting with a 🚫 will remove trashbot's elephant react and prevent it from happening again
 
 ## installation
 
@@ -71,3 +93,7 @@ Running a Minecraft server and want a quick way to check if anybody's on? Trashb
 ### environment variables
 
 In order to function, trashbot needs a Discord bot API token and an AWS programmatic access token. When running locally, the Discord API token can be stored in the main-level directory as ``key.txt``. Alternatively, it can be stored as an environment varibale named ``TRASHBOT_KEY``. The AWS token (consisting of a key ID and secret access key) can be received by configuring [awscli](https://github.com/aws/aws-cli) on your machine or, if you're on [Heroku](https://www.heroku.com), setting config vars ``AWS_ACCESS_KEY_ID`` and ``AWS_SECRET_ACCESS_KEY`` to their appropriate values. The Minecraft server pinged by mcplayers can be set through the variable ``MC_IP`` or by a file named ``ip.txt``.
+
+### other files
+
+the rdj module expects ARLRDBD.TTF in the root directory of trashbot's files. you can likely pull this from your Windows computer.
