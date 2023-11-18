@@ -106,6 +106,11 @@ class MyClient(discord.Client):
                         await c.disconnect(force=True)
                         await c.cleanup()
 
+                if message.content == "!doublegulp":
+                    vcs = self.voice_clients
+                    for c in vcs:
+                        c.play(discord.FFmpegPCMAudio("doublegulp.mp3"))
+
                 if helperfunctions.chance(.002):
                     await message.channel.send("Error")
 
