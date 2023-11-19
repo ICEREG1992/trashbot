@@ -109,7 +109,16 @@ class MyClient(discord.Client):
                 if message.content == "!doublegulp":
                     vcs = self.voice_clients
                     for c in vcs:
-                        c.play(discord.FFmpegPCMAudio("doublegulp.mp3"))
+                        print(c.guild.name)
+                        print(c.guild.me.voice.self_mute)
+                        if (c.guild.me.voice.self_mute):
+                            flag = True
+                            print("unmuting")
+                            await c.guild.change_voice_state(channel=c.channel, self_mute=False)
+                        c.play(discord.FFmpegPCMAudio("doublegulp.mp3", executable="ffmpeg.exe"))
+                        if (flag) {
+                            await c.guild.change_voice_state(channel=c.channel, self_mute=True)
+                        }
 
                 if helperfunctions.chance(.002):
                     await message.channel.send("Error")
@@ -156,5 +165,6 @@ class MyClient(discord.Client):
 
 intents = discord.Intents.default()
 intents.message_content = True
+intents.voice_states = True
 client = MyClient(intents=intents)
 client.run(TOKEN)
