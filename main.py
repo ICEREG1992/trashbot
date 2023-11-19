@@ -116,9 +116,8 @@ class MyClient(discord.Client):
                             print("unmuting")
                             await c.guild.change_voice_state(channel=c.channel, self_mute=False)
                         c.play(discord.FFmpegPCMAudio("doublegulp.mp3", executable="ffmpeg.exe"))
-                        if (flag) {
+                        if (flag):
                             await c.guild.change_voice_state(channel=c.channel, self_mute=True)
-                        }
 
                 if helperfunctions.chance(.002):
                     await message.channel.send("Error")
