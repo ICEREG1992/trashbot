@@ -4,6 +4,7 @@ from permissions import permissions
 import os
 import boto3
 import subprocess
+import jproperties
 
 global db
 db = boto3.client('dynamodb', region_name='us-east-2')
@@ -72,7 +73,12 @@ class mc:
                     "WAIT YOUR TURN",
                     "one at a time pls"
                 ]))
-            
+        elif message.content == "!mcip":
+            if server:
+                config = jproperties.Properties()
+                with open('/home/william/minecraft/' + 'server.properties', 'rb') as file:
+                    config.load(file)
+                await message.channel.send(config.get("server-ip"))
         elif message.content == "!stophost" and permissions.allowed(message.author.id, "blue"):
             server.kill()
             server = None

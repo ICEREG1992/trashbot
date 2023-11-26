@@ -69,20 +69,20 @@ class food:
                 "` by user " + message.author.name + " after being hungry for " + str(humanize.precisedelta((dt.datetime.utcnow() - dt.timedelta(hours=6) - t), suppress=['milliseconds','microseconds'])))
                 t = dt.datetime.utcnow()
                 food.save(t)
-                if chance(8):
+                if chance(10):
                     await message.channel.send(pick_string([
                         "yea sure that's okay",
                         "it tastes fine",
                         "thx i guess",
                         "mm yum yeah ok that's alright",
-                        "yumbly in my tumbly",
+                        "it's " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "a bowl of seeds"),
                         "it's alright for me",
                         "sure i could have that",
                         "monch monch ehhhh its a little dry",
                         "a little underseasoned to my taste. i mean ill still eat it though",
                         "sorry i dont really like it it's fine though"
                     ]))
-                else:
+                elif chance(50):
                     await message.channel.send(pick_string([
                         "Oh fuck yes it's a " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds") + " for me",
                         "AW YEAH all abourt the gravy train TOOT TOOT im eatin good tonite",
@@ -95,6 +95,17 @@ class food:
                         "nom nom nom nom nom nom nom nom hehe xd ty",
                         "omg can't wait to enjoy this " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds") + " s gonna be so good",
                         "great big ol " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds") + " just for me"
+                    ]))
+                else:
+                    await message.channel.send(pick_string([
+                        "HOLY FUCK iT'S GOOD",
+                        "TAHTS SO FUCKING GOOD",
+                        "I LOVE IT I LOVE IT I LOVE IT I LOVE IT OMHOMHMHMHMMOMHMGOGMGMMGOHMOHMMGGHOHMMOHMOMGOHMOHMOM".
+                        "it's REALLY GOOD and GOOD and GREAT and I LIKE IT",
+                        "I'VE NEVER HAD SOMETHING SO GOOD",
+                        "I LIKE IT A LOT AND ITS VERY GOOD",
+                        "MANNA FROM HEAVEN. AMBROSIA. MILK OF THE GGODS",
+                        "PLEASE FEED ME ONLY THIS FROM NOW ON IT IS SO GOOD"
                     ]))
         # elif (message.content == "!unfeed" and (permissions.allowed(message.author.id, "blue") or (permissions.allowed(message.author.id, "red")))):
         #     if (t > dt.datetime.utcnow() - dt.timedelta(hours=6)):
