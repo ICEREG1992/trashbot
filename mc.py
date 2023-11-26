@@ -79,6 +79,8 @@ class mc:
                 with open('/home/william/minecraft/' + 'server.properties', 'rb') as file:
                     config.load(file)
                 await message.channel.send(config.get("server-ip").data + ":" + config.get("server-port").data)
+            else:
+                await message.channel.send("im not hosting anything rn")
         elif message.content == "!stophost" and permissions.allowed(message.author.id, "blue"):
             server.kill()
             server = None
