@@ -100,7 +100,7 @@ class food:
                     await message.channel.send(pick_string([
                         "HOLY FUCK iT'S GOOD",
                         "TAHTS SO FUCKING GOOD",
-                        "I LOVE IT I LOVE IT I LOVE IT I LOVE IT OMHOMHMHMHMMOMHMGOGMGMMGOHMOHMMGGHOHMMOHMOMGOHMOHMOM".
+                        "I LOVE IT I LOVE IT I LOVE IT I LOVE IT OMHOMHMHMHMMOMHMGOGMGMMGOHMOHMMGGHOHMMOHMOMGOHMOHMOM",
                         "it\'s REALLY GOOD and GOOD and GREAT and I LIKE IT",
                         "I'VE NEVER HAD SOMETHING SO GOOD",
                         "I LIKE IT A LOT AND ITS VERY GOOD",
