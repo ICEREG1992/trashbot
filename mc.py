@@ -78,7 +78,7 @@ class mc:
                 config = jproperties.Properties()
                 with open('/home/william/minecraft/' + 'server.properties', 'rb') as file:
                     config.load(file)
-                await message.channel.send(config.get("server-ip"))
+                await message.channel.send(config.get("server-ip").data + ":" + config.get("server-port").data)
         elif message.content == "!stophost" and permissions.allowed(message.author.id, "blue"):
             server.kill()
             server = None
