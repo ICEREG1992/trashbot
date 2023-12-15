@@ -5,7 +5,8 @@ import helperfunctions
 
 e = ("Error: pattern too long or too complex",
     "Error: unexpected character in pattern",
-    "Error: expected } at end of tagged item")
+    "Error: expected } at end of tagged item",
+    "Error: LHS must be single variable in negated match constraint")
 
 dicts = ["UKACD",
         "YAWL",
