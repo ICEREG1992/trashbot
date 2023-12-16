@@ -51,7 +51,7 @@ class humor_regex:
                     await message.channel.send("that one doesnt seem to exist")
         else:
             for phrase in keyphrases:
-                o = re.match(phrase, message.content)
+                o = re.match(phrase, message.content, re.IGNORECASE)
                 if o:
                     await message.channel.send(humor_escape(message, pick_string(keyphrases[phrase]), o))
 
