@@ -10,6 +10,7 @@ from permissions import permissions
 from uptime import uptime
 from todo import todo
 from food import food
+from finally_img import finally_img
 from karaoke import karaoke_manager
 from battle import battle_manager
 from train import spam_train
@@ -71,6 +72,7 @@ class MyClient(discord.Client):
                 await uptime.run(self, message)
                 await food.run(self, message, powerswitch)
                 await rdj.run(self, message)
+                # await finally_img.run(self, message)
                 # await lipo.run(self, message)
                 await qat.run(self, message)
                 # await wordplay.run(self, message)
