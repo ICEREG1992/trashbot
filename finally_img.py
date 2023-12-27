@@ -15,8 +15,10 @@ t = dt.datetime.utcnow()
 class finally_img:
 
     async def run(self, message):
+        global t
         if (message.content.startswith("!finally ")):
-            if (t > dt.datetime.utcnow() - dt.timedelta(seconds=30)):
+            print('finally')
+            if (t < dt.datetime.utcnow() - dt.timedelta(seconds=30)):
                 template_img = Image.open("finally.png")
                 text = message.content[9:]
                 # add image
@@ -47,9 +49,11 @@ class finally_img:
                 draw.text((x+2, y+2), text, font=font, fill=shadowcolor)
                 # now draw the text over it
                 draw.text((x, y), text, font=font, fill=fillcolor)
+                t = dt.datetime.utcnow()
                 await finally_img.send_image(template_img, message.channel)
             else:
-                await message.add_reaction('🚫')
+                print("not yet")
+                await message.add_reaction("🚫")
 
     async def send_image(img, channel):
         with io.BytesIO() as out:
