@@ -49,5 +49,5 @@ class rdj:
         with io.BytesIO() as out:
             img.save(out, format="PNG")
             out.seek(0)
-            f = discord.File(fp=out, filename="rdj.png", description="robert downy junior meme that says \'{text}\'")
+            f = discord.File(fp=out, filename="rdj.png", description="robert downy junior meme that says \"" + text + "\"")
             await channel.send(file=f)
