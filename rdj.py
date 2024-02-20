@@ -43,11 +43,11 @@ class rdj:
                 draw.text((60, offset), line, font=font, fill="black")
                 bbox = font.getbbox(line)
                 offset += bbox[3]-bbox[1]
-            await rdj.send_image(rdj_img, message.channel)
+            await rdj.send_image(rdj_img, message.channel, text)
 
-    async def send_image(img, channel):
+    async def send_image(img, channel, text):
         with io.BytesIO() as out:
             img.save(out, format="PNG")
             out.seek(0)
-            f = discord.File(fp=out, filename="rdj.png")
+            f = discord.File(fp=out, filename="rdj.png", description="robert downy junior meme that says \'{text}\'")
             await channel.send(file=f)

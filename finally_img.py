@@ -50,16 +50,16 @@ class finally_img:
                 # now draw the text over it
                 draw.text((x, y), text, font=font, fill=fillcolor)
                 t = dt.datetime.utcnow()
-                await finally_img.send_image(template_img, message.channel)
+                await finally_img.send_image(template_img, message.channel, text)
             else:
                 print("not yet")
                 await message.add_reaction("🚫")
 
-    async def send_image(img, channel):
+    async def send_image(img, channel, text):
         with io.BytesIO() as out:
             img.save(out, format="PNG")
             out.seek(0)
-            f = discord.File(fp=out, filename="rdj.png")
+            f = discord.File(fp=out, filename="finally.png", description="man holding test tube finally meme that says \"finally, {text}\"")
             await channel.send(file=f)
 
     def get_google_image(query):
