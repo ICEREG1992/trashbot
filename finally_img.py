@@ -62,7 +62,7 @@ class finally_img:
         with io.BytesIO() as out:
             img.save(out, format="PNG")
             out.seek(0)
-            f = discord.File(fp=out, filename="finally.png", description="man holding test tube finally meme that says \"finally, " + text + "\"")
+            f = discord.File(fp=out, filename="finally.png", description="man holding test tube finally meme that says \"FINALLY, " + text + "\"")
             await channel.send(file=f)
 
     def get_google_image(query):
