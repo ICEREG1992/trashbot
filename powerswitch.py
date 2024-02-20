@@ -31,7 +31,8 @@ class powerswitch:
                 "\uD83D\uDECC\uD83D\uDCA4",
                 "ok bye guys",
                 "good call cya",
-                "peace out bitches"
+                "peace out bitches",
+                "https://media1.tenor.com/m/c136KhwXENwAAAAC/kermit-the-frog-kermit.gif"
             ]))
             await self.change_presence(status=discord.Status.dnd, activity=discord.Game(name='Powered off.'))
             powerswitch.save()
@@ -43,7 +44,8 @@ class powerswitch:
                 "trashbot",
                 "was a good nap",
                 "lol",
-                "sup bitches"
+                "sup bitches",
+                "https://media1.tenor.com/m/ANKVCEFYBUQAAAAC/reverse-kermit.gif"
             ]))
             powerswitch.save()
 
