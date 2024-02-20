@@ -19,7 +19,10 @@ class finally_img:
         if (message.content.startswith("!finally ")):
             print('finally')
             if (t < dt.datetime.utcnow() - dt.timedelta(seconds=30)):
-                template_img = Image.open("finally.png")
+                if helperfunctions.chance(5):
+                    template_img = Image.open("finally2.png")
+                else:
+                    template_img = Image.open("finally.png")
                 text = message.content[9:]
                 # add image
                 google_image = finally_img.get_google_image(text)
