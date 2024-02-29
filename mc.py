@@ -101,7 +101,7 @@ class mc:
 
     def serverExists():
         global server
-        if server is None
+        if server is None:
             try:
                 subprocess.check_output(["pidof","java"]):
             except subprocess.CalledProcessError as e:
