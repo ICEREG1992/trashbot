@@ -96,6 +96,8 @@ class mc:
                 else:
                     subprocess.run(['pkill', '-f', 'server.jar'])
                     await message.channel.send("i tracked it down and killed it")
+            else:
+                await message.channel.send("im not hosting anything rn")
 
     def serverExists():
         global server
