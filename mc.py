@@ -103,7 +103,7 @@ class mc:
         global server
         if server is None:
             try:
-                subprocess.check_output(["pidof","java"]):
+                subprocess.check_output(["pidof","java"])
             except subprocess.CalledProcessError as e:
                 return False
         return True
