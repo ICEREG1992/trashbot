@@ -74,7 +74,7 @@ class mc:
                     "one at a time pls"
                 ]))
         elif message.content == "!mcip":
-            if server:
+            if mc.serverExists():
                 config = jproperties.Properties()
                 with open('/home/william/minecraft/' + 'server.properties', 'rb') as file:
                     config.load(file)
