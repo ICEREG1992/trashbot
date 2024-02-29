@@ -101,10 +101,12 @@ class mc:
 
     def serverExists():
         global server
-        if server is None and not subprocess.check_output(["pidof","java"]):
-            return False
-        else:
-            return True
+        if server is None
+            try:
+                subprocess.check_output(["pidof","java"]):
+            except subprocess.CalledProcessError as e:
+                return False
+        return True
 
     def save():
         global mcIP
