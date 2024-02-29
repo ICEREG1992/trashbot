@@ -54,7 +54,7 @@ class mc:
                 "New IP Set! haha wasnt that goofy"]))
             mcplayers.save()
         elif message.content == "!hostmc" and permissions.allowed(message.author.id, "blue"):
-            if server is None:
+            if mc.serverExists():
                 await message.channel.send(helperfunctions.pick_string([
                     "hhhhnnnnnnngggggg...",
                     "\*inhales\*",
@@ -82,8 +82,27 @@ class mc:
             else:
                 await message.channel.send("im not hosting anything rn")
         elif message.content == "!stophost" and permissions.allowed(message.author.id, "blue"):
-            server.kill()
-            server = None
+            if mc.serverExists():
+                if server:
+                    server.kill()
+                    server = None
+                    await message.channel.send(helperfunctions.pick_string([
+                        "it's dead, jim",
+                        "kablam",
+                        "kablooie",
+                        "die die die die die die die die",
+                        "goodnight little fishie"
+                    ]))
+                else:
+                    subprocess.run(['pkill', '-f', 'server.jar'])
+                    await message.channel.send("i tracked it down and killed it")
+
+    def serverExists():
+        global server
+        if server is None and not subprocess.check_output(["pidof","java"]):
+            return False
+        else:
+            return True
 
     def save():
         global mcIP
