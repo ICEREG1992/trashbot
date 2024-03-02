@@ -76,7 +76,7 @@ class lipo:
                     # extract all of the character words found in the string
                     words = re.split('\W+', st)
                     # filter down to just the words longer than the max length
-                    matches = [[a for a in words if a.length > int(participants[uid]['c'])], 'word longer than ' + participants[uid]['c'] + ' letters']
+                    matches = [[a for a in words if len(a) > int(participants[uid]['c'])], 'word longer than ' + participants[uid]['c'] + ' letters']
                 else:
                     for n in participants[uid]['c']:
                         if n in st:
