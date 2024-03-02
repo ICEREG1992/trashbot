@@ -42,6 +42,8 @@ class lipo:
             if ' ' not in message.content:
                 az = list(map(chr, range(97, 123)))
                 c = pick_string(az)
+            elif message.content[6:].isdigit and int(message.content[6:]) > 2000:
+                await message.channel.send('please try a lower character limit please')
             elif len(message.content[6:]) >= 1:
                 c = message.content[6:].lower()
             if uid not in participants:
@@ -77,6 +79,8 @@ class lipo:
                     words = re.split('\W+', st)
                     # filter down to just the words longer than the max length
                     matches = [[a for a in words if len(a) > int(participants[uid]['c'])], 'word longer than ' + participants[uid]['c'] + ' letters']
+                    if len(matches[0]) == 0:
+                        matches = None
                 else:
                     for n in participants[uid]['c']:
                         if n in st:
@@ -89,13 +93,13 @@ class lipo:
                             break
                 if matches:
                     if (participants[uid]['points'] == 0):
-                        await message.channel.send(pick_string(["YOU DON'T HAVE TO DO A LIPO IF YOU DON'T WANT TO (" + str(participants[uid]['points']) + " points)",
+                        await message.reply(pick_string(["YOU DON'T HAVE TO DO A LIPO IF YOU DON'T WANT TO (" + str(participants[uid]['points']) + " points)",
                         "THE JOKE ISN'T FUNNY. YOU LOSE. (" + str(participants[uid]['points']) + " points)",
                         "DID YOU ENJOY YOURSELF? (" + str(participants[uid]['points']) + " points)",
                         "HAHAHAHAHAHAHA GOOD ONE I LIKED THAT ONE SEE YOU STARTED A LIPO THEN IMMEDIATELY FAILED SO FUNNY (" + str(participants[uid]['points']) + " points)",
                         "BRUH (" + str(participants[uid]['points']) + " points)"]))
                     else:
-                        await message.channel.send(pick_string(["epic fail (" + str(participants[uid]['points']) + " points)",
+                        await message.reply(pick_string(["epic fail (" + str(participants[uid]['points']) + " points)",
                         "lipogram challenge failed (" + str(participants[uid]['points']) + " points)",
                         "it was a good try but you failed after " + str(participants[uid]['points']) + " messages",
                         "no dice, i see a `" + matches[1] + "` in there (" + str(participants[uid]['points']) + " points)",
