@@ -54,7 +54,7 @@ class lipo:
                 participants[uid]['start'] = dt.datetime.utcnow().timestamp()
                 participants[uid]['best'] = ""
                 if c.isdigit():
-                    await message.channel.send(message.author.mention + ", you have started a lipogram challenge for words with fewer than `" + c + "` letters. Have fun!")
+                    await message.channel.send(message.author.mention + ", you have started a lipogram challenge for words with `" + c + "` letters or fewer. Have fun!")
                 elif len(c) > 1:
                     await message.channel.send(message.author.mention + ", you have started a lipogram challenge for the letters in `" + c + "`. Have fun!")
                 else:
@@ -64,7 +64,7 @@ class lipo:
             else:
                 c = participants[uid]['c']
                 if c.isdigit():
-                    await message.channel.send("you're doing a lipo challenge for words less than `" + c + "` letters long with `" + str(participants[uid]['points']) + " points`")
+                    await message.channel.send("you're doing a lipo challenge for words with `" + c + "` letters or fewer with `" + str(participants[uid]['points']) + " points`")
                 elif len(c) > 1:
                     await message.channel.send("you're doing a lipo challenge for the letters in `" + c + "` with `" + str(participants[uid]['points']) + " points`")
                 else:
