@@ -48,7 +48,7 @@ class MyClient(discord.Client):
         # wordplay.init()
         uptime.init()
         food.init()
-        # lipo.init()
+        lipo.init()
         await powerswitch.init(self)
 
     async def on_message(self, message):
