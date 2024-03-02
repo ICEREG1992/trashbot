@@ -24,6 +24,7 @@ class lipo:
         participants = json.loads(d['Item']['data']['S'])
 
     async def run(self, message):
+        global participants
         uid = str(message.author.id)
         if (message.content.startswith("!lipoboard")):
             t = pick_string(["🏆 currently running lipo challenges:\n",
@@ -51,7 +52,7 @@ class lipo:
                 participants[uid]['c'] = c
                 participants[uid]['points'] = 0
                 participants[uid]['name'] = message.author.name
-                participants[uid]['start'] = dt.datetime.utcnow().timestamp()
+                participants[uid]['start'] = dt.datetime.now().timestamp()
                 participants[uid]['best'] = ""
                 if c.isdigit():
                     await message.channel.send(message.author.mention + ", you have started a lipogram challenge for words with `" + c + "` letters or fewer. Have fun!")
