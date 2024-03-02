@@ -121,5 +121,6 @@ class lipo:
                 lipo.save()
                     
     def save():
+        global participants
         # we have to do shenanigans here to be able to serialize our dict with tuple keys
         db.put_item(TableName="trashbot", Item={'name':{'S':'lipo'}, 'data':{'S':json.dumps(participants)}})
