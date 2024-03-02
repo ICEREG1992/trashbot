@@ -19,7 +19,7 @@ from wordplay import wordplay
 from mc import mc
 from powerswitch import powerswitch
 from rdj import rdj
-# from lipo import lipo
+from lipo import lipo
 from qat import qat
 import logcommand, logging
 logging.basicConfig(level=logging.INFO)
@@ -73,7 +73,7 @@ class MyClient(discord.Client):
                 await food.run(self, message, powerswitch)
                 await rdj.run(self, message)
                 await finally_img.run(self, message)
-                # await lipo.run(self, message)
+                await lipo.run(self, message)
                 await qat.run(self, message)
                 # await wordplay.run(self, message)
                 # await karaoke_manager.run(self, message)

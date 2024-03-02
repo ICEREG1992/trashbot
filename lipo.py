@@ -71,15 +71,22 @@ class lipo:
             st = re.sub(r'<(?:(?:a?:\w+:)|(?:\@\&?)|\#)\d{1,19}>', '', st) # erase emojis, channel tags and user/role mentions
             if uid in participants:
                 matches = None
-                for n in participants[uid]['c']:
-                    if n in st:
-                        # extract all of the character words found in the string
-                        words = re.split('\W+', st)
-                        # filter down to just the words containing the keyword
-                        matches = [[a for a in words if n in a], n]
-                        if len(matches[0]) == 0:
-                            matches[0] = n
-                        break
+                # account for word length lipo
+                if participants[uid]['c'].isdigit():
+                    # extract all of the character words found in the string
+                    words = re.split('\W+', st)
+                    # filter down to just the words longer than the max length
+                    matches = [[a for a in words if a.length > int(participants[uid]['c'])], 'word longer than ' + participants[uid]['c'] + ' letters']
+                else:
+                    for n in participants[uid]['c']:
+                        if n in st:
+                            # extract all of the character words found in the string
+                            words = re.split('\W+', st)
+                            # filter down to just the words containing the keyword
+                            matches = [[a for a in words if n in a], n]
+                            if len(matches[0]) == 0:
+                                matches[0] = n
+                            break
                 if matches:
                     if (participants[uid]['points'] == 0):
                         await message.channel.send(pick_string(["YOU DON'T HAVE TO DO A LIPO IF YOU DON'T WANT TO (" + str(participants[uid]['points']) + " points)",
