@@ -54,7 +54,7 @@ class mc:
                 "New IP Set! haha wasnt that goofy"]))
             mcplayers.save()
         elif message.content == "!hostmc" and permissions.allowed(message.author.id, "blue"):
-            if mc.serverExists():
+            if not mc.serverExists():
                 await message.channel.send(helperfunctions.pick_string([
                     "hhhhnnnnnnngggggg...",
                     "\*inhales\*",
