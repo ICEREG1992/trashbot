@@ -60,7 +60,7 @@ class mc:
                     "\*inhales\*",
                     "ok one sec"
                 ]))
-                server = subprocess.Popen(['java', '-Xmx1024M', '-Xms1024M', '-jar', 'server.jar' ,'nogui'], cwd=r'/home/william/minecraft/', stdin=subprocess.PIPE)
+                server = subprocess.Popen(['java', '-Xmx2048M', '-Xmx2048M', '-jar', 'server.jar' ,'nogui'], cwd=r'/home/william/minecraft/', stdin=subprocess.PIPE)
                 helperfunctions.bot_wait_long()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
@@ -81,6 +81,9 @@ class mc:
                 await message.channel.send(config.get("server-ip").data + ":" + config.get("server-port").data)
             else:
                 await message.channel.send("im not hosting anything rn")
+        elif message.content == "!mcversion":
+            if mc.serverExists():
+
         elif message.content == "!stophost" and permissions.allowed(message.author.id, "blue"):
             if mc.serverExists():
                 if server:
