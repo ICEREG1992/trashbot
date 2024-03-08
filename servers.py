@@ -130,9 +130,12 @@ class servers:
         global server
         if server is None:
             try:
-                subprocess.check_output(["pgrep", '-f', "\'bash launch.sh\'"])
+                subprocess.check_output(["pgrep", '-f', "server.jar"])
             except subprocess.CalledProcessError as e:
-                return False
+                try:
+                    subprocess.check_output(["pgrep", '-f', "SVENCOOPIDK"]) # todo
+                except subprocess.CalledProcessError as e:
+                    return False
         return True
 
     def save():
