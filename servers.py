@@ -61,7 +61,7 @@ class servers:
                     "\*inhales\*",
                     "ok one sec"
                 ]))
-                server = subprocess.Popen(['bash','launch.sh'], cwd=r'/home/william/minecraft/', stdin=subprocess.PIPE)
+                server = subprocess.Popen(['java','-Xmx2048M','-Xmx2048M','-jar','server.jar','nogui'], cwd=r'/home/william/minecraft/', stdin=subprocess.PIPE)
                 helperfunctions.bot_wait_long()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
@@ -121,6 +121,7 @@ class servers:
                     ]))
                 else:
                     subprocess.run(['pkill', '-f', '\'bash launch.sh\''])
+                    subprocess.run(['pkill', '-f', 'server.jar'])
                     await message.channel.send("i tracked it down and killed it")
             else:
                 await message.channel.send("im not hosting anything rn")
