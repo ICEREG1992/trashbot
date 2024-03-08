@@ -61,7 +61,7 @@ class servers:
                     "\*inhales\*",
                     "ok one sec"
                 ]))
-                server = subprocess.Popen(['java','-Xmx2048M','-Xmx2048M','-jar','server.jar','nogui'], cwd=r'/home/william/minecraft/', stdin=subprocess.PIPE)
+                server = subprocess.Popen(['java','-Xms1G','-Xmx2G','-jar','server.jar','nogui'], cwd=r'/home/william/minecraft/', stdin=subprocess.PIPE)
                 helperfunctions.bot_wait_long()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
