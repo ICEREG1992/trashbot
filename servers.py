@@ -90,7 +90,7 @@ class servers:
                     "\*inhales\*",
                     "ok one sec"
                 ]))
-                server = subprocess.Popen(['bash','launch.sh'], cwd=r'/home/william/steam/', stdin=subprocess.PIPE)
+                server = subprocess.Popen(['bash','svends_run'], cwd=r'/home/william/steam/', stdin=subprocess.PIPE)
                 helperfunctions.bot_wait_long()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
