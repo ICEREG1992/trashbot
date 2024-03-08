@@ -16,7 +16,7 @@ from battle import battle_manager
 from train import spam_train
 from log_manager import logging_manager
 from wordplay import wordplay
-from mc import mc
+from servers import servers
 from powerswitch import powerswitch
 from rdj import rdj
 # from lipo import lipo
@@ -43,7 +43,7 @@ class MyClient(discord.Client):
         humor_regex.init()
         permissions.init() 
         todo.init()
-        mc.init()
+        servers.init()
         # karaoke_manager.init()
         # wordplay.init()
         uptime.init()
@@ -67,7 +67,7 @@ class MyClient(discord.Client):
                 await todo.run(self, message)
                 await spam_train.run(self, message)
                 await logging_manager.run(self, message)
-                await mc.run(self, message)
+                await servers.run(self, message)
                 await battle_manager.run(self, message)
                 await uptime.run(self, message)
                 await food.run(self, message, powerswitch)

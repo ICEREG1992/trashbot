@@ -15,7 +15,7 @@ mcIP = ""
 global server
 server = None
 
-class mc:
+class servers:
 
     def init():
         d = db.get_item(TableName="trashbot", Key={'name':{'S':'mc_ip'}})
@@ -52,15 +52,16 @@ class mc:
             await message.channel.send(helperfunctions.pick_string(["ok i'll watch " + mcIP + " for ya",
                 "ok sure minecraft ip set to " + mcIP,
                 "New IP Set! haha wasnt that goofy"]))
-            mcplayers.save()
+            servers.save()
+        # minecraft
         elif message.content == "!hostmc" and permissions.allowed(message.author.id, "blue"):
-            if not mc.serverExists():
+            if not servers.serverExists():
                 await message.channel.send(helperfunctions.pick_string([
                     "hhhhnnnnnnngggggg...",
                     "\*inhales\*",
                     "ok one sec"
                 ]))
-                server = subprocess.Popen(['java', '-Xmx2048M', '-Xmx2048M', '-jar', 'server.jar' ,'nogui'], cwd=r'/home/william/minecraft/', stdin=subprocess.PIPE)
+                server = subprocess.Popen(['bash','launch.sh'], cwd=r'/home/william/minecraft/', stdin=subprocess.PIPE)
                 helperfunctions.bot_wait_long()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
@@ -74,15 +75,40 @@ class mc:
                     "one at a time pls"
                 ]))
         elif message.content == "!mcip":
-            if mc.serverExists():
+            if servers.serverExists():
                 config = jproperties.Properties()
                 with open('/home/william/minecraft/' + 'server.properties', 'rb') as file:
                     config.load(file)
                 await message.channel.send(config.get("server-ip").data + ":" + config.get("server-port").data)
             else:
                 await message.channel.send("im not hosting anything rn")
+        # sven coop
+        elif message.content == "!hostsven" and permissions.allowed(message.author.id, "blue"):
+            if not servers.serverExists():
+                await message.channel.send(helperfunctions.pick_string([
+                    "hhhhnnnnnnngggggg...",
+                    "\*inhales\*",
+                    "ok one sec"
+                ]))
+                server = subprocess.Popen(['bash','launch.sh'], cwd=r'/home/william/steam/', stdin=subprocess.PIPE)
+                helperfunctions.bot_wait_long()
+                await message.channel.send(helperfunctions.pick_string([
+                    "ok im runnin",
+                    "epic sven",
+                    "aw yeah shoot em up baybee :)"
+                ]))
+            else:
+                await message.channel.send(helperfunctions.pick_string([
+                    "NO!!!!!!!!!!",
+                    "WAIT YOUR TURN",
+                    "one at a time pls"
+                ]))
+        elif message.content == "!svenip":
+            if servers.serverExists():
+                # do this later
+                await message.channel.send("no can do sry")
         elif message.content == "!stophost" and permissions.allowed(message.author.id, "blue"):
-            if mc.serverExists():
+            if servers.serverExists():
                 if server:
                     server.kill()
                     server = None
@@ -94,7 +120,7 @@ class mc:
                         "goodnight little fishie"
                     ]))
                 else:
-                    subprocess.run(['pkill', '-f', 'server.jar'])
+                    subprocess.run(['pkill', '-f', '\'bash launch.sh\''])
                     await message.channel.send("i tracked it down and killed it")
             else:
                 await message.channel.send("im not hosting anything rn")
@@ -103,7 +129,7 @@ class mc:
         global server
         if server is None:
             try:
-                subprocess.check_output(["pidof","java"])
+                subprocess.check_output(["pgrep", '-f', "\'bash launch.sh\'"])
             except subprocess.CalledProcessError as e:
                 return False
         return True
