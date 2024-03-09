@@ -22,7 +22,7 @@ class rdj:
                 draw.text((60, offset), line, font=font, fill=color)
                 bbox = font.getbbox(line)
                 offset += bbox[3]-bbox[1]
-            await rdj.send_image(rdj_img, message.channel)
+            await rdj.send_image(rdj_img, message.channel, text)
         elif (message.content.startswith("!rdj")):
             rdj_img = Image.open("rdj.png")
             draw = ImageDraw.Draw(rdj_img)
