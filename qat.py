@@ -3,11 +3,18 @@ import requests
 import sys
 import helperfunctions
 
-e = ("Error: pattern too long or too complex",
-    "Error: unexpected character in pattern",
-    "Error: expected } at end of tagged item",
-    "Error: LHS must be single variable in negated match constraint",
-    "Error: non-variable in difference constraint")
+e = (
+        "Error: bad length qualification",
+        "Error: expected ) at end of subpattern",
+        "Error: expected ] at end of letter choice",
+        "Error: expected } at end of tagged item",
+        "Error: pattern too long or too complex",
+        "Error: syntax error in length-only constraint",
+        "Error: syntax error in tagged item",
+        "Error: unexpected character in pattern",
+        "Error: LHS must be single variable in negated match constraint",
+        "Error: non-variable in difference constraint"
+    )
 
 dicts = ["UKACD",
         "YAWL",
