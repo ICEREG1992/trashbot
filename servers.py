@@ -54,7 +54,15 @@ class servers:
                 "New IP Set! haha wasnt that goofy"]))
             servers.save()
         # minecraft
-        elif message.content == "!hostmc" and permissions.allowed(message.author.id, "blue"):
+        elif message.content.startswith("!hostmc") and permissions.allowed(message.author.id, "blue"):
+            if len(message.content) > 7:
+                map = message.content[8:]
+                mapexists = subprocess.check_output(['test', '-d', '/home/william/minecraft'])
+                if mapexists:
+                    message.channel.send("i was able to find a map called that")
+                else:
+                    message.channel.send("i was not able to find a map called that")
+            return
             if not servers.serverExists():
                 await message.channel.send(helperfunctions.pick_string([
                     "hhhhnnnnnnngggggg...",
