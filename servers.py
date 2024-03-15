@@ -58,7 +58,10 @@ class servers:
             if len(message.content) > 7:
                 map = message.content[8:]
                 map = helperfunctions.sanitize(map)
-                mapexists = subprocess.check_output(['test', '-d', '/home/william/minecraft/' + map])
+                try:
+                    mapexists = subprocess.check_output(['test', '-d', '/home/william/minecraft/' + map])
+                except subprocess.CalledProcessError as e:
+                    message.channel.send("i was not able to find a map called that")
                 if mapexists:
                     message.channel.send("i was able to find a map called that")
                     """config = jproperties.Properties()
@@ -68,8 +71,6 @@ class servers:
                         file.seek(0)
                         file.truncate(0)
                         config.save(file, encoding="utf-8")"""
-                else:
-                    message.channel.send("i was not able to find a map called that")
             return
             if not servers.serverExists():
                 await message.channel.send(helperfunctions.pick_string([
