@@ -94,3 +94,6 @@ def fill_defaults(db):
         if ('Item' not in n):
             logging.info("No " + keynames[i] + " value found, set to default.")
             db.put_item(TableName="trashbot", Item={'name':{'S':keynames[i]}, 'data':{'S':defaults[i]}})
+
+def sanitize(str):
+    return re.sub(r'[^a-zA-Z0-9]', '', str)

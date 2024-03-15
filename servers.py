@@ -57,9 +57,17 @@ class servers:
         elif message.content.startswith("!hostmc") and permissions.allowed(message.author.id, "blue"):
             if len(message.content) > 7:
                 map = message.content[8:]
-                mapexists = subprocess.check_output(['test', '-d', '/home/william/minecraft'])
+                map = helperfunctions.sanitize(map)
+                mapexists = subprocess.check_output(['test', '-d', '/home/william/minecraft/' + map])
                 if mapexists:
                     message.channel.send("i was able to find a map called that")
+                    """config = jproperties.Properties()
+                    with open('/home/william/minecraft/' + 'server.properties', 'rb') as file:
+                        config.load(file)
+                        config["level-name"] = map
+                        file.seek(0)
+                        file.truncate(0)
+                        config.save(file, encoding="utf-8")"""
                 else:
                     message.channel.send("i was not able to find a map called that")
             return
