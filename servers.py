@@ -55,24 +55,25 @@ class servers:
             servers.save()
         # minecraft
         elif message.content.startswith("!hostmc") and permissions.allowed(message.author.id, "blue"):
-            if len(message.content) > 7:
-                map = message.content[8:]
-                map = helperfunctions.sanitize(map)
-                try:
-                    subprocess.check_output(['test', '-d', '/home/william/minecraft/' + map])
-                except subprocess.CalledProcessError as e:
-                    await message.channel.send("i was not able to find a map called that")
-                    return
-                await message.channel.send("i was able to find a map called that")
-                config = jproperties.Properties()
-                with open('/home/william/minecraft/' + 'server.properties', 'r+b') as file:
-                    config.load(file, "utf-8")
-                    config["level-name"] = map
-                    file.seek(0)
-                    file.truncate(0)
-                    config.store(file, encoding="utf-8")
-            return
             if not servers.serverExists():
+                # set map first
+                if len(message.content) > 7:
+                    map = message.content[8:]
+                    map = helperfunctions.sanitize(map)
+                    try:
+                        subprocess.check_output(['test', '-d', '/home/william/minecraft/' + map])
+                    except subprocess.CalledProcessError as e:
+                        await message.channel.send("i was not able to find a map called that")
+                        return
+                    await message.channel.send("i was able to find a map called that")
+                    config = jproperties.Properties()
+                    with open('/home/william/minecraft/' + 'server.properties', 'r+b') as file:
+                        config.load(file, "utf-8")
+                        config["level-name"] = map
+                        file.seek(0)
+                        file.truncate(0)
+                        config.store(file, encoding="utf-8")
+                # now boot
                 await message.channel.send(helperfunctions.pick_string([
                     "hhhhnnnnnnngggggg...",
                     "\*inhales\*",
