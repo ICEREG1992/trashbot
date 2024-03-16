@@ -59,11 +59,11 @@ class servers:
                 map = message.content[8:]
                 map = helperfunctions.sanitize(map)
                 try:
-                    mapexists = subprocess.check_output(['test', '-d', '/home/william/minecraft/' + map])
+                    mapexists = subprocess.check_output(['test', '-d', '/home/william/minecraft/' + map, '&&', 'echo', '"found"'])
                 except subprocess.CalledProcessError as e:
-                    message.channel.send("i was not able to find a map called that")
+                    await message.channel.send("i was not able to find a map called that")
                 if mapexists:
-                    message.channel.send("i was able to find a map called that")
+                    await message.channel.send("i was able to find a map called that")
                     """config = jproperties.Properties()
                     with open('/home/william/minecraft/' + 'server.properties', 'rb') as file:
                         config.load(file)
