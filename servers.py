@@ -65,7 +65,7 @@ class servers:
                     return
                 await message.channel.send("i was able to find a map called that")
                 config = jproperties.Properties()
-                with open('/home/william/minecraft/' + 'server.properties', 'rb') as file:
+                with open('/home/william/minecraft/' + 'server.properties', 'rw+') as file:
                     config.load(file)
                     config["level-name"] = map
                     file.seek(0)
