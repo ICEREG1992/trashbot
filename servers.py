@@ -59,7 +59,7 @@ class servers:
                 map = message.content[8:]
                 map = helperfunctions.sanitize(map)
                 try:
-                    subprocess.check_output(['test', '-d', '/home/william/minecraft/' + map, '&&', 'echo', '"found"'])
+                    subprocess.check_output(['test', '-d', '/home/william/minecraft/' + map])
                 except subprocess.CalledProcessError as e:
                     await message.channel.send("i was not able to find a map called that")
                     return
