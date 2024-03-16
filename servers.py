@@ -69,8 +69,7 @@ class servers:
                     config.load(file)
                     config["level-name"] = map
                     file.seek(0)
-                    file.truncate()
-                    config.save(file, encoding="utf-8")
+                    config.store(file, encoding="utf-8")
             return
             if not servers.serverExists():
                 await message.channel.send(helperfunctions.pick_string([
