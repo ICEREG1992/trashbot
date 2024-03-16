@@ -69,7 +69,7 @@ class servers:
                     config.load(file)
                     config["level-name"] = map
                     file.seek(0)
-                    file.truncate(0)
+                    file.truncate()
                     config.save(file, encoding="utf-8")
             return
             if not servers.serverExists():
@@ -78,7 +78,7 @@ class servers:
                     "\*inhales\*",
                     "ok one sec"
                 ]))
-                server = subprocess.Popen(['java','-Xms1G','-Xmx2G','-jar','server.jar','nogui'], cwd=r'/home/william/minecraft/', stdin=subprocess.PIPE)
+                server = subprocess.Popen(['java','-Xms1G','-Xmx4G','-jar','server.jar','nogui'], cwd=r'/home/william/minecraft/', stdin=subprocess.PIPE)
                 helperfunctions.bot_wait_long()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
