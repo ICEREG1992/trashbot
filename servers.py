@@ -142,7 +142,7 @@ class servers:
                 else:
                     subprocess.run(['pkill', '-f', '\'bash launch.sh\''])
                     subprocess.run(['pkill', '-f', 'server.jar'])
-                    subprocess.run(['pkill', '-f', 'svends_amd'])
+                    subprocess.run(['pkill', '-f', 'svends'])
                     await message.channel.send("i tracked it down and killed it")
             else:
                 await message.channel.send("im not hosting anything rn")
@@ -154,7 +154,7 @@ class servers:
                 subprocess.check_output(["pgrep", '-f', "server.jar"])
             except subprocess.CalledProcessError as e:
                 try:
-                    subprocess.check_output(["pgrep", '-f', "svends_amd"]) # todo
+                    subprocess.check_output(["pgrep", '-f', "svends"]) # todo
                 except subprocess.CalledProcessError as e:
                     return False
         return True
