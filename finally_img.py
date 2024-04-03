@@ -28,18 +28,18 @@ class finally_img:
                 google_image = finally_img.get_google_image(text)
                 match google_image:
                     case 2:
-                        await channel.send("couldn't get a suitable image for that")
+                        await message.channel.send("couldn't get a suitable image for that")
                     case 1:
-                        await channel.send("couldn't find any images for that")
+                        await message.channel.send("couldn't find any images for that")
                     case 0:
-                        await channel.send("google didn't like when i asked that")
+                        await message.channel.send("google didn't like when i asked that")
                 # open the image url pulled
                 google_image_request = requests.get(google_image)
                 if google_image_request.status_code == 200:
                     image_stream = io.BytesIO(google_image_request.content)
                     google_image = Image.open(image_stream)
                 else:
-                    await channel.send("whoops couldn't get the full image")
+                    await message.channel.send("whoops couldn't get the full image")
                     return
                 # paste image onto template
                 template_img.paste(google_image, (150,70))
