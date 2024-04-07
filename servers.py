@@ -26,7 +26,7 @@ class servers:
         global mcIP
         global server
         if mcIP and message.content == "!whosuprn":
-            r = requests.get('https://api.mcsrvstat.us/2/' + mcIP)
+            r = requests.get('https://api.mcsrvstat.us/3/' + mcIP)
             o = r.json()
             if o['online']:
                 n = str(o['players']['online'])
@@ -46,6 +46,18 @@ class servers:
                     "server is sorta sus rn ngl (down)",
                     "server is down (down) (down) (epic down)",
                     "it is down (down)"]))
+        if mcIP and message.content == "!mcversion":
+            r = requests.get('https://api.mcsrvstat.us/3/' + mcIP)
+            o = r.json()
+            if o['online']:
+                n = str(o['version'])
+                await message.channel.send(n)
+            else:
+                await message.channel.send(helperfunctions.pick_string([
+                    "i can't tell",
+                    "i won't tell",
+                    "idk lol",
+                    "it's a secret"]))
         elif message.content.startswith("!setwhosup ") and permissions.allowed(message.author.id, "blue"):
             i = message.content[11:]
             mcIP = i
