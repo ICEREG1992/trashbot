@@ -28,7 +28,6 @@ class servers:
         if mcIP and message.content == "!whosuprn":
             r = requests.get('https://api.mcsrvstat.us/3/' + mcIP)
             o = r.json()
-            print(o)
             if o['online']:
                 n = str(o['players']['online'])
                 if (n == '0'):
