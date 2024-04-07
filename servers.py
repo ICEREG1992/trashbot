@@ -34,8 +34,11 @@ class servers:
                     await message.channel.send(helperfunctions.pick_string(["nah nobody up rn", "not rn sorry", "nope", "nothing much whos uprn with u", "nah", "negative"]))
                 else:
                     out = ""
-                    for p in o['players']['list']:
-                        out += p + "\n"
+                    if o['players']['list']:
+                        for p in o['players']['list']:
+                            out += p + "\n"
+                    else:
+                        out = str(o['players']['online']) + " people online rn"
                     await message.channel.send(out)
             else:
                 await message.channel.send(helperfunctions.pick_string([
