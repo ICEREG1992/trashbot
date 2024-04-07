@@ -28,6 +28,7 @@ class servers:
         if mcIP and message.content == "!whosuprn":
             r = requests.get('https://api.mcsrvstat.us/3/' + mcIP)
             o = r.json()
+            print(o)
             if o['online']:
                 n = str(o['players']['online'])
                 if (n == '0'):
@@ -36,7 +37,9 @@ class servers:
                     out = ""
                     if o['players']['list']:
                         for p in o['players']['list']:
-                            out += p + "\n"
+                            out += p['name'] + "\n"
+                        if len(o['players']['list']) > o['players']['online']:
+                            out += "and " + str(len(o['players']['list']) - o['players']['online']) + " more"
                     else:
                         out = str(o['players']['online']) + " people online rn"
                     await message.channel.send(out)
