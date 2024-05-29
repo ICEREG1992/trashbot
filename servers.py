@@ -104,6 +104,7 @@ class servers:
                     for x in maps:
                         out += '-' + x + "\n"
                     await message.channel.send(out)
+                    return
 
                 # now boot
                 await message.channel.send(helperfunctions.pick_string([
