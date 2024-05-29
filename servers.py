@@ -102,7 +102,7 @@ class servers:
                     # print list of maps
                     out = ""
                     for x in maps:
-                        out += '-' + x + "\n"
+                        out += '- ' + x + "\n"
                     await message.channel.send(out)
                     return
 
