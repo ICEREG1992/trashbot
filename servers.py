@@ -90,6 +90,21 @@ class servers:
                         file.seek(0)
                         file.truncate(0)
                         config.store(file, encoding="utf-8")
+                else:
+                    await message.channel.send("pls tell me a map.. i see these map names:")
+                    maps = os.walk('/home/william/minecraft/')
+                    # fuckery
+                    maps = next(maps)[1]
+                    # trim folders we don't want
+                    for (x in ['crash-reports','libraries','logs','versions']):
+                        if x in maps:
+                            maps.remove(x)
+                    # print list of maps
+                    out = ""
+                    for x in maps:
+                        out += '-' + x + "\n"
+                    await message.channel.send(out)
+
                 # now boot
                 await message.channel.send(helperfunctions.pick_string([
                     "hhhhnnnnnnngggggg...",
