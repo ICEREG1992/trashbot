@@ -46,6 +46,7 @@ class qat:
                     dict = ld.index(pc)
                 elif type(localDict) == list:
                     await message.channel.send("be nice to me")
+                    return
                 else:
                     await message.channel.send("only put a space in your qat query if you want to specify a dictionary to use. i didn't see one")
                     return
