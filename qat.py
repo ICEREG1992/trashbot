@@ -41,7 +41,7 @@ class qat:
                 ld = [a.lower() for a in dicts]
                 localDict = [a for a in ld if a in s.lower()]
                 if type(localDict) == list and len(localDict) == 1:
-                    s = s[len(localDict)+1:]
+                    s = s[len(localDict[0])+1:]
                     dictStorage = dict
                     dict = ld.index(localDict[0])
                 elif type(localDict) == list:
