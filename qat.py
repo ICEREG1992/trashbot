@@ -36,6 +36,19 @@ class qat:
         global dict
         if message.content.lower().startswith("!qat ") or message.content.lower().startswith("!taq "):
             s = message.content[5:]
+            if " " in s:
+                # dict specified
+                localDict = [a.lower() for a in dicts]
+                localDict = (a for a in localDict if a in s.lower())
+                if type(localDict) == str:
+                    s = s[len(localDict)+1:]
+                    dictStorage = localDict
+                    dict = localDict
+                else if type(localDict) == list:
+                    await message.channel.send("be nice to me")
+                else:
+                    await message.channel.send("only put a space in your qat query if you want to specify a dictionary to use. i didn't see one")
+                    return
             spoilerResult = False
             if s.startswith("||") and s.endswith("||"):
                 spoilerResult = True
@@ -106,6 +119,8 @@ class qat:
                     "my sources say no",
                     "outlook not so good"
                 ]))
+            # set dict back
+            dict = dictStorage
         elif message.content.lower().startswith("!dict"):
             if len(message.content) > 6:
                 pc = message.content.lower()[6:]
