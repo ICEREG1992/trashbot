@@ -42,8 +42,8 @@ class qat:
                 localDict = [a for a in localDict if a in s.lower()]
                 if type(localDict) == list and len(localDict) == 1:
                     s = s[len(localDict)+1:]
-                    dictStorage = localDict
-                    dict = localDict
+                    dictStorage = dict
+                    dict = ld.index(pc)
                 elif type(localDict) == list:
                     await message.channel.send("be nice to me")
                 else:
