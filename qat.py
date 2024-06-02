@@ -44,7 +44,7 @@ class qat:
                     s = s[len(localDict)+1:]
                     dictStorage = localDict
                     dict = localDict
-                else if type(localDict) == list:
+                elif type(localDict) == list:
                     await message.channel.send("be nice to me")
                 else:
                     await message.channel.send("only put a space in your qat query if you want to specify a dictionary to use. i didn't see one")
