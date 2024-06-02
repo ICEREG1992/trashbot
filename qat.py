@@ -38,8 +38,8 @@ class qat:
             s = message.content[5:]
             if " " in s:
                 # dict specified
-                localDict = [a.lower() for a in dicts]
-                localDict = [a for a in localDict if a in s.lower()]
+                ld = [a.lower() for a in dicts]
+                localDict = [a for a in ld if a in s.lower()]
                 if type(localDict) == list and len(localDict) == 1:
                     s = s[len(localDict)+1:]
                     dictStorage = dict
