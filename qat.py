@@ -43,7 +43,7 @@ class qat:
                 if type(localDict) == list and len(localDict) == 1:
                     s = s[len(localDict)+1:]
                     dictStorage = dict
-                    dict = ld.index(localDict)
+                    dict = ld.index(localDict[0])
                 elif type(localDict) == list:
                     await message.channel.send("be nice to me")
                     return
