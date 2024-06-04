@@ -98,7 +98,7 @@ class finally_img:
         response = requests.get(url)
         if response.status_code == 200:
             if len(response.json()['items']) > 0:
-                return response.json()['items'][0]['image']['link'] 
+                return response.json()['items'][0]['link']
             else:
                 return 1
         else:
