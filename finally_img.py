@@ -55,12 +55,12 @@ class finally_img:
                     await message.channel.send("whoops couldn't get the full image")
                     return
                 # paste image onto template
-                template_img.paste(google_image, (150,70))
+                template_img.paste(google_image, (200,100))
                 # add text
                 shadowcolor = "black"
                 fillcolor = "white"
-                x = 200
-                y = 420
+                x = 100
+                y = 320
                 font = ImageFont.truetype('IMPACT.TTF', 46)
                 # no need for textwrap here
                 draw = ImageDraw.Draw(template_img)
