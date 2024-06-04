@@ -83,7 +83,7 @@ class finally_img:
         # headers = {
         #     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.0"
         # }
-        response = requests.get(url, headers=headers)
+        response = requests.get(url)
         if response.status_code == 200:
             if len(response.json()['items']) > 0:
                 return response.json()['items'][0]['image']['thumbnailLink'] 
