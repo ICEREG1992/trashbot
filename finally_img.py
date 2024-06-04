@@ -55,7 +55,7 @@ class finally_img:
                     await message.channel.send("whoops couldn't get the full image")
                     return
                 # resize image
-                google_image.thumbnail((300,300))
+                google_image.thumbnail((300,250))
                 # paste image onto template
                 template_img.paste(google_image, (150,70))
                 # add text
