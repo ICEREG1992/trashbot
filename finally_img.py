@@ -7,7 +7,7 @@ import io
 import base64
 import discord
 import requests
-from bs4 import BeautifulSoup
+import os
 
 global t
 t = dt.datetime.utcnow()
