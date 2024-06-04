@@ -12,6 +12,12 @@ from bs4 import BeautifulSoup
 global t
 t = dt.datetime.utcnow()
 
+global token
+if os.path.exists("img.txt"):
+    f = open("img.txt", "r")
+    token = f.read().split('\n')
+    f.close()
+
 class finally_img:
 
     async def run(self, message):
@@ -32,7 +38,7 @@ class finally_img:
                     case 1:
                         await message.channel.send("couldn't find any images for that")
                     case 0:
-                        await message.channel.send("google didn't like when i asked that")
+                        await message.channel.send("google didn't like when i asked for that")
                 # open the image url pulled
                 google_image_request = requests.get(google_image)
                 if google_image_request.status_code == 200:
@@ -73,23 +79,14 @@ class finally_img:
             await channel.send(file=f)
 
     def get_google_image(query):
-        url = f"https://www.google.com/search?q={query}&tbm=isch"
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-        }
+        url = f"https://www.googleapis.com/customsearch/v1?q={query}&num=1&start=1&imgSize=huge&searchType=image&key={token[1]}&cx={token[0]}"
+        # headers = {
+        #     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.0"
+        # }
         response = requests.get(url, headers=headers)
         if response.status_code == 200:
-            soup = BeautifulSoup(response.text, "html.parser")
-            img_tags = soup.find_all("img")
-            if img_tags:
-                for img in img_tags:
-                    deferred = img.get("data-deferred")
-                    if not deferred:
-                        img_height = img.get("height")
-                        if img_height and int(img_height) > 48:
-                            image_url = img.get("data-src")
-                            return image_url
-                return 2
+            if len(response.json()['items']) > 0:
+                return response.json()['items'][0]['image']['thumbnailLink'] 
             else:
                 return 1
         else:
