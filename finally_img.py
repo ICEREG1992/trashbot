@@ -52,8 +52,8 @@ class finally_img:
                 # add text
                 shadowcolor = "black"
                 fillcolor = "white"
-                x = 100
-                y = 320
+                x = 200
+                y = 420
                 font = ImageFont.truetype('IMPACT.TTF', 46)
                 # no need for textwrap here
                 draw = ImageDraw.Draw(template_img)
@@ -79,7 +79,7 @@ class finally_img:
             await channel.send(file=f)
 
     def get_google_image(query):
-        url = f"https://www.googleapis.com/customsearch/v1?q={query}&num=1&start=1&imgSize=huge&searchType=image&key={token[1]}&cx={token[0]}"
+        url = f"https://www.googleapis.com/customsearch/v1?q={query}&num=1&start=1&safe=active&imgSize=medium&searchType=image&key={token[1]}&cx={token[0]}"
         # headers = {
         #     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.0"
         # }
