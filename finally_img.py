@@ -12,6 +12,9 @@ import os
 global t
 t = dt.datetime.utcnow()
 
+global c
+c = [dt.datetime.utcnow(), 0]
+
 global token
 if os.path.exists("img.txt"):
     f = open("img.txt", "r")
@@ -22,9 +25,13 @@ class finally_img:
 
     async def run(self, message):
         global t
+        global c
         if (message.content.startswith("!finally ")):
-            print('finally')
-            if (t < dt.datetime.utcnow() - dt.timedelta(seconds=30)):
+            # reset c if it's time
+            if (dt.datetime.utcnow() > c[0] + dt.timedelta(days=1)):
+                c[0] = dt.datetime.utcnow()
+                c[1] = 0
+            if (t < dt.datetime.utcnow() - dt.timedelta(seconds=30) and c[1] < 80):
                 if helperfunctions.chance(5):
                     template_img = Image.open("finally2.png")
                 else:
@@ -67,9 +74,12 @@ class finally_img:
                 draw.text((x, y), text, font=font, fill=fillcolor)
                 t = dt.datetime.utcnow()
                 await finally_img.send_image(template_img, message.channel, text)
+                c[1] = c[1] + 1
             else:
-                print("not yet")
-                await message.add_reaction("🚫")
+                if (c[1] >= 80):
+                    await message.channel.send("out of requests for today, sry")
+                else:
+                    await message.add_reaction("🚫")
 
     async def send_image(img, channel, text):
         with io.BytesIO() as out:
