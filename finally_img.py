@@ -54,8 +54,10 @@ class finally_img:
                 else:
                     await message.channel.send("whoops couldn't get the full image")
                     return
+                # resize image
+                template_img.thumbnail((300,300))
                 # paste image onto template
-                template_img.paste(google_image, (200,100))
+                template_img.paste(google_image, (150,70))
                 # add text
                 shadowcolor = "black"
                 fillcolor = "white"
@@ -96,7 +98,7 @@ class finally_img:
         response = requests.get(url)
         if response.status_code == 200:
             if len(response.json()['items']) > 0:
-                return response.json()['items'][0]['image']['thumbnailLink'] 
+                return response.json()['items'][0]['image']['link'] 
             else:
                 return 1
         else:
