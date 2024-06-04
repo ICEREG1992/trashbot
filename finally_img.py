@@ -10,7 +10,7 @@ import requests
 import os
 
 global t
-t = dt.datetime.utcnow()
+t = dt.datetime.utcnow() - dt.timedelta(seconds=30)
 
 global c
 c = [dt.datetime.utcnow(), 0]
