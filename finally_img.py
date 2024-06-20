@@ -57,7 +57,7 @@ class finally_img:
                 # resize image
                 google_image.thumbnail((300,250))
                 # paste image onto template
-                template_img.paste(google_image, (150,70))
+                template_img.paste(google_image, (180,70))
                 # add text
                 shadowcolor = "black"
                 fillcolor = "white"
