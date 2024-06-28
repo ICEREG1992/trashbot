@@ -50,9 +50,10 @@ class finally_img:
                 google_image_request = requests.get(google_image)
                 for i in range(1,5):
                     c[1] = c[1] + 1
-                    if google_image_request.status_code != 200:
+                    if google_image_request.status_code == 200:
                         image_stream = io.BytesIO(google_image_request.content)
                         google_image = Image.open(image_stream)
+                        break
                     else:
                         match google_image:
                             case 2:
@@ -62,8 +63,7 @@ class finally_img:
                             case 0:
                                 await message.channel.send("google didn't like when i asked for that")
                         # open the image url pulled
-                        google_image_request = requests.get(google_image)
-                        break
+                        google_image_request = requests.get(google_image)   
                 else:
                     await message.channel.send("i tried really hard but there's no image for that")
                     return
