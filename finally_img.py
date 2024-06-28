@@ -55,6 +55,7 @@ class finally_img:
                         google_image = Image.open(image_stream)
                         break
                     else:
+                        google_image = finally_img.get_google_image(text, i)
                         match google_image:
                             case 2:
                                 await message.channel.send("couldn't get a suitable image for that")
