@@ -91,9 +91,9 @@ class MyClient(discord.Client):
                     os.execl(python, python, * sys.argv)
 
                 if message.content == "!cum" or permissions.allowed(message.author.id, "cum"):
-                    await message.add_reaction("�")
-                    await message.add_reaction("�")
-                    await message.add_reaction("�")
+                    await message.add_reaction("🇨")
+                    await message.add_reaction("🇺")
+                    await message.add_reaction("🇲")
 
                 if message.content == "!version":
                     await message.channel.send("u last pushed to me _DATE_")
