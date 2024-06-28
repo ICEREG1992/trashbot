@@ -38,7 +38,7 @@ class finally_img:
                     template_img = Image.open("finally.png")
                 text = message.content[9:]
                 # add image
-                google_image = finally_img.get_google_image(text)
+                google_image = finally_img.get_google_image(text, 0)
                 match google_image:
                     case 2:
                         await message.channel.send("couldn't get a suitable image for that")
@@ -46,6 +46,27 @@ class finally_img:
                         await message.channel.send("couldn't find any images for that")
                     case 0:
                         await message.channel.send("google didn't like when i asked for that")
+                # open the image url pulled
+                google_image_request = requests.get(google_image)
+                for i in range(1,5):
+                    c[1] = c[1] + 1
+                    if google_image_request.status_code != 200:
+                        image_stream = io.BytesIO(google_image_request.content)
+                        google_image = Image.open(image_stream)
+                        break
+                    else:
+                        match google_image:
+                            case 2:
+                                await message.channel.send("couldn't get a suitable image for that")
+                            case 1:
+                                await message.channel.send("couldn't find any images for that")
+                            case 0:
+                                await message.channel.send("google didn't like when i asked for that")
+                        # open the image url pulled
+                        google_image_request = requests.get(google_image)
+                else:
+                    await message.channel.send("i tried really hard but there's no image for that")
+                    return
                 # resize image
                 google_image.thumbnail((300,250))
                 # paste image onto template
@@ -68,7 +89,6 @@ class finally_img:
                 draw.text((x, y), text, font=font, fill=fillcolor)
                 t = dt.datetime.utcnow()
                 await finally_img.send_image(template_img, message.channel, text)
-                c[1] = c[1] + 1
             else:
                 if (c[1] >= 80):
                     await message.channel.send("out of requests for today, sry")
@@ -82,8 +102,8 @@ class finally_img:
             f = discord.File(fp=out, filename="finally.png", description="person holding test tube finally meme that says \"FINALLY, " + text + "\"")
             await channel.send(file=f)
 
-    def get_google_image(query):
-        url = f"https://www.googleapis.com/customsearch/v1?q={query}&num=1&start=1&safe=active&imgSize=medium&searchType=image&key={token[1]}&cx={token[0]}"
+    def get_google_image(query, n):
+        url = f"https://www.googleapis.com/customsearch/v1?q={query}&num=1&start={n}&safe=active&imgSize=medium&searchType=image&key={token[1]}&cx={token[0]}"
         # headers = {
         #     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.0"
         # }
