@@ -46,14 +46,6 @@ class finally_img:
                         await message.channel.send("couldn't find any images for that")
                     case 0:
                         await message.channel.send("google didn't like when i asked for that")
-                # open the image url pulled
-                google_image_request = requests.get(google_image)
-                if google_image_request.status_code == 200:
-                    image_stream = io.BytesIO(google_image_request.content)
-                    google_image = Image.open(image_stream)
-                else:
-                    await message.channel.send("whoops couldn't get the full image")
-                    return
                 # resize image
                 google_image.thumbnail((300,250))
                 # paste image onto template
