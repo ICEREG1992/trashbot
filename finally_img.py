@@ -26,6 +26,7 @@ class finally_img:
     async def run(self, message):
         global t
         global c
+        google_image_request = None
         if (message.content.startswith("!finally ")):
             # reset c if it's time
             if (dt.datetime.utcnow() > c[0] + dt.timedelta(days=1)):
@@ -47,10 +48,13 @@ class finally_img:
                     case 0:
                         await message.channel.send("google didn't like when i asked for that")
                 # open the image url pulled
-                google_image_request = requests.get(google_image)
+                try:
+                    google_image_request = requests.get(google_image, timeout=5)
+                except:
+                    None
                 for i in range(1,5):
                     c[1] = c[1] + 1
-                    if google_image_request.status_code == 200:
+                    if google_image_request is not None and google_image_request.status_code == 200:
                         image_stream = io.BytesIO(google_image_request.content)
                         google_image = Image.open(image_stream)
                         break
@@ -64,7 +68,10 @@ class finally_img:
                             case 0:
                                 await message.channel.send("google didn't like when i asked for that")
                         # open the image url pulled
-                        google_image_request = requests.get(google_image)   
+                        try:
+                            google_image_request = requests.get(google_image, timeout=5)
+                        except:
+                            None
                 else:
                     await message.channel.send("i tried really hard but there's no image for that")
                     return
