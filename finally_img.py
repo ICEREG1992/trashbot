@@ -8,6 +8,7 @@ import base64
 import discord
 import requests
 import os
+from urllib.parse import quote
 
 global t
 t = dt.datetime.utcnow() - dt.timedelta(seconds=30)
@@ -47,7 +48,7 @@ class finally_img:
                     case 0:
                         await message.channel.send("google didn't like when i asked for that")
                 # open the image url pulled
-                google_image_request = requests.get(google_image)
+                google_image_request = requests.get(quote(google_image))
                 for i in range(1,5):
                     c[1] = c[1] + 1
                     if google_image_request.status_code == 200:
