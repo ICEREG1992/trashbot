@@ -41,8 +41,8 @@ class finally_img:
                 # add image
                 google_image = finally_img.get_google_image(text, 0)
                 match google_image:
-                    case 2:
-                        await message.channel.send("couldn't get a suitable image for that")
+                    case -1:
+                        await message.channel.send("google doesn't have that")
                     case 1:
                         await message.channel.send("couldn't find any images for that")
                     case 0:
@@ -61,8 +61,8 @@ class finally_img:
                     else:
                         google_image = finally_img.get_google_image(text, i)
                         match google_image:
-                            case 2:
-                                await message.channel.send("couldn't get a suitable image for that")
+                            case -1:
+                                await message.channel.send("google doesn't have that")
                             case 1:
                                 await message.channel.send("couldn't find any images for that")
                             case 0:
@@ -112,14 +112,18 @@ class finally_img:
 
     def get_google_image(query, n):
         url = f"https://www.googleapis.com/customsearch/v1?q={query}&num=1&start={n}&safe=active&imgSize=medium&searchType=image&key={token[1]}&cx={token[0]}"
+        print(url)
         # headers = {
         #     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.0"
         # }
         response = requests.get(url)
         if response.status_code == 200:
-            if len(response.json()['items']) > 0:
-                return response.json()['items'][0]['link']
+            if response.json()['searchInformation']['totalResults'] > 0:
+                if len(response.json()['items']) > 0:
+                    return response.json()['items'][0]['link']
+                else:
+                    return 1
             else:
-                return 1
+                return -1
         else:
             return 0
