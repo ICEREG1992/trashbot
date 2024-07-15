@@ -43,6 +43,7 @@ class finally_img:
                 match google_image:
                     case -1:
                         await message.channel.send("google doesn't have that")
+                        return
                     case 1:
                         await message.channel.send("couldn't find any images for that")
                     case 0:
@@ -61,8 +62,6 @@ class finally_img:
                     else:
                         google_image = finally_img.get_google_image(text, i)
                         match google_image:
-                            case -1:
-                                await message.channel.send("google doesn't have that")
                             case 1:
                                 await message.channel.send("couldn't find any images for that")
                             case 0:
