@@ -112,7 +112,6 @@ class finally_img:
 
     def get_google_image(query, n):
         url = f"https://www.googleapis.com/customsearch/v1?q={quote(query)}&num=1&start={n}&safe=active&imgSize=medium&searchType=image&key={token[1]}&cx={token[0]}"
-        print(url)
         # headers = {
         #     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:126.0) Gecko/20100101 Firefox/126.0"
         # }
