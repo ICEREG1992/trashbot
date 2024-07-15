@@ -95,7 +95,7 @@ class MyClient(discord.Client):
                     await message.add_reaction("🇺")
                     await message.add_reaction("🇲")
 
-                if message.content == "or well," in message.content:
+                if message.content == "or well,":
                     await message.add_reaction("1️⃣")
                     await message.add_reaction("9️⃣")
                     await message.add_reaction("8️⃣")
