@@ -95,6 +95,12 @@ class MyClient(discord.Client):
                     await message.add_reaction("🇺")
                     await message.add_reaction("🇲")
 
+                if message.content == "or well," in message.content:
+                    await message.add_reaction("1️⃣")
+                    await message.add_reaction("9️⃣")
+                    await message.add_reaction("8️⃣")
+                    await message.add_reaction("4️⃣")
+
                 if message.content == "!version":
                     await message.channel.send("u last pushed to me _DATE_")
 
