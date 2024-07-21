@@ -47,6 +47,10 @@ class food:
                         "okay ENOUGH that's GOOD im FULL IT'S ENOUGH FOOD",
                         "STOP IT QUIT IT I HAVE ENOUGH",
                         "im GOOD i DON'T NEED ANY OF THAT"
+                        "STOP GIVING ME FOOD!!1!"
+                        "I want Cheeseburgor"
+                        "I eat it if you tell me the whole number of pie (:"
+                        "sorry, but I removed my mouth, please try again later after I readded my mouth (:"
                     ]))
             elif (t < dt.datetime.utcnow() - dt.timedelta(days=2)):
                 logcommand.log_globally(logging.INFO, "I was fed `" + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds") +
