@@ -26,6 +26,10 @@ class food:
         # send messages if fed
         if (message.content.startswith("!feed")):
             if (t > dt.datetime.utcnow() - dt.timedelta(hours=6)):
+                if message.content[message.content.index(' ')+1:] is "cheeseburger":
+                    await message.channel.send(pick_string([
+                        "actually nevermind i dont want anything"
+                    ]))
                 if chance(5):
                     await message.channel.send(pick_string([
                         "i guess i could have a bite but i wont",
@@ -33,7 +37,8 @@ class food:
                         "ehhh im a little full",
                         "can you box it up to go please",
                         "maybe later",
-                        "uhhh"
+                        "uhhh",
+                        "i would rather have a cheeseburger"
                     ]))
                 else:
                     await message.channel.send(pick_string([
