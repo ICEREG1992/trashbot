@@ -103,6 +103,8 @@ class finally_img:
                         await message.channel.send("out of requests for today, sry")
                     else:
                         await message.add_reaction("🚫")
+        else:
+            await message.add_reaction("🚫")
 
     async def send_image(img, channel, text):
         with io.BytesIO() as out:
