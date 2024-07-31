@@ -28,80 +28,81 @@ class finally_img:
         global t
         global c
         google_image_request = None
-        if (message.content.startswith("!finally ")):
-            # reset c if it's time
-            if (dt.datetime.utcnow() > c[0] + dt.timedelta(days=1)):
-                c[0] = dt.datetime.utcnow()
-                c[1] = 0
-            if (t < dt.datetime.utcnow() - dt.timedelta(seconds=30) and c[1] < 80):
-                if helperfunctions.chance(5):
-                    template_img = Image.open("finally2.png")
-                else:
-                    template_img = Image.open("finally.png")
-                text = message.content[9:]
-                # add image
-                google_image = finally_img.get_google_image(text, 0)
-                match google_image:
-                    case -1:
-                        await message.channel.send("google doesn't have that")
-                        return
-                    case 1:
-                        await message.channel.send("couldn't find any images for that")
-                    case 0:
-                        await message.channel.send("google didn't like when i asked for that")
-                # open the image url pulled
-                try:
-                    google_image_request = requests.get(google_image, timeout=5)
-                except:
-                    None
-                for i in range(1,5):
-                    c[1] = c[1] + 1
-                    if google_image_request is not None and google_image_request.status_code == 200:
-                        image_stream = io.BytesIO(google_image_request.content)
-                        google_image = Image.open(image_stream)
-                        break
+        if (message.channel.id == 555540666776813568 or isinstance(message.channel, discord.channel.DMChannel)):
+            if (message.content.startswith("!finally ")):
+                # reset c if it's time
+                if (dt.datetime.utcnow() > c[0] + dt.timedelta(days=1)):
+                    c[0] = dt.datetime.utcnow()
+                    c[1] = 0
+                if (t < dt.datetime.utcnow() - dt.timedelta(seconds=30) and c[1] < 80):
+                    if helperfunctions.chance(5):
+                        template_img = Image.open("finally2.png")
                     else:
-                        google_image = finally_img.get_google_image(text, i)
-                        match google_image:
-                            case 1:
-                                await message.channel.send("couldn't find any images for that")
-                            case 0:
-                                await message.channel.send("google didn't like when i asked for that")
-                        # open the image url pulled
-                        try:
-                            google_image_request = requests.get(google_image, timeout=5)
-                        except:
-                            None
+                        template_img = Image.open("finally.png")
+                    text = message.content[9:]
+                    # add image
+                    google_image = finally_img.get_google_image(text, 0)
+                    match google_image:
+                        case -1:
+                            await message.channel.send("google doesn't have that")
+                            return
+                        case 1:
+                            await message.channel.send("couldn't find any images for that")
+                        case 0:
+                            await message.channel.send("google didn't like when i asked for that")
+                    # open the image url pulled
+                    try:
+                        google_image_request = requests.get(google_image, timeout=5)
+                    except:
+                        None
+                    for i in range(1,5):
+                        c[1] = c[1] + 1
+                        if google_image_request is not None and google_image_request.status_code == 200:
+                            image_stream = io.BytesIO(google_image_request.content)
+                            google_image = Image.open(image_stream)
+                            break
+                        else:
+                            google_image = finally_img.get_google_image(text, i)
+                            match google_image:
+                                case 1:
+                                    await message.channel.send("couldn't find any images for that")
+                                case 0:
+                                    await message.channel.send("google didn't like when i asked for that")
+                            # open the image url pulled
+                            try:
+                                google_image_request = requests.get(google_image, timeout=5)
+                            except:
+                                None
+                    else:
+                        await message.channel.send("i tried really hard but there's no image for that")
+                        return
+                    # resize image
+                    google_image.thumbnail((300,250))
+                    # paste image onto template
+                    template_img.paste(google_image, (180,70))
+                    # add text
+                    shadowcolor = "black"
+                    fillcolor = "white"
+                    x = 100
+                    y = 320
+                    font = ImageFont.truetype('IMPACT.TTF', 46)
+                    # no need for textwrap here
+                    draw = ImageDraw.Draw(template_img)
+                    # thicker border
+                    text = text.upper()
+                    draw.text((x-2, y-2), text, font=font, fill=shadowcolor)
+                    draw.text((x+2, y-2), text, font=font, fill=shadowcolor)
+                    draw.text((x-2, y+2), text, font=font, fill=shadowcolor)
+                    draw.text((x+2, y+2), text, font=font, fill=shadowcolor)
+                    # now draw the text over it
+                    draw.text((x, y), text, font=font, fill=fillcolor)
+                    t = dt.datetime.utcnow()
+                    await finally_img.send_image(template_img, message.channel, text)
                 else:
-                    await message.channel.send("i tried really hard but there's no image for that")
-                    return
-                # resize image
-                google_image.thumbnail((300,250))
-                # paste image onto template
-                template_img.paste(google_image, (180,70))
-                # add text
-                shadowcolor = "black"
-                fillcolor = "white"
-                x = 100
-                y = 320
-                font = ImageFont.truetype('IMPACT.TTF', 46)
-                # no need for textwrap here
-                draw = ImageDraw.Draw(template_img)
-                # thicker border
-                text = text.upper()
-                draw.text((x-2, y-2), text, font=font, fill=shadowcolor)
-                draw.text((x+2, y-2), text, font=font, fill=shadowcolor)
-                draw.text((x-2, y+2), text, font=font, fill=shadowcolor)
-                draw.text((x+2, y+2), text, font=font, fill=shadowcolor)
-                # now draw the text over it
-                draw.text((x, y), text, font=font, fill=fillcolor)
-                t = dt.datetime.utcnow()
-                await finally_img.send_image(template_img, message.channel, text)
-            else:
-                if (c[1] >= 80):
-                    await message.channel.send("out of requests for today, sry")
-                else:
-                    await message.add_reaction("🚫")
+                    if (c[1] >= 80):
+                        await message.channel.send("out of requests for today, sry")
+                    else:
+                        await message.add_reaction("🚫")
 
     async def send_image(img, channel, text):
         with io.BytesIO() as out:
