@@ -35,6 +35,7 @@ class qat:
     async def run(self, message):
         global dict
         if message.content.lower().startswith("!qat ") or message.content.lower().startswith("!taq "):
+            dictStorage = -1
             s = message.content[5:]
             if " " in s:
                 # dict specified
@@ -121,7 +122,8 @@ class qat:
                     "outlook not so good"
                 ]))
             # set dict back
-            dict = dictStorage
+            if dictStorage == -1:
+                dict = dictStorage
         elif message.content.lower().startswith("!dict"):
             if len(message.content) > 6:
                 pc = message.content.lower()[6:]
