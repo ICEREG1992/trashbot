@@ -125,7 +125,8 @@ class servers:
                 await message.channel.send(helperfunctions.pick_string([
                     "looks like i'm already running " + servers.serverExists(),
                     "it's already " + servers.serverExists(),
-                    "it's " + servers.serverExists() + " time rn baybee"
+                    "it's actually " + servers.serverExists() + " time rn baybee",
+                    "i'll keep hosting " + servers.serverExists() + " instead ok"
                 ]))
         elif message.content == "!mcip":
             if servers.serverExists():
