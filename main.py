@@ -21,6 +21,7 @@ from powerswitch import powerswitch
 from numerology import numerology
 from rdj import rdj
 from lipo import lipo
+from pan import pan
 from qat import qat
 import logcommand, logging
 logging.basicConfig(level=logging.INFO)
@@ -50,6 +51,7 @@ class MyClient(discord.Client):
         uptime.init()
         food.init()
         lipo.init()
+        pan.init()
         await powerswitch.init(self)
 
     async def on_message(self, message):
@@ -75,6 +77,7 @@ class MyClient(discord.Client):
                 await rdj.run(self, message)
                 await finally_img.run(self, message)
                 await lipo.run(self, message)
+                await pan.run(self, message)
                 await qat.run(self, message)
                 await numerology.run(self, message)
                 # await wordplay.run(self, message)
