@@ -9,6 +9,7 @@ from operator import attrgetter
 import boto3
 import logcommand, logging
 import re
+import string
 
 global db
 db = boto3.client('dynamodb', region_name='us-east-2')
