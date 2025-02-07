@@ -135,6 +135,21 @@ class servers:
                 await message.channel.send(config.get("server-ip").data + ":" + config.get("server-port").data)
             else:
                 await message.channel.send("im not hosting anything rn")
+        elif message.content == "!mclog":
+            try:
+                with open('/home/william/minecraft/logs/latest.log', 'r') as file:
+                    lines = [line.strip() for _, line in zip(range(10), file)]  # Read first 10 lines
+                    log_text = '\n'.join(lines) if lines else "Log file is empty."
+                    
+                    if log_text:
+                        await message.channel.send(f"```\n{log_text}\n```")  # Send in a code block for formatting
+                    else:
+                        await message.channel.send("No log data available.")
+            except FileNotFoundError:
+                await message.channel.send("Log file not found.")
+            except Exception as e:
+                await message.channel.send(f"Error reading log file: {e}")
+
         # sven coop
         elif message.content == "!hostsven" and permissions.allowed(message.author.id, "blue"):
             if not servers.serverExists():
