@@ -10,9 +10,6 @@ import requests
 import os
 from urllib.parse import quote
 
-global t
-t = dt.datetime.utcnow() - dt.timedelta(seconds=30)
-
 global c
 c = [dt.datetime.utcnow(), 0]
 
@@ -34,7 +31,7 @@ class finally_img:
                 if (dt.datetime.utcnow() > c[0] + dt.timedelta(days=1)):
                     c[0] = dt.datetime.utcnow()
                     c[1] = 0
-                if (t < dt.datetime.utcnow() - dt.timedelta(seconds=30) and c[1] < 80):
+                if (c[1] < 80):
                     if helperfunctions.chance(5):
                         template_img = Image.open("finally2.png")
                     else:
@@ -79,7 +76,7 @@ class finally_img:
                     # resize image
                     google_image.thumbnail((300,250))
                     # paste image onto template
-                    template_img.paste(google_image, (180,70))
+                    template_img.paste(google_image, (180,70), google_image)
                     # add text
                     shadowcolor = "black"
                     fillcolor = "white"
@@ -96,13 +93,9 @@ class finally_img:
                     draw.text((x+2, y+2), text, font=font, fill=shadowcolor)
                     # now draw the text over it
                     draw.text((x, y), text, font=font, fill=fillcolor)
-                    t = dt.datetime.utcnow()
                     await finally_img.send_image(template_img, message.channel, text)
-                else:
-                    if (c[1] >= 80):
-                        await message.channel.send("out of requests for today, sry")
-                    else:
-                        await message.add_reaction("🚫")
+                elif (c[1] >= 80):
+                    await message.channel.send("out of requests for today, sry")
         elif "!finally " in message.content:
             await message.add_reaction("🚫")
 
