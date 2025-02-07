@@ -53,7 +53,7 @@ class pan:
             st = message.content.lower()
             if uid in participants:
                 if not set(string.ascii_lowercase).issubset(set(st.lower())): # pangram check is here
-                    misses = set(string.ascii_lowercase) - set(st)
+                    misses = list(set(string.ascii_lowercase) - set(st))
                     if (participants[uid]['points'] == 0):
                         await message.reply(pick_string(["YOU DON'T HAVE TO DO A PANGRAM IF YOU DON'T WANT TO (" + str(participants[uid]['points']) + " points)",
                         "THE JOKE ISN'T FUNNY. YOU LOSE. (" + str(participants[uid]['points']) + " points)",
