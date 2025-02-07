@@ -20,7 +20,7 @@ from servers import servers
 from powerswitch import powerswitch
 from numerology import numerology
 from rdj import rdj
-# from lipo import lipo
+from lipo import lipo
 from qat import qat
 import logcommand, logging
 logging.basicConfig(level=logging.INFO)
