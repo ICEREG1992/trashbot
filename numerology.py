@@ -8,7 +8,7 @@ class numerology:
             if message.content.startswith('!six '):
                 total = total * 6
             await message.channel.send(str(total))
-        elif message.content === '!num':
+        elif message.content == '!num':
             await message.channel.send(helperfunctions.pick_string([
                 'num num num',
                 'num num num num num',
@@ -24,7 +24,7 @@ class numerology:
                 'nom',
                 'rum'
             ]))
-        elif message.content === '!six':
+        elif message.content == '!six':
             await message.channel.send(helperfunctions.pick_string([
                 '6'
             ]))
