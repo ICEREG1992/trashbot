@@ -34,7 +34,7 @@ class pan:
             "🏆 eight"])
             embed = discord.Embed(title=t)
             for l in sorted(participants.items(), key=lambda item: item[1]['points'], reverse=True)[0:8]:
-                embed.add_field(name=l[1]['name'], value=str(l[1]['points']) + " points for `" + (l[1]['c'] if len(l[1]['c']) <= 26 else (l[1]['c'][0:26] + "...")) + "` since <t:" + str(int(l[1]['start'])) + ">", inline=False)
+                embed.add_field(name=l[1]['name'], value=str(l[1]['points']) + " points since <t:" + str(int(l[1]['start'])) + ">", inline=False)
             await message.channel.send(embed=embed)
         elif (message.content.startswith("!pan")):
             if uid not in participants:
@@ -44,7 +44,7 @@ class pan:
                 participants[uid]['start'] = dt.datetime.now().timestamp()
                 participants[uid]['best'] = ""
                 await message.channel.send(message.author.mention + ", you have started a pangram challenge. every message you send must contain all letters of the alphabet. for more information, read a book.")
-                logcommand.log_globally(logging.INFO, "New pangram challenge started by " + message.author.name + " for letter `" + c + "`")
+                logcommand.log_globally(logging.INFO, "New pangram challenge started by " + message.author.name)
                 pan.save()
             else:
                 await message.channel.send("you're doing a pangram challenge with `" + str(participants[uid]['points']) + " points`")
@@ -52,6 +52,7 @@ class pan:
             st = message.content.lower()
             if uid in participants:
                 if not set(string.ascii_lowercase).issubset(set(st.lower())): # pangram check is here
+                    misses = set(string.ascii_lowercase) - set(st)
                     if (participants[uid]['points'] == 0):
                         await message.reply(pick_string(["YOU DON'T HAVE TO DO A PANGRAM IF YOU DON'T WANT TO (" + str(participants[uid]['points']) + " points)",
                         "THE JOKE ISN'T FUNNY. YOU LOSE. (" + str(participants[uid]['points']) + " points)",
@@ -62,12 +63,12 @@ class pan:
                         await message.reply(pick_string(["epic fail (" + str(participants[uid]['points']) + " points)",
                         "pangram challenge failed (" + str(participants[uid]['points']) + " points)",
                         "it was a good try but you failed after " + str(participants[uid]['points']) + " messages",
-                        "no dice, i see a `" + matches[1] + "` in there (" + str(participants[uid]['points']) + " points)",
-                        "sadly you're not allowed to say `" + pick_string(matches[0]) + "` (" + str(participants[uid]['points']) + " points)",
-                        "lol this user said " + pick_string(matches[0]) + " (" + str(participants[uid]['points']) + " points)",
-                        "laugh at this user they used letter " + matches[1] + " (" + str(participants[uid]['points']) + " points)",
-                        "YOU CAN\"T SAY `" + pick_string(matches[0]) + "` LOLLLLLLL (" + str(participants[uid]['points']) + " points)"]))
-                    logcommand.log_globally(logging.INFO, "`" + participants[uid]['c'] + "` pangram challenge for " + message.author.name + " has ended with `" + str(participants[uid]['points']) + "` points.")
+                        "no dice, i don't see a `" + pick_string(misses) + "` in there (" + str(participants[uid]['points']) + " points)",
+                        "sadly you had to say `" + pick_string(misses) + "` (" + str(participants[uid]['points']) + " points)",
+                        "lol this user didn't have a `" + pick_string(misses) + "` (" + str(participants[uid]['points']) + " points)",
+                        "laugh at this user they didn't use letter " + pick_string(misses) + " (" + str(participants[uid]['points']) + " points)",
+                        "YOU ACTUALLY FORGOT `" + pick_string(matches) + "` LOLLLLLLL (" + str(participants[uid]['points']) + " points)"]))
+                    logcommand.log_globally(logging.INFO, "pangram challenge for " + message.author.name + " has ended with `" + str(participants[uid]['points']) + "` points.")
                     participants.pop(uid, None)
                 else:
                     participants[uid]['points'] += 1
