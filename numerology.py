@@ -14,7 +14,15 @@ class numerology:
                 'num num num num num',
                 'nom nom nom hehe',
                 'num num give me gum gum',
-                '🥶❄️ HELP ITS SO COLD IM TURNING NUMB PLS LET ME INSIDE 🧊😰☃️'
+                'num nom num nom num',
+                'num num non mom',
+                'num non mum nun',
+                'num num nom mom mum',
+                'nommy nommy nom',
+                'mom',
+                'num',
+                'nom',
+                'rum'
             ]))
         elif message.content.startswith('!six'):
             await message.channel.send(helperfunctions.pick_string([
