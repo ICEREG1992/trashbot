@@ -18,6 +18,7 @@ from log_manager import logging_manager
 from wordplay import wordplay
 from servers import servers
 from powerswitch import powerswitch
+from numerology import numerology
 from rdj import rdj
 # from lipo import lipo
 from qat import qat
@@ -48,7 +49,7 @@ class MyClient(discord.Client):
         # wordplay.init()
         uptime.init()
         food.init()
-        # lipo.init()
+        lipo.init()
         await powerswitch.init(self)
 
     async def on_message(self, message):
@@ -73,8 +74,9 @@ class MyClient(discord.Client):
                 await food.run(self, message, powerswitch)
                 await rdj.run(self, message)
                 await finally_img.run(self, message)
-                # await lipo.run(self, message)
+                await lipo.run(self, message)
                 await qat.run(self, message)
+                await numerology.run(self, message)
                 # await wordplay.run(self, message)
                 # await karaoke_manager.run(self, message)
                 
