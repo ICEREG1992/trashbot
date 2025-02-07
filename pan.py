@@ -68,7 +68,7 @@ class pan:
                         "sadly you had to say `" + pick_string(misses) + "` (" + str(participants[uid]['points']) + " points)",
                         "lol this user didn't have a `" + pick_string(misses) + "` (" + str(participants[uid]['points']) + " points)",
                         "laugh at this user they didn't use letter " + pick_string(misses) + " (" + str(participants[uid]['points']) + " points)",
-                        "YOU ACTUALLY FORGOT `" + pick_string(matches) + "` LOLLLLLLL (" + str(participants[uid]['points']) + " points)"]))
+                        "YOU ACTUALLY FORGOT `" + pick_string(misses) + "` LOLLLLLLL (" + str(participants[uid]['points']) + " points)"]))
                     logcommand.log_globally(logging.INFO, "pangram challenge for " + message.author.name + " has ended with `" + str(participants[uid]['points']) + "` points.")
                     participants.pop(uid, None)
                 else:
