@@ -123,9 +123,9 @@ class servers:
                 ]))
             else:
                 await message.channel.send(helperfunctions.pick_string([
-                    "NO!!!!!!!!!!",
-                    "WAIT YOUR TURN",
-                    "one at a time pls"
+                    "looks like i'm already running " + servers.serverExists(),
+                    "it's already " + servers.serverExists(),
+                    "it's " + servers.serverExists() + " time rn baybee"
                 ]))
         elif message.content == "!mcip":
             if servers.serverExists():
@@ -136,19 +136,14 @@ class servers:
             else:
                 await message.channel.send("im not hosting anything rn")
         elif message.content == "!mclog":
-            try:
-                with open('/home/william/minecraft/logs/latest.log', 'r') as file:
-                    lines = [line.strip() for _, line in zip(range(10), file)]  # Read first 10 lines
-                    log_text = '\n'.join(lines) if lines else "Log file is empty."
-                    
-                    if log_text:
-                        await message.channel.send(f"```\n{log_text}\n```")  # Send in a code block for formatting
-                    else:
-                        await message.channel.send("No log data available.")
-            except FileNotFoundError:
-                await message.channel.send("Log file not found.")
-            except Exception as e:
-                await message.channel.send(f"Error reading log file: {e}")
+            with open('/home/william/minecraft/logs/latest.log', 'r') as file:
+                lines = [line.strip() for _, line in zip(range(10), file)]  # Read first 10 lines
+                log_text = '\n'.join(lines) if lines else "Log file is empty."
+                
+                if log_text:
+                    await message.channel.send(f"```\n{log_text}\n```")  # Send in a code block for formatting
+                else:
+                    await message.channel.send("🪵")
 
         # sven coop
         elif message.content == "!hostsven" and permissions.allowed(message.author.id, "blue"):
@@ -167,9 +162,9 @@ class servers:
                 ]))
             else:
                 await message.channel.send(helperfunctions.pick_string([
-                    "NO!!!!!!!!!!",
-                    "WAIT YOUR TURN",
-                    "one at a time pls"
+                    "looks like i'm already running " + servers.serverExists(),
+                    "it's already " + servers.serverExists(),
+                    "it's " + servers.serverExists() + " time rn baybee"
                 ]))
         elif message.content == "!svenip":
             if servers.serverExists():
@@ -199,15 +194,18 @@ class servers:
 
     def serverExists():
         global server
+        out = ""
         if server is None:
             try:
                 subprocess.check_output(["pgrep", '-f', "server.jar"])
+                out = "minecraft"
             except subprocess.CalledProcessError as e:
                 try:
                     subprocess.check_output(["pgrep", '-f', "svends"]) # todo
+                    out = "sven"
                 except subprocess.CalledProcessError as e:
-                    return False
-        return True
+                    return ""
+        return out
 
     def save():
         global mcIP
