@@ -172,6 +172,35 @@ class servers:
             if servers.serverExists():
                 # do this later
                 await message.channel.send("no can do sry")
+
+        # tf2
+        elif message.content == "!hosttf2" and permissions.allowed(message.author.id, "blue"):
+            if not servers.serverExists():
+                await message.channel.send(helperfunctions.pick_string([
+                    "hhhhnnnnnnngggggg...",
+                    "\*inhales\*",
+                    "ok one sec"
+                ]))
+                server = subprocess.Popen(['bash','srcds_linux', '+maxplayers', '16'], cwd=r'/home/william/steam/steamapps/common/Team Fortress 2 Dedicated Server', stdin=subprocess.PIPE)
+                helperfunctions.bot_wait_long()
+                await message.channel.send(helperfunctions.pick_string([
+                    "ok im runnin",
+                    "epic tf2",
+                    "aw yeah shoot em up baybee :)"
+                ]))
+            else:
+                await message.channel.send(helperfunctions.pick_string([
+                    "looks like i'm already running " + servers.serverExists(),
+                    "it's already " + servers.serverExists(),
+                    "it's actually " + servers.serverExists() + " time rn baybee",
+                    "i'll keep hosting " + servers.serverExists() + " instead ok"
+                ]))
+        elif message.content == "!tf2ip":
+            if servers.serverExists():
+                # do this later
+                await message.channel.send("no can do sry")
+
+        # poweroff                
         elif message.content == "!stophost" and permissions.allowed(message.author.id, "blue"):
             if servers.serverExists():
                 if server:
@@ -190,6 +219,7 @@ class servers:
                     subprocess.run(['pkill', '-f', '\'bash launch.sh\''])
                     subprocess.run(['pkill', '-f', 'server.jar'])
                     subprocess.run(['pkill', '-f', 'svends'])
+                    subprocess.run(['pkill', '-f', 'srcds'])
                     await message.channel.send("i tracked it down and killed it")
             else:
                 await message.channel.send("im not hosting anything rn")
@@ -206,7 +236,11 @@ class servers:
                     subprocess.check_output(["pgrep", '-f', "svends"]) # todo
                     out = "sven"
                 except subprocess.CalledProcessError as e:
-                    return ""
+                    try:
+                        subprocess.check_output(["pgrep", '-f', "srcds"]) # todo
+                        out = "tf2"
+                    except subprocess.CalledProcessError as e:
+                        return ""
         return out
 
     def save():
