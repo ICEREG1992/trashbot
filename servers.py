@@ -236,7 +236,7 @@ class servers:
     def serverExists():
         global server
         out = ""
-        if server is None:
+        if not isinstance(server, subprocess.Popen):
             try:
                 subprocess.check_output(["pgrep", '-f', "server.jar"])
                 out = "minecraft"
