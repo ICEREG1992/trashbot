@@ -123,10 +123,10 @@ class servers:
                 ]))
             else:
                 await message.channel.send(helperfunctions.pick_string([
-                    "looks like i'm already running " + servers.serverExists(),
-                    "it's already " + servers.serverExists(),
-                    "it's actually " + servers.serverExists() + " time rn baybee",
-                    "i'll keep hosting " + servers.serverExists() + " instead ok"
+                    "looks like i'm already running " + servers.runningServer(),
+                    "it's already " + servers.runningServer(),
+                    "it's actually " + servers.runningServer() + " time rn baybee",
+                    "i'll keep hosting " + servers.runningServer() + " instead ok"
                 ]))
         elif message.content == "!mcip":
             if servers.serverExists():
@@ -163,10 +163,10 @@ class servers:
                 ]))
             else:
                 await message.channel.send(helperfunctions.pick_string([
-                    "looks like i'm already running " + servers.serverExists(),
-                    "it's already " + servers.serverExists(),
-                    "it's actually " + servers.serverExists() + " time rn baybee",
-                    "i'll keep hosting " + servers.serverExists() + " instead ok"
+                    "looks like i'm already running " + servers.runningServer(),
+                    "it's already " + servers.runningServer(),
+                    "it's actually " + servers.runningServer() + " time rn baybee",
+                    "i'll keep hosting " + servers.runningServer() + " instead ok"
                 ]))
         elif message.content == "!svenip":
             if servers.serverExists():
@@ -199,10 +199,10 @@ class servers:
                 ]))
             else:
                 await message.channel.send(helperfunctions.pick_string([
-                    "looks like i'm already running " + servers.serverExists(),
-                    "it's already " + servers.serverExists(),
-                    "it's actually " + servers.serverExists() + " time rn baybee",
-                    "i'll keep hosting " + servers.serverExists() + " instead ok"
+                    "looks like i'm already running " + servers.runningServer(),
+                    "it's already " + servers.runningServer(),
+                    "it's actually " + servers.runningServer() + " time rn baybee",
+                    "i'll keep hosting " + servers.runningServer() + " instead ok"
                 ]))
         elif message.content == "!tf2ip":
             if servers.serverExists():
@@ -237,19 +237,24 @@ class servers:
         global server
         out = ""
         if not isinstance(server, subprocess.Popen):
+            out = runningServer()
+        return out
+
+    def runningServer():
+        out = ""
+        try:
+            subprocess.check_output(["pgrep", '-f', "server.jar"])
+            out = "minecraft"
+        except subprocess.CalledProcessError as e:
             try:
-                subprocess.check_output(["pgrep", '-f', "server.jar"])
-                out = "minecraft"
+                subprocess.check_output(["pgrep", '-f', "svends"]) # todo
+                out = "sven"
             except subprocess.CalledProcessError as e:
                 try:
-                    subprocess.check_output(["pgrep", '-f', "svends"]) # todo
-                    out = "sven"
+                    subprocess.check_output(["pgrep", '-f', "srcds"]) # todo
+                    out = "tf2"
                 except subprocess.CalledProcessError as e:
-                    try:
-                        subprocess.check_output(["pgrep", '-f', "srcds"]) # todo
-                        out = "tf2"
-                    except subprocess.CalledProcessError as e:
-                        return ""
+                    return ""
         return out
 
     def save():
