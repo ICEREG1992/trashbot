@@ -183,14 +183,14 @@ class servers:
                 ]))
                 # first get game server account login token
                 token = ""
-                if os.path.exists('/home/william/steam/steamapps/common/Team Fortress 2 Dedicated Server/' + 'token.txt'):
-                    f = open('/home/william/steam/steamapps/common/Team Fortress 2 Dedicated Server/' + 'token.txt', "r")
+                if os.path.exists('/home/william/Steam/steamapps/common/Team Fortress 2 Dedicated Server/' + 'token.txt'):
+                    f = open('/home/william/Steam/steamapps/common/Team Fortress 2 Dedicated Server/' + 'token.txt', "r")
                     token = f.read()
                     f.close()
                 else:
                     await message.channel.send("will doesn't have the token set up right")
                     return
-                server = subprocess.Popen(['bash','srcds_run', '+maxplayers', '16', '+map', 'ctf_2fort', '+sv_setsteamaccount', token], cwd=r'/home/william/steam/steamapps/common/Team Fortress 2 Dedicated Server', stdin=subprocess.PIPE)
+                server = subprocess.Popen(['bash','srcds_run', '+maxplayers', '16', '+map', 'ctf_2fort', '+sv_setsteamaccount', token], cwd=r'/home/william/Steam/steamapps/common/Team Fortress 2 Dedicated Server', stdin=subprocess.PIPE)
                 helperfunctions.bot_wait_long()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
