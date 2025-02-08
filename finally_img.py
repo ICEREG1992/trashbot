@@ -76,7 +76,10 @@ class finally_img:
                     # resize image
                     google_image.thumbnail((300,250))
                     # paste image onto template
-                    template_img.paste(google_image, (180,70), google_image)
+                    if google_image.mode in ("RGBA", "LA", "P"):
+                        template_img.paste(google_image, (180,70), google_image)
+                    else:
+                        template_img.paste(google_image, (180,70))
                     # add text
                     shadowcolor = "black"
                     fillcolor = "white"
