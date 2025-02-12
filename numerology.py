@@ -41,7 +41,7 @@ class numerology:
                     "try specifying a number"
                 ]))
                 return
-            if not n:
+            if n % 26 == 0:
                 return
             msg = ' '.join(args[1:]).upper()
             if msg:
