@@ -88,7 +88,7 @@ class numerology:
                 if og.embeds:
                     if og.embeds[0].description:
                         out = numerology.rot(og.embeds[0].description.upper(), n)
-                        await message.channel.send(out)
+                        await message.channel.send("||" + out + "||")
                     else:
                         await message.channel.send(helperfunctions.pick_string([
                             "don't see anything to rot",
@@ -96,7 +96,7 @@ class numerology:
                         ]))
                 else:
                     out = numerology.rot(og.content.upper(), n)
-                    await message.channel.send(out)
+                    await message.channel.send("||" + out + "||")
             else:
                 await message.channel.send(helperfunctions.pick_string([
                     "you didn't do it right",
