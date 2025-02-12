@@ -32,7 +32,6 @@ class numerology:
         
         # rot13
         elif message.content.startswith("!rot"):
-            spoilerResult = False
             args = message.content.split(' ')
             try:
                 n = int(args[0][4:])
@@ -64,6 +63,7 @@ class numerology:
                     ]))
 
     def rot(msg, n):
+        spoilerResult = False
         if msg.startswith("||") and msg.endswith("||"):
             spoilerResult = True
             msg = msg[2:-2] 
