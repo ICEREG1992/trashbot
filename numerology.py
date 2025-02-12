@@ -61,7 +61,7 @@ class numerology:
                                 "that's a bad embed"
                             ]))
                     else:
-                        out = numerology.rot(og.content, n)
+                        out = numerology.rot(og.content.upper(), n)
                         await message.channel.send(out)
                 else:
                     await message.channel.send(helperfunctions.pick_string([
