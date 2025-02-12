@@ -35,7 +35,7 @@ class numerology:
             msg = list(' '.join(message.content.split(' ')[1:]).upper())
             rot = [numerology.shift(c, 13) for c in msg]
             out = [chr(c) for c in rot]
-            await message.channel.send(out)
+            await message.channel.send(''.join(out))
 
     def shift(c, n):
         letter = ord(c) - 65
