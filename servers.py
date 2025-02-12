@@ -12,9 +12,6 @@ db = boto3.client('dynamodb', region_name='us-east-2')
 global mcIP
 mcIP = ""
 
-global server
-server = None
-
 class servers:
 
     def init():
@@ -24,7 +21,6 @@ class servers:
 
     async def run(self, message):
         global mcIP
-        global server
         if mcIP and message.content == "!whosuprn":
             r = requests.get('https://api.mcsrvstat.us/3/' + mcIP)
             o = r.json()
@@ -114,7 +110,7 @@ class servers:
                     "\*inhales\*",
                     "ok one sec"
                 ]))
-                server = subprocess.Popen(['java', '-Xms1024M', '-Xmx1024M', '-jar', 'server.jar', 'nogui'], cwd=r'/home/william/minecraft/', stdin=subprocess.PIPE)
+                subprocess.Popen(['java', '-Xms1024M', '-Xmx1024M', '-jar', 'server.jar', 'nogui'], cwd=r'/home/william/minecraft/', stdin=subprocess.PIPE)
                 helperfunctions.bot_wait_long()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
@@ -129,7 +125,7 @@ class servers:
                     "i'll keep hosting " + servers.runningServer() + " instead ok"
                 ]))
         elif message.content == "!mcip":
-            if servers.serverExists():
+            if servers.runningServer():
                 config = jproperties.Properties()
                 with open('/home/william/minecraft/' + 'server.properties', 'rb') as file:
                     config.load(file)
@@ -148,13 +144,13 @@ class servers:
 
         # sven coop
         elif message.content == "!hostsven" and permissions.allowed(message.author.id, "blue"):
-            if not servers.serverExists():
+            if not servers.runningServer():
                 await message.channel.send(helperfunctions.pick_string([
                     "hhhhnnnnnnngggggg...",
                     "\*inhales\*",
                     "ok one sec"
                 ]))
-                server = subprocess.Popen(['bash','svends_run', '+maxplayers', '16'], cwd=r'/home/william/Steam/steamapps/common/Sven Co-op Dedicated Server', stdin=subprocess.PIPE)
+                subprocess.Popen(['bash','svends_run', '+maxplayers', '16'], cwd=r'/home/william/Steam/steamapps/common/Sven Co-op Dedicated Server', stdin=subprocess.PIPE)
                 helperfunctions.bot_wait_long()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
@@ -169,13 +165,13 @@ class servers:
                     "i'll keep hosting " + servers.runningServer() + " instead ok"
                 ]))
         elif message.content == "!svenip":
-            if servers.serverExists():
+            if servers.runningServer():
                 # do this later
                 await message.channel.send("no can do sry")
 
         # tf2
         elif message.content == "!hosttf2" and permissions.allowed(message.author.id, "blue"):
-            if not servers.serverExists():
+            if not servers.runningServer():
                 await message.channel.send(helperfunctions.pick_string([
                     "hhhhnnnnnnngggggg...",
                     "\*inhales\*",
@@ -190,7 +186,7 @@ class servers:
                 else:
                     await message.channel.send("will doesn't have the token set up right")
                     return
-                server = subprocess.Popen(['bash','srcds_run', '+maxplayers', '16', '+map', 'ctf_2fort', '+sv_setsteamaccount', token], cwd=r'/home/william/Steam/steamapps/common/Team Fortress 2 Dedicated Server', stdin=subprocess.PIPE)
+                subprocess.Popen(['bash','srcds_run', '+maxplayers', '16', '+map', 'ctf_2fort', '+sv_setsteamaccount', token], cwd=r'/home/william/Steam/steamapps/common/Team Fortress 2 Dedicated Server', stdin=subprocess.PIPE)
                 helperfunctions.bot_wait_long()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
@@ -205,40 +201,26 @@ class servers:
                     "i'll keep hosting " + servers.runningServer() + " instead ok"
                 ]))
         elif message.content == "!tf2ip":
-            if servers.serverExists():
+            if servers.runningServer():
                 # do this later
                 await message.channel.send("no can do sry")
 
         # poweroff                
         elif message.content == "!stophost" and permissions.allowed(message.author.id, "blue"):
-            if servers.serverExists():
-                if server:
-                    server.kill()
-                    server = None
-                    if servers.serverExists():
-                        subprocess.run(['pkill', '-f', 'svends_amd'])
-                    await message.channel.send(helperfunctions.pick_string([
-                        "it's dead, jim",
-                        "kablam",
-                        "kablooie",
-                        "die die die die die die die die",
-                        "goodnight little fishie"
-                    ]))
-                else:
-                    subprocess.run(['pkill', '-f', '\'bash launch.sh\''])
-                    subprocess.run(['pkill', '-f', 'server.jar'])
-                    subprocess.run(['pkill', '-f', 'svends'])
-                    subprocess.run(['pkill', '-f', 'srcds'])
-                    await message.channel.send("i tracked it down and killed it")
+            if servers.runningServer():
+                subprocess.run(['pkill', '-f', '\'bash launch.sh\''])
+                subprocess.run(['pkill', '-f', 'server.jar'])
+                subprocess.run(['pkill', '-f', 'svends'])
+                subprocess.run(['pkill', '-f', 'srcds'])
+                await message.channel.send(helperfunctions.pick_string([
+                    "it's dead, jim",
+                    "kablam",
+                    "kablooie",
+                    "die die die die die die die die",
+                    "goodnight little fishie"
+                ]))
             else:
                 await message.channel.send("im not hosting anything rn")
-
-    def serverExists():
-        global server
-        out = ""
-        if not isinstance(server, subprocess.Popen):
-            out = servers.runningServer()
-        return out
 
     def runningServer():
         out = ""
@@ -247,11 +229,11 @@ class servers:
             out = "minecraft"
         except subprocess.CalledProcessError as e:
             try:
-                subprocess.check_output(["pgrep", '-f', "svends"]) # todo
+                subprocess.check_output(["pgrep", '-f', "svends"])
                 out = "sven"
             except subprocess.CalledProcessError as e:
                 try:
-                    subprocess.check_output(["pgrep", '-f', "srcds"]) # todo
+                    subprocess.check_output(["pgrep", '-f', "srcds"])
                     out = "tf2"
                 except subprocess.CalledProcessError as e:
                     return ""
