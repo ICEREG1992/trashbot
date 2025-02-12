@@ -35,9 +35,9 @@ class numerology:
             args = message.content.split(' ')
             n = int(args[0][4:])
             msg = ' '.join(args[1:]).upper()
-            if s.startswith("||") and s.endswith("||"):
+            if msg.startswith("||") and msg.endswith("||"):
                 spoilerResult = True
-                s = s[2:-2] 
+                msg = msg[2:-2] 
             rot = [numerology.shift(c, n) for c in msg]
             out = ''.join(rot)
             if spoilerResult:
