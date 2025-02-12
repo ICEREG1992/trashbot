@@ -237,7 +237,7 @@ class servers:
         global server
         out = ""
         if not isinstance(server, subprocess.Popen):
-            out = runningServer()
+            out = servers.runningServer()
         return out
 
     def runningServer():
