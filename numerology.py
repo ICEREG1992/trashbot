@@ -2,6 +2,7 @@ import helperfunctions
 
 class numerology:
     async def run(self, message):
+        # number sum
         if message.content.startswith(('!num ', '!numerology ', '!six ')):
             arr = list(' '.join(message.content.split(' ')[1:]).lower())
             total = sum(ord(c) - 96 for c in arr if 'a' <= c <= 'z')
@@ -28,3 +29,14 @@ class numerology:
             await message.channel.send(helperfunctions.pick_string([
                 '6'
             ]))
+        
+        # rot13
+        elif message.content.startswith("!rot13 "):
+            msg = list(' '.join(message.content.split(' ')[1:]).upper())
+            rot = [numerology.shift(c, 13) for c in msg]
+            out = [chr(c) for c in rot]
+            await message.channel.send(out)
+
+    def shift(c, n):
+        letter = ord(c) - 65
+        return (letter + n) % 26
