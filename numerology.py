@@ -41,6 +41,8 @@ class numerology:
                     "try specifying a number"
                 ]))
                 return
+            if not n:
+                return
             msg = ' '.join(args[1:]).upper()
             if msg:
                 print("message detected")
@@ -83,7 +85,7 @@ class numerology:
 
     def shift(c, n):
         letter = ord(c) - 65
-        if 0 <= letter < 26 and n % 26 != 0:
+        if 0 <= letter < 26:
             rot = (letter + n) % 26
             return chr(rot + 65)
         else:
