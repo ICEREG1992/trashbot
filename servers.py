@@ -186,7 +186,7 @@ class servers:
                 else:
                     await message.channel.send("will doesn't have the token set up right")
                     return
-                subprocess.Popen(['bash','srcds_run', '+maxplayers', '16', '+map', 'ctf_2fort', '+sv_setsteamaccount', token], cwd=r'/home/william/Steam/steamapps/common/Team Fortress 2 Dedicated Server', stdin=subprocess.PIPE)
+                subprocess.Popen(['bash','srcds_run', '-game', 'tf', '+maxplayers', '16', '+map', 'ctf_2fort', '+sv_setsteamaccount', token], cwd=r'/home/william/Steam/steamapps/common/Team Fortress 2 Dedicated Server', stdin=subprocess.PIPE)
                 helperfunctions.bot_wait_long()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
@@ -201,6 +201,42 @@ class servers:
                     "i'll keep hosting " + servers.runningServer() + " instead ok"
                 ]))
         elif message.content == "!tf2ip":
+            if servers.runningServer():
+                # do this later
+                await message.channel.send("no can do sry")
+
+        # css
+        elif message.content == "!hostcss" and permissions.allowed(message.author.id, "blue"):
+            if not servers.runningServer():
+                await message.channel.send(helperfunctions.pick_string([
+                    "hhhhnnnnnnngggggg...",
+                    "\*inhales\*",
+                    "ok one sec"
+                ]))
+                # first get game server account login token
+                token = ""
+                if os.path.exists('/home/william/Steam/steamapps/common/Counter-Strike Source Dedicated Server/' + 'token.txt'):
+                    f = open('/home/william/Steam/steamapps/common/Counter-Strike Source Dedicated Server/' + 'token.txt', "r")
+                    token = f.read()
+                    f.close()
+                else:
+                    await message.channel.send("will doesn't have the token set up right")
+                    return
+                subprocess.Popen(['bash','srcds_run', '-game', 'cstrike', '+maxplayers', '16', '+map', 'de_dust', '+sv_setsteamaccount', token], cwd=r'/home/william/Steam/steamapps/common/Counter-Strike Source Dedicated Server', stdin=subprocess.PIPE)
+                helperfunctions.bot_wait_long()
+                await message.channel.send(helperfunctions.pick_string([
+                    "ok im runnin",
+                    "epic cs:s",
+                    "aw yeah shoot em up baybee :)"
+                ]))
+            else:
+                await message.channel.send(helperfunctions.pick_string([
+                    "looks like i'm already running " + servers.runningServer(),
+                    "it's already " + servers.runningServer(),
+                    "it's actually " + servers.runningServer() + " time rn baybee",
+                    "i'll keep hosting " + servers.runningServer() + " instead ok"
+                ]))
+        elif message.content == "!cssip":
             if servers.runningServer():
                 # do this later
                 await message.channel.send("no can do sry")
@@ -236,7 +272,11 @@ class servers:
                     subprocess.check_output(["pgrep", '-f', "srcds"])
                     out = "tf2"
                 except subprocess.CalledProcessError as e:
-                    return ""
+                    try:
+                        subprocess.check_output(["pgrep", '-f', "srcds"])
+                        out = "tf2"
+                    except subprocess.CalledProcessError as e:
+                        return ""
         return out
 
     def save():
