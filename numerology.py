@@ -31,10 +31,18 @@ class numerology:
             ]))
         
         # rot13
-        elif message.content.startswith("!rot13 "):
-            msg = list(' '.join(message.content.split(' ')[1:]).upper())
-            rot = [numerology.shift(c, 13) for c in msg]
-            await message.channel.send(''.join(rot))
+        elif message.content.startswith("!rot"):
+            args = message.content.split(' ')
+            n = int(args[0][4:])
+            msg = ' '.join(args[1:]).upper()
+            if s.startswith("||") and s.endswith("||"):
+                spoilerResult = True
+                s = s[2:-2] 
+            rot = [numerology.shift(c, n) for c in msg]
+            out = ''.join(rot)
+            if spoilerResult:
+                out = '||' + out + '||'
+            await message.channel.send(out)
 
     def shift(c, n):
         letter = ord(c) - 65
