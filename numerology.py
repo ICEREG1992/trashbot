@@ -70,6 +70,38 @@ class numerology:
                         "don't see anything to rot",
                         "try specifying a string or reply"
                     ]))
+        elif message.content.startswith("||!rot"):
+            # spoilered rot for reply
+            args = message.content.split(' ')
+            try:
+                n = int(args[0][6:-2])
+            except (NameError, ValueError):
+                await message.channel.send(helperfunctions.pick_string([
+                    "doesn't look good to me",
+                    "weird reply but ok"
+                ]))
+                return
+            if n % 26 == 0:
+                return
+            if message.reference:
+                og = message.reference.resolved
+                if og.embeds:
+                    if og.embeds[0].description:
+                        out = numerology.rot(og.embeds[0].description.upper(), n)
+                        await message.channel.send(out)
+                    else:
+                        await message.channel.send(helperfunctions.pick_string([
+                            "don't see anything to rot",
+                            "that's a bad embed"
+                        ]))
+                else:
+                    out = numerology.rot(og.content.upper(), n)
+                    await message.channel.send(out)
+            else:
+                await message.channel.send(helperfunctions.pick_string([
+                    "you didn't do it right",
+                    "try the other way like !rot" + n + " `|`| {message} `|`|"
+                ]))
 
     def rot(msg, n):
         spoilerResult = False
