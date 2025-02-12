@@ -83,7 +83,7 @@ class numerology:
 
     def shift(c, n):
         letter = ord(c) - 65
-        if 0 <= letter < 26:
+        if 0 <= letter < 26 and n % 26 != 0:
             rot = (letter + n) % 26
             return chr(rot + 65)
         else:
