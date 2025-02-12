@@ -35,31 +35,38 @@ class numerology:
             args = message.content.split(' ')
             try:
                 n = int(args[0][4:])
-            except NameError:
+            except (NameError, ValueError):
                 await message.channel.send(helperfunctions.pick_string([
                     "don't see a rot value for me",
-                    "try specifying a number",
-                    "rot"
+                    "try specifying a number"
                 ]))
                 return
             msg = ' '.join(args[1:]).upper()
             if msg:
+                print("message detected")
                 out = numerology.rot(msg, n)
                 await message.channel.send(out)
             else:
+                print("message not detected")
                 # no message, check if this is a reply
-                if message.type == "reply":
+                if message.reference:
                     og = message.reference.resolved
                     if og.embeds:
-                        await message.channel.send(og.embeds[0].description)
+                        if og.embeds[0].description:
+                            out = numerology.rot(og.embeds[0].description.upper(), n)
+                            await message.channel.send(out)
+                        else:
+                            await message.channel.send(helperfunctions.pick_string([
+                                "don't see anything to rot",
+                                "that's a bad embed"
+                            ]))
                     else:
                         out = numerology.rot(og.content, n)
                         await message.channel.send(out)
                 else:
                     await message.channel.send(helperfunctions.pick_string([
                         "don't see anything to rot",
-                        "try specifying a string or reply",
-                        "rot"
+                        "try specifying a string or reply"
                     ]))
 
     def rot(msg, n):
