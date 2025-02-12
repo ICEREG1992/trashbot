@@ -32,6 +32,7 @@ class numerology:
         
         # rot13
         elif message.content.startswith("!rot"):
+            spoilerResult = False
             args = message.content.split(' ')
             n = int(args[0][4:])
             msg = ' '.join(args[1:]).upper()
