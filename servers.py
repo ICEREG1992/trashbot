@@ -68,7 +68,7 @@ class servers:
             servers.save()
         # minecraft
         elif message.content.startswith("!hostmc") and permissions.allowed(message.author.id, "blue"):
-            if not servers.serverExists():
+            if not servers.runningServer():
                 # set map first
                 if len(message.content) > 7:
                     map = message.content[8:]
