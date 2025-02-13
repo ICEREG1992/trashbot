@@ -222,7 +222,7 @@ class servers:
                 else:
                     await message.channel.send("will doesn't have the token set up right")
                     return
-                subprocess.Popen(['bash','srcds_run', '-game', 'cstrike', '+maxplayers', '16', '+map', 'mg_rota_derp_v1_1', '+sv_setsteamaccount', token], cwd=r'/home/william/Steam/steamapps/common/Counter-Strike Source Dedicated Server', stdin=subprocess.PIPE)
+                subprocess.Popen(['bash','srcds_run', '-game', 'cstrike', '+maxplayers', '16', '+map', 'de_dust2', '+sv_setsteamaccount', token], cwd=r'/home/william/Steam/steamapps/common/Counter-Strike Source Dedicated Server', stdin=subprocess.PIPE)
                 helperfunctions.bot_wait_long()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
