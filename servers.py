@@ -134,7 +134,7 @@ class servers:
                 await message.channel.send("im not hosting anything rn")
         elif message.content == "!mclog":
             with open('/home/william/minecraft/logs/latest.log', 'r') as file:
-                lines = [line.strip() for _, line in zip(range(10), file)]  # Read first 10 lines
+                lines = file.readlines()[-10:]
                 log_text = '\n'.join(lines) if lines else "Log file is empty."
                 
                 if log_text:
@@ -166,8 +166,8 @@ class servers:
                 ]))
         elif message.content == "!svenip":
             if servers.runningServer():
-                # do this later
-                await message.channel.send("no can do sry")
+                r = requests.get('ipecho.net/plain')
+                await message.channel.send(r.text)
 
         # tf2
         elif message.content == "!hosttf2" and permissions.allowed(message.author.id, "blue"):
@@ -202,8 +202,8 @@ class servers:
                 ]))
         elif message.content == "!tf2ip":
             if servers.runningServer():
-                # do this later
-                await message.channel.send("no can do sry")
+                r = requests.get('ipecho.net/plain')
+                await message.channel.send(r.text)
 
         # css
         elif message.content == "!hostcss" and permissions.allowed(message.author.id, "blue"):
@@ -238,8 +238,8 @@ class servers:
                 ]))
         elif message.content == "!cssip":
             if servers.runningServer():
-                # do this later
-                await message.channel.send("no can do sry")
+                r = requests.get('ipecho.net/plain')
+                await message.channel.send(r.text)
 
         # ttt
         elif message.content == "!hostttt" and permissions.allowed(message.author.id, "blue"):
@@ -274,8 +274,8 @@ class servers:
                 ]))
         elif message.content == "!tttip":
             if servers.runningServer():
-                # do this later
-                await message.channel.send("no can do sry")
+                r = requests.get('ipecho.net/plain')
+                await message.channel.send(r.text)
 
         # poweroff                
         elif message.content == "!stophost" and permissions.allowed(message.author.id, "blue"):
