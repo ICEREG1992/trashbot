@@ -135,7 +135,7 @@ class servers:
         elif message.content == "!mclog":
             with open('/home/william/minecraft/logs/latest.log', 'r') as file:
                 lines = file.readlines()[-10:]
-                log_text = '\n'.join(lines) if lines else "Log file is empty."
+                log_text = ''.join(lines) if lines else "Log file is empty."
                 
                 if log_text:
                     await message.channel.send(f"```\n{log_text}\n```")  # Send in a code block for formatting
