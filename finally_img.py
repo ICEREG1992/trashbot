@@ -1,4 +1,4 @@
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageSequence
 import helperfunctions
 import logcommand, logging
 import datetime as dt
@@ -73,13 +73,6 @@ class finally_img:
                     else:
                         await message.channel.send("i tried really hard but there's no image for that")
                         return
-                    # resize image
-                    google_image.thumbnail((300,250))
-                    # paste image onto template
-                    if google_image.mode in ("RGBA", "LA"):
-                        template_img.paste(google_image, (180,70), google_image)
-                    else:
-                        template_img.paste(google_image, (180,70))
                     # add text
                     shadowcolor = "black"
                     fillcolor = "white"
@@ -96,11 +89,46 @@ class finally_img:
                     draw.text((x+2, y+2), text, font=font, fill=shadowcolor)
                     # now draw the text over it
                     draw.text((x, y), text, font=font, fill=fillcolor)
-                    await finally_img.send_image(template_img, message.channel, text)
+                    if(google_image.is_animated):
+                        imageout = finally_img.process_gif(template_img, google_image)
+                        await finally_img.send_gif(imageout, message.channel, text)
+                    else:
+                        # resize image
+                        google_image.thumbnail((300,250))
+                        # paste image onto template
+                        finally_img.paste_with_transparency(template_img, google_image, (180,70))
+                        await finally_img.send_image(template_img, message.channel, text)
                 elif (c[1] >= 80):
                     await message.channel.send("out of requests for today, sry")
         elif "!finally " in message.content:
             await message.add_reaction("🚫")
+
+    def process_gif(baseimage, animatedimage):
+        iter = ImageSequence.Iterator(animatedimage)
+        framesout = []
+        #cap to like frames so you dont spend forever processing gifs
+        #maybe actually set a timer of some sort instead of doing it like this
+        for i in range(0, min(animatedimage.n_frames, 120)):
+            frame = iter[i].copy()
+            frame.thumbnail((300,250))
+            newframe = baseimage.copy()
+            
+            finally_img.paste_with_transparency(newframe, frame, (180,70))
+            framesout.append(newframe)
+        return framesout
+
+    def paste_with_transparency(image, secondimage, location):
+        if secondimage.mode in ("RGBA", "LA"):
+            image.paste(secondimage, location, secondimage)
+        else:
+            image.paste(secondimage, location)
+
+    async def send_gif(img, channel, text):
+        with io.BytesIO() as out:
+            img[0].save(out, save_all=True, format="GIF", append_images= img[1:], duration=100, loop=0)
+            out.seek(0)
+            f = discord.File(fp=out, filename="finally.gif", description="person holding test tube finally meme that says \"FINALLY, " + text + "\"")
+            await channel.send(file=f)
 
     async def send_image(img, channel, text):
         with io.BytesIO() as out:
