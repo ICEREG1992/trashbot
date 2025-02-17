@@ -244,6 +244,14 @@ class servers:
         # ttt
         elif message.content == "!hostttt" and permissions.allowed(message.author.id, "blue"):
             if not servers.runningServer():
+                # figure out map first
+                map = 'ttt_rooftps_2016_v1'
+                if len(message.content) > 8:
+                    map = message.content[9:]
+                    map = helperfunctions.sanitize(map)
+                    if map not in ['ttt_rooftops_2016_v1', 'ttt_college']:
+                        await message.channel.send("that's not a map i can start on")
+                        return
                 await message.channel.send(helperfunctions.pick_string([
                     "hhhhnnnnnnngggggg...",
                     "\*inhales\*",
@@ -258,7 +266,7 @@ class servers:
                 else:
                     await message.channel.send("will doesn't have the token set up right")
                     return
-                subprocess.Popen(['bash','srcds_run', '-game', 'garrysmod', '+gamemode', 'terrortown', '+maxplayers', '16', '+map', 'ttt_rooftops_2016_v1', '+host_workshop_collection', '3100438906', '+sv_setsteamaccount', token], cwd=r'/home/william/Steam/steamapps/common/GarrysModDS', stdin=subprocess.PIPE)
+                subprocess.Popen(['bash','srcds_run', '-game', 'garrysmod', '+gamemode', 'terrortown', '+maxplayers', '16', '+map', map, '+host_workshop_collection', '3100438906', '+sv_setsteamaccount', token], cwd=r'/home/william/Steam/steamapps/common/GarrysModDS', stdin=subprocess.PIPE)
                 helperfunctions.bot_wait_long()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
