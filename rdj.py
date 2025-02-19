@@ -49,7 +49,7 @@ class rdj:
             draw = ImageDraw.Draw(ithink_img)
             font = ImageFont.truetype('arialbd.ttf', 46)
             text = message.content[12:]
-            draw.text((321, 6), text, font=font, fill="black")
+            draw.text((330, 6), text, font=font, fill="black")
             await rdj.send_image(ithink_img, message.channel, text)
     async def send_image(img, channel, text):
         with io.BytesIO() as out:
