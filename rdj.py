@@ -47,7 +47,7 @@ class rdj:
         elif (message.content.startswith("!ithinkitis ")):
             ithink_img = Image.open("ithink.png")
             draw = ImageDraw.Draw(ithink_img)
-            font = ImageFont.truetype('ARLRDBD.TTF', 36)
+            font = ImageFont.truetype('arialbd.ttf', 52)
             text = message.content[12:]
             draw.text((321, 6), text, font=font, fill="black")
             await rdj.send_image(ithink_img, message.channel, text)
