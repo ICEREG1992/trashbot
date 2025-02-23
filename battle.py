@@ -148,8 +148,9 @@ class BattleU:
                 await self.right_run()
 
     async def left_attack(self):
-        damage = random.randint(5,15)
         if self.active:
+            damage = random.randint(5,15)
+            self.turn = not self.turn
             self.right_emoji = Battle.punch
             self.update_bars()
             await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleU.attack_response))
@@ -167,12 +168,11 @@ class BattleU:
                 for reaction in self.message.reactions:
                     reaction.clear()
                 self.active = False
-            
-            self.turn = not self.turn
 
     async def right_attack(self):
-        damage = random.randint(5,15)
         if self.active:
+            damage = random.randint(5,15)
+            self.turn = not self.turn
             self.left_emoji = Battle.punch
             self.update_bars()
             await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleU.attack_response))
@@ -190,12 +190,10 @@ class BattleU:
                 for reaction in self.message.reactions:
                     reaction.clear()
                 self.active = False
-            
-            self.turn = not self.turn
 
     async def left_heal(self):
-        heal = random.randint(10,20)
         if self.active:
+            heal = random.randint(10,20)
             self.left_emoji = Battle.hospital
             self.update_bars()
             await self.message.edit(content = self.bars + "\n" + helperfunctions.pick_string(BattleU.heal_response))
@@ -208,8 +206,8 @@ class BattleU:
             self.turn = not self.turn
 
     async def right_heal(self):
-        heal = random.randint(10,20)
         if self.active:
+            heal = random.randint(10,20)
             self.right_emoji = Battle.hospital
             self.update_bars()
             await self.message.edit(content = self.bars + "\n" + helperfunctions.pick_string(BattleU.heal_response))
