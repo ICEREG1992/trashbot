@@ -153,7 +153,7 @@ class BattleU:
         self.right_health = random.randint(10, 30)
         self.active = True
         self.turn = False # false for left's turn, true for right's turn
-        self.update_bars()
+        await self.update_bars()
         await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string([
             "Pick a button bro lets go!",
             "Aight frosh pick a button!"
