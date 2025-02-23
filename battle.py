@@ -47,7 +47,7 @@ class battle_manager:
                 "easy easy EASY EASY bro deep breaths, u dont have to do this"
             ]))
         else:
-            bat = BattleU(channel, uid, eid)
+            bat = BattleU(channel, uid, eid, bot)
             b[uid] = bat
             b[eid] = bat
             await bat.spawn()
