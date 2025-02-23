@@ -219,13 +219,14 @@ class BattleU:
                 await self.message.add_reaction(helperfunctions.pick_string(Battle.crits))
 
             if self.right_health <= 0:
+                self.active = False
                 self.left_emoji = helperfunctions.pick_string(Battle.wins)
                 self.right_emoji = helperfunctions.pick_string(Battle.deads)
                 self.update_bars()
                 await self.message.edit(content=self.bars + "\nAnd <@" + self.uid + "> wins!!!")
-                for reaction in self.message.reactions:
-                    await reaction.remove(self.bot.user)
-                self.active = False
+                reactions = self.message.reactions
+                for n in range(len(reactions)):
+                    await reactions[n].remove(self.bot.user)
 
     async def right_attack(self):
         if self.active:
@@ -243,13 +244,16 @@ class BattleU:
                 await self.message.add_reaction(helperfunctions.pick_string(Battle.crits))
 
             if self.left_health <= 0:
+                self.active = False
                 self.right_emoji = helperfunctions.pick_string(Battle.wins)
                 self.left_emoji = helperfunctions.pick_string(Battle.deads)
                 self.update_bars()
                 await self.message.edit(content=self.bars + "\nLOL! <@" + self.uid + "> you got your ass kicked bro!")
                 for reaction in self.message.reactions:
                     await reaction.remove(self.bot.user)
-                self.active = False
+                reactions = self.message.reactions
+                for n in range(len(reactions)):
+                    await reactions[n].remove(self.bot.user)
 
     async def left_crit(self):
         if self.active:
@@ -270,13 +274,14 @@ class BattleU:
             await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleU.prompt_response))
             
             if self.right_health <= 0:
+                self.active = False
                 self.left_emoji = helperfunctions.pick_string(Battle.wins)
                 self.right_emoji = helperfunctions.pick_string(Battle.deads)
                 self.update_bars()
                 await self.message.edit(content=self.bars + "\nAnd <@" + self.uid + "> wins!!!")
-                for reaction in self.message.reactions:
-                    await reaction.remove(self.bot.user)
-                self.active = False
+                reactions = self.message.reactions
+                for n in range(len(reactions)):
+                    await reactions[n].remove(self.bot.user)
 
     async def right_crit(self):
         if self.active:
@@ -297,13 +302,15 @@ class BattleU:
             await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleU.prompt_response))
 
             if self.left_health <= 0:
+                self.active = False
                 self.right_emoji = helperfunctions.pick_string(Battle.wins)
                 self.left_emoji = helperfunctions.pick_string(Battle.deads)
                 self.update_bars()
                 await self.message.edit(content=self.bars + "\nLOL! <@" + self.uid + "> you got your ass kicked bro!")
-                for reaction in self.message.reactions:
-                    await reaction.remove(self.bot.user)
-                self.active = False
+                reactions = self.message.reactions
+                for n in range(len(reactions)):
+                    await reactions[n].remove(self.bot.user)
+                
 
     async def left_heal(self):
         if self.active:
@@ -345,8 +352,9 @@ class BattleU:
             self.left_health = 0
             self.update_bars()
             await self.message.edit(content = self.bars + "\nif you can't take the heat, get out of the fryer dude!")
-            for reaction in self.message.reactions:
-                await reaction.remove(self.bot.user)
+            reactions = self.message.reactions
+            for n in range(len(reactions)):
+                await reactions[n].remove(self.bot.user)
 
     async def right_run(self):
         if self.active:
@@ -358,8 +366,9 @@ class BattleU:
             self.right_health = 0
             self.update_bars()
             await self.message.edit(content = self.bars + "\ndude i dont think that person wanted to fight anybody")
-            for reaction in self.message.reactions:
-                await reaction.remove(self.bot.user)
+            reactions = self.message.reactions
+            for n in range(len(reactions)):
+                await reactions[n].remove(self.bot.user)
 
 class BattleB:
     attack_response = ["oh damn they goin in!",
