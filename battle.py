@@ -15,7 +15,7 @@ class battle_manager:
             # user battle
             if (message.mentions[0].id != message.author.id):
                 logcommand.log_globally(logging.INFO, "User battle started by " + message.author.name + " with " + message.mentions[0].name)
-                await battle_manager.add_user_battle(str(message.author.id), str(message.raw_mentions[0]), message.channel)
+                await battle_manager.add_user_battle(str(message.author.id), str(message.raw_mentions[0]), self, message.channel)
         elif message.author == self.user and message.content.startswith("battle"):
             # initialize battle
             await b[message.content[6:]].initialize(message)
@@ -38,7 +38,7 @@ class battle_manager:
             bat = BattleB(channel, uid)
             b[uid] = bat
 
-    async def add_user_battle(uid, eid, channel):
+    async def add_user_battle(uid, eid, bot, channel):
         battle_manager.clean_battles()
         if uid in b or eid in b:
             await channel.send(helperfunctions.pick_string([
@@ -132,10 +132,11 @@ class BattleU:
                       "broooooooooo",
                       "get their ass!!!"]
 
-    def __init__(self, c, u, e):
+    def __init__(self, c, u, e, b):
         self.channel = c
         self.uid = u
         self.eid = e
+        self.bot = b
 
     async def spawn(self):
         await self.channel.send("battle" + str(self.uid))
@@ -223,7 +224,7 @@ class BattleU:
                 self.update_bars()
                 await self.message.edit(content=self.bars + "\nAnd <@" + self.uid + "> wins!!!")
                 for reaction in self.message.reactions:
-                    reaction.clear()
+                    await reaction.remove(self.bot)
                 self.active = False
 
     async def right_attack(self):
@@ -247,7 +248,7 @@ class BattleU:
                 self.update_bars()
                 await self.message.edit(content=self.bars + "\nLOL! <@" + self.uid + "> you got your ass kicked bro!")
                 for reaction in self.message.reactions:
-                    reaction.clear()
+                    await reaction.remove(self.bot)
                 self.active = False
 
     async def left_crit(self):
@@ -255,7 +256,7 @@ class BattleU:
             # first remove crit emoji so it doesn't get triggered again
             for reaction in self.message.reactions:
                 if reaction.emoji in Battle.crits:
-                    reaction.clear()
+                    await reaction.remove(self.bot)
             damage = random.randint(10,20)
             if not self.turn:
                 self.turn = not self.turn    
@@ -274,7 +275,7 @@ class BattleU:
                 self.update_bars()
                 await self.message.edit(content=self.bars + "\nAnd <@" + self.uid + "> wins!!!")
                 for reaction in self.message.reactions:
-                    reaction.clear()
+                    await reaction.remove(self.bot)
                 self.active = False
 
     async def right_crit(self):
@@ -282,7 +283,7 @@ class BattleU:
             # first remove crit emoji so it doesn't get triggered again
             for reaction in self.message.reactions:
                 if reaction.emoji in Battle.crits:
-                    reaction.clear()
+                    await reaction.remove(self.bot)
             damage = random.randint(10,20)
             if self.turn:
                 self.turn = not self.turn    
@@ -301,7 +302,7 @@ class BattleU:
                 self.update_bars()
                 await self.message.edit(content=self.bars + "\nLOL! <@" + self.uid + "> you got your ass kicked bro!")
                 for reaction in self.message.reactions:
-                    reaction.clear()
+                    await reaction.remove(self.bot)
                 self.active = False
 
     async def left_heal(self):
@@ -344,6 +345,8 @@ class BattleU:
             self.left_health = 0
             self.update_bars()
             await self.message.edit(content = self.bars + "\nif you can't take the heat, get out of the fryer dude!")
+            for reaction in self.message.reactions:
+                await reaction.remove(self.bot)
 
     async def right_run(self):
         if self.active:
@@ -355,6 +358,8 @@ class BattleU:
             self.right_health = 0
             self.update_bars()
             await self.message.edit(content = self.bars + "\ndude i dont think that person wanted to fight anybody")
+            for reaction in self.message.reactions:
+                await reaction.remove(self.bot)
 
 class BattleB:
     attack_response = ["oh damn they goin in!",
