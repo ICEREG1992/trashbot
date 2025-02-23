@@ -67,6 +67,10 @@ class Battle:
     half_green = "<:halfgreen:1343320611040002118>"
     purple = "<:purple:1343320613799854153>"
     half_purple = "<:halfpurple:1343320612050829382>"
+    left = "<:left:1343339406437781605>"
+    left_red = "<:leftred:1343339407243214888>"
+    right = "<:right:1343339408388259840>"
+    right_red = "<:rightred:1343339409432379412>"
     attack = "⚔️"
     heal = "💊"
     run = "🏃"
@@ -166,13 +170,13 @@ class BattleU:
         if self.right_health < 0:
             self.right_health = 0
         blanks = (30-self.left_health) + (30-self.right_health)
-        self.bars = self.left_emoji + ":" +\
+        self.bars = self.left_emoji + (Battle.left if self.turn else Battle.left_red) +\
             (Battle.green * math.floor(self.left_health / 2)) +\
             (Battle.half_green if self.left_health % 2 != 0 else "") +\
             (Battle.blank * math.floor(blanks / 2)) +\
             (Battle.half_purple if self.right_health % 2 != 0 else "") +\
             (Battle.purple * math.floor(self.right_health / 2)) +\
-            ":" + self.right_emoji
+            (Battle.right if not self.turn else Battle.right_red) + self.right_emoji
 
     async def battle(self, uid, reaction):
         if (reaction.emoji == Battle.attack):
