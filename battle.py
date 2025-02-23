@@ -155,7 +155,7 @@ class BattleU:
         self.turn = False # false for left's turn, true for right's turn
         await self.update_bars()
         await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string([
-            "Pick a button bro lets go!",
+            "Pick a button dude lets go!",
             "Aight frosh pick a button!"
             ]))
 
@@ -248,7 +248,7 @@ class BattleU:
         if self.active:
             # first remove crit emoji so it doesn't get triggered again
             for reaction in self.message.reactions:
-                if reaction in Battle.crits:
+                if reaction.emoji in Battle.crits:
                     reaction.clear()
             damage = random.randint(10,20)
             if not self.turn:
@@ -275,7 +275,7 @@ class BattleU:
         if self.active:
             # first remove crit emoji so it doesn't get triggered again
             for reaction in self.message.reactions:
-                if reaction in Battle.crits:
+                if reaction.emoji in Battle.crits:
                     reaction.clear()
             damage = random.randint(10,20)
             if self.turn:
@@ -416,7 +416,7 @@ class BattleB:
         self.turn = False # false for left's turn, true for right's turn
         self.update_bars()
         await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string([
-            "Pick a button bro lets go!",
+            "Pick a button dude lets go!",
             "Aight frosh pick a button!"
             ]))
 
