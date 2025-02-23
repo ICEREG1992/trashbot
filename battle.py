@@ -224,7 +224,7 @@ class BattleU:
                 self.update_bars()
                 await self.message.edit(content=self.bars + "\nAnd <@" + self.uid + "> wins!!!")
                 for reaction in self.message.reactions:
-                    await reaction.remove(self.bot)
+                    await reaction.remove(self.bot.user)
                 self.active = False
 
     async def right_attack(self):
@@ -248,7 +248,7 @@ class BattleU:
                 self.update_bars()
                 await self.message.edit(content=self.bars + "\nLOL! <@" + self.uid + "> you got your ass kicked bro!")
                 for reaction in self.message.reactions:
-                    await reaction.remove(self.bot)
+                    await reaction.remove(self.bot.user)
                 self.active = False
 
     async def left_crit(self):
@@ -256,7 +256,7 @@ class BattleU:
             # first remove crit emoji so it doesn't get triggered again
             for reaction in self.message.reactions:
                 if reaction.emoji in Battle.crits:
-                    await reaction.remove(self.bot)
+                    await reaction.remove(self.bot.user)
             damage = random.randint(10,20)
             if not self.turn:
                 self.turn = not self.turn    
@@ -275,7 +275,7 @@ class BattleU:
                 self.update_bars()
                 await self.message.edit(content=self.bars + "\nAnd <@" + self.uid + "> wins!!!")
                 for reaction in self.message.reactions:
-                    await reaction.remove(self.bot)
+                    await reaction.remove(self.bot.user)
                 self.active = False
 
     async def right_crit(self):
@@ -283,7 +283,7 @@ class BattleU:
             # first remove crit emoji so it doesn't get triggered again
             for reaction in self.message.reactions:
                 if reaction.emoji in Battle.crits:
-                    await reaction.remove(self.bot)
+                    await reaction.remove(self.bot.user)
             damage = random.randint(10,20)
             if self.turn:
                 self.turn = not self.turn    
@@ -302,7 +302,7 @@ class BattleU:
                 self.update_bars()
                 await self.message.edit(content=self.bars + "\nLOL! <@" + self.uid + "> you got your ass kicked bro!")
                 for reaction in self.message.reactions:
-                    await reaction.remove(self.bot)
+                    await reaction.remove(self.bot.user)
                 self.active = False
 
     async def left_heal(self):
@@ -346,7 +346,7 @@ class BattleU:
             self.update_bars()
             await self.message.edit(content = self.bars + "\nif you can't take the heat, get out of the fryer dude!")
             for reaction in self.message.reactions:
-                await reaction.remove(self.bot)
+                await reaction.remove(self.bot.user)
 
     async def right_run(self):
         if self.active:
@@ -359,7 +359,7 @@ class BattleU:
             self.update_bars()
             await self.message.edit(content = self.bars + "\ndude i dont think that person wanted to fight anybody")
             for reaction in self.message.reactions:
-                await reaction.remove(self.bot)
+                await reaction.remove(self.bot.user)
 
 class BattleB:
     attack_response = ["oh damn they goin in!",
