@@ -81,9 +81,9 @@ class Battle:
 class BattleU:
     attack_response = ["oh damn he goin in!", "worldstar!!", "worldstar!", "oh get him!", "yea show him the 1-2 mayweather!", "3-4 mcgreggor!!!", "yo beat the shit outta him!", "yooooooooo!!!!!!!", "show him what fer!", "ohh damn!"]
     heal_response = ["he chargin up!", "ohkay!", "oh damnn!", "ok bro he finna heal right up then!", "weird flex but ok", "ooh!", "he need some milk!!", "you aint even seen his final form yet!!!"]
-    run_response = ["sorta anticlimactic but ok", "coward ass! take this on ur way out!", "fuckin lame-o!", "pussy bitch! take this aye!", "oh so now u finna back down!?", "loser!"]
+    run_response = ["sorta anticlimactic but ok", "hey how come he can just leave?", "fuckin lame!", "ok he's running now", "booooooo", "loser"]
     prompt_response = ["ohkay what next tho!", "brooo hit him back!", "damn bro swing at him!", "HIT HIMMM!!", "AIGHT!", "LES GOOO", "*bruh*!!", "u just gon let him do that!?!", "what u gon do next tho!?"]
-    start_response = ["swing first bro, swing first!", "whoa okay guys settle down a lil", "oh he doin it!", "bro someone start recording this gonna be wicked", "broooooooooo"]
+    start_response = ["swing first bro, swing first!", "whoa okay guys settle down a lil", "oh he doin it!", "omg someone film this", "broooooooooo"]
 
     def __init__(self, c, u):
         self.channel = c
@@ -192,6 +192,56 @@ class BattleU:
                 self.active = False
             
             self.turn = not self.turn
+
+    async def left_heal(self):
+        heal = random.randint(10,20)
+        if self.active:
+            self.left_emoji = Battle.hospital
+            self.update_bars()
+            await self.message.edit(content = self.bars + "\n" + helperfunctions.pick_string(BattleU.heal_response))
+            self.left_health += heal
+            self.left_emoji = helperfunctions.pick_string(Battle.normals)
+            helperfunctions.bot_wait()
+            self.update_bars()
+            await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleU.prompt_response))
+
+            self.turn = not self.turn
+
+    async def right_heal(self):
+        heal = random.randint(10,20)
+        if self.active:
+            self.right_emoji = Battle.hospital
+            self.update_bars()
+            await self.message.edit(content = self.bars + "\n" + helperfunctions.pick_string(BattleU.heal_response))
+            self.right_health += heal
+            self.right_emoji = helperfunctions.pick_string(Battle.normals)
+            helperfunctions.bot_wait()
+            self.update_bars()
+            await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleU.prompt_response))
+
+            self.turn = not self.turn
+
+    async def left_run(self):
+        if self.active:
+            self.left_emoji = Battle.run
+            self.update_bars()
+            await self.message.edit(content = self.bars + "\n" + helperfunctions.pick_string(BattleU.run_response))
+            self.active = False
+            helperfunctions.bot_wait()
+            self.left_health = 0
+            self.update_bars()
+            await self.message.edit(content = self.bars + "\nif you can't take the heat, get out of the fryer dude!")
+
+    async def right_run(self):
+        if self.active:
+            self.right_emoji = Battle.run
+            self.update_bars()
+            await self.message.edit(content = self.bars + "\n" + helperfunctions.pick_string(BattleU.run_response))
+            self.active = False
+            helperfunctions.bot_wait()
+            self.right_health = 0
+            self.update_bars()
+            await self.message.edit(content = self.bars + "\ndude i dont think that person wanted to fight anybody")
 
 class BattleB:
     x = ""
