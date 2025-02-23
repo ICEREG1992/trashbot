@@ -306,6 +306,7 @@ class BattleU:
 
     async def left_heal(self):
         if self.active:
+            self.turn = not self.turn
             heal = random.randint(10,20)
             self.left_emoji = Battle.hospital
             self.update_bars()
@@ -317,11 +318,10 @@ class BattleU:
             await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleU.prompt_response))
             if helperfunctions.chance(10):
                 await self.message.add_reaction(helperfunctions.pick_string(Battle.crits))
-            
-            self.turn = not self.turn
 
     async def right_heal(self):
         if self.active:
+            self.turn = not self.turn
             heal = random.randint(10,20)
             self.right_emoji = Battle.hospital
             self.update_bars()
@@ -333,8 +333,6 @@ class BattleU:
             await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleU.prompt_response))
             if helperfunctions.chance(10):
                 await self.message.add_reaction(helperfunctions.pick_string(Battle.crits))
-                
-            self.turn = not self.turn
 
     async def left_run(self):
         if self.active:
