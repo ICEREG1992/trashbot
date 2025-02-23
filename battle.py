@@ -153,13 +153,13 @@ class BattleU:
         self.right_health = random.randint(10, 30)
         self.active = True
         self.turn = False # false for left's turn, true for right's turn
-        await self.update_bars()
+        self.update_bars()
         await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string([
             "Pick a button dude lets go!",
             "Aight frosh pick a button!"
             ]))
 
-    async def update_bars(self):
+    def update_bars(self):
         self.bars = ""
         if self.left_health < 0:
             self.left_health = 0
@@ -173,8 +173,6 @@ class BattleU:
             (Battle.half_purple if self.right_health % 2 != 0 else "") +\
             (Battle.purple * math.floor(self.right_health / 2)) +\
             ":" + self.right_emoji
-        if helperfunctions.chance(10):
-            await self.message.add_reaction(helperfunctions.pick_string(Battle.crits))
 
     async def battle(self, uid, reaction):
         if (reaction.emoji == Battle.attack):
@@ -205,18 +203,20 @@ class BattleU:
             damage = random.randint(5,15)
             self.turn = not self.turn
             self.right_emoji = Battle.punch
-            await self.update_bars()
+            self.update_bars()
             await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleU.attack_response))
             self.right_health -= damage
             self.right_emoji = helperfunctions.pick_string(Battle.hurts)
             helperfunctions.bot_wait()
-            await self.update_bars()
+            self.update_bars()
             await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleU.prompt_response))
+            if helperfunctions.chance(10):
+                await self.message.add_reaction(helperfunctions.pick_string(Battle.crits))
 
             if self.right_health <= 0:
                 self.left_emoji = helperfunctions.pick_string(Battle.wins)
                 self.right_emoji = helperfunctions.pick_string(Battle.deads)
-                await self.update_bars()
+                self.update_bars()
                 await self.message.edit(content=self.bars + "\nAnd <@" + self.uid + "> wins!!!")
                 for reaction in self.message.reactions:
                     reaction.clear()
@@ -227,18 +227,20 @@ class BattleU:
             damage = random.randint(5,15)
             self.turn = not self.turn
             self.left_emoji = Battle.punch
-            await self.update_bars()
+            self.update_bars()
             await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleU.attack_response))
             self.left_health -= damage
             self.left_emoji = helperfunctions.pick_string(Battle.hurts)
             helperfunctions.bot_wait()
-            await self.update_bars()
+            self.update_bars()
             await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleU.prompt_response))
+            if helperfunctions.chance(10):
+                await self.message.add_reaction(helperfunctions.pick_string(Battle.crits))
 
             if self.left_health <= 0:
                 self.right_emoji = helperfunctions.pick_string(Battle.wins)
                 self.left_emoji = helperfunctions.pick_string(Battle.deads)
-                await self.update_bars()
+                self.update_bars()
                 await self.message.edit(content=self.bars + "\nLOL! <@" + self.uid + "> you got your ass kicked bro!")
                 for reaction in self.message.reactions:
                     reaction.clear()
@@ -254,18 +256,18 @@ class BattleU:
             if not self.turn:
                 self.turn = not self.turn    
             self.right_emoji = Battle.punch
-            await self.update_bars()
+            self.update_bars()
             await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleU.crit_response))
             self.right_health -= damage
             self.right_emoji = helperfunctions.pick_string(Battle.hurts)
             helperfunctions.bot_wait()
-            await self.update_bars()
+            self.update_bars()
             await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleU.prompt_response))
-
+            
             if self.right_health <= 0:
                 self.left_emoji = helperfunctions.pick_string(Battle.wins)
                 self.right_emoji = helperfunctions.pick_string(Battle.deads)
-                await self.update_bars()
+                self.update_bars()
                 await self.message.edit(content=self.bars + "\nAnd <@" + self.uid + "> wins!!!")
                 for reaction in self.message.reactions:
                     reaction.clear()
@@ -281,18 +283,18 @@ class BattleU:
             if self.turn:
                 self.turn = not self.turn    
             self.left_emoji = Battle.punch
-            await self.update_bars()
+            self.update_bars()
             await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleU.crit_response))
             self.left_health -= damage
             self.left_emoji = helperfunctions.pick_string(Battle.hurts)
             helperfunctions.bot_wait()
-            await self.update_bars()
+            self.update_bars()
             await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleU.prompt_response))
 
             if self.left_health <= 0:
                 self.right_emoji = helperfunctions.pick_string(Battle.wins)
                 self.left_emoji = helperfunctions.pick_string(Battle.deads)
-                await self.update_bars()
+                self.update_bars()
                 await self.message.edit(content=self.bars + "\nLOL! <@" + self.uid + "> you got your ass kicked bro!")
                 for reaction in self.message.reactions:
                     reaction.clear()
@@ -302,50 +304,54 @@ class BattleU:
         if self.active:
             heal = random.randint(10,20)
             self.left_emoji = Battle.hospital
-            await self.update_bars()
+            self.update_bars()
             await self.message.edit(content = self.bars + "\n" + helperfunctions.pick_string(BattleU.heal_response))
             self.left_health += heal
             self.left_emoji = helperfunctions.pick_string(Battle.normals)
             helperfunctions.bot_wait()
-            await self.update_bars()
+            self.update_bars()
             await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleU.prompt_response))
-
+            if helperfunctions.chance(10):
+                await self.message.add_reaction(helperfunctions.pick_string(Battle.crits))
+            
             self.turn = not self.turn
 
     async def right_heal(self):
         if self.active:
             heal = random.randint(10,20)
             self.right_emoji = Battle.hospital
-            await self.update_bars()
+            self.update_bars()
             await self.message.edit(content = self.bars + "\n" + helperfunctions.pick_string(BattleU.heal_response))
             self.right_health += heal
             self.right_emoji = helperfunctions.pick_string(Battle.normals)
             helperfunctions.bot_wait()
-            await self.update_bars()
+            self.update_bars()
             await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleU.prompt_response))
-
+            if helperfunctions.chance(10):
+                await self.message.add_reaction(helperfunctions.pick_string(Battle.crits))
+                
             self.turn = not self.turn
 
     async def left_run(self):
         if self.active:
             self.left_emoji = Battle.run
-            await self.update_bars()
+            self.update_bars()
             await self.message.edit(content = self.bars + "\n" + helperfunctions.pick_string(BattleU.run_response))
             self.active = False
             helperfunctions.bot_wait()
             self.left_health = 0
-            await self.update_bars()
+            self.update_bars()
             await self.message.edit(content = self.bars + "\nif you can't take the heat, get out of the fryer dude!")
 
     async def right_run(self):
         if self.active:
             self.right_emoji = Battle.run
-            await self.update_bars()
+            self.update_bars()
             await self.message.edit(content = self.bars + "\n" + helperfunctions.pick_string(BattleU.run_response))
             self.active = False
             helperfunctions.bot_wait()
             self.right_health = 0
-            await self.update_bars()
+            self.update_bars()
             await self.message.edit(content = self.bars + "\ndude i dont think that person wanted to fight anybody")
 
 class BattleB:
