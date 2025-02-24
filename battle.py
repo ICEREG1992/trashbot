@@ -224,7 +224,7 @@ class BattleU:
                 self.right_emoji = helperfunctions.pick_string(Battle.deads)
                 self.update_bars()
                 await self.message.edit(content=self.bars + "\nAnd <@" + self.uid + "> wins!!!")
-                reactions = self.message.reactions
+                reactions = [r for r in self.message.reactions]
                 for n in range(len(reactions)):
                     await reactions[n].remove(self.bot.user)
 
@@ -251,14 +251,14 @@ class BattleU:
                 await self.message.edit(content=self.bars + "\nLOL! <@" + self.uid + "> you got your ass kicked bro!")
                 for reaction in self.message.reactions:
                     await reaction.remove(self.bot.user)
-                reactions = self.message.reactions
+                reactions = [r for r in self.message.reactions]
                 for n in range(len(reactions)):
                     await reactions[n].remove(self.bot.user)
 
     async def left_crit(self):
         if self.active:
             # first remove crit emoji so it doesn't get triggered again
-            for reaction in self.message.reactions:
+            for reaction in [r for r in self.message.reactions]:
                 if reaction.emoji in Battle.crits:
                     await reaction.remove(self.bot.user)
             damage = random.randint(10,20)
@@ -279,14 +279,14 @@ class BattleU:
                 self.right_emoji = helperfunctions.pick_string(Battle.deads)
                 self.update_bars()
                 await self.message.edit(content=self.bars + "\nAnd <@" + self.uid + "> wins!!!")
-                reactions = self.message.reactions
+                reactions = [r for r in self.message.reactions]
                 for n in range(len(reactions)):
                     await reactions[n].remove(self.bot.user)
 
     async def right_crit(self):
         if self.active:
             # first remove crit emoji so it doesn't get triggered again
-            for reaction in self.message.reactions:
+            for reaction in [r for r in self.message.reactions]:
                 if reaction.emoji in Battle.crits:
                     await reaction.remove(self.bot.user)
             damage = random.randint(10,20)
@@ -307,7 +307,7 @@ class BattleU:
                 self.left_emoji = helperfunctions.pick_string(Battle.deads)
                 self.update_bars()
                 await self.message.edit(content=self.bars + "\nLOL! <@" + self.uid + "> you got your ass kicked bro!")
-                reactions = self.message.reactions
+                reactions = [r for r in self.message.reactions]
                 for n in range(len(reactions)):
                     await reactions[n].remove(self.bot.user)
                 
@@ -352,7 +352,7 @@ class BattleU:
             self.left_health = 0
             self.update_bars()
             await self.message.edit(content = self.bars + "\nif you can't take the heat, get out of the fryer dude!")
-            reactions = self.message.reactions
+            reactions = [r for r in self.message.reactions]
             for n in range(len(reactions)):
                 await reactions[n].remove(self.bot.user)
 
@@ -366,7 +366,7 @@ class BattleU:
             self.right_health = 0
             self.update_bars()
             await self.message.edit(content = self.bars + "\ndude i dont think that person wanted to fight anybody")
-            reactions = self.message.reactions
+            reactions = [r for r in self.message.reactions]
             for n in range(len(reactions)):
                 await reactions[n].remove(self.bot.user)
 
