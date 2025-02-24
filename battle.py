@@ -421,9 +421,10 @@ class BattleB:
                       "oh you wanna go? you wanna go!?",
                       "aaaaaahhhhh don't hurt me"]
     
-    def __init__(self, c, u):
+    def __init__(self, c, u, b):
         self.channel = c
         self.uid = u
+        self.bot = b
 
     async def spawn(self):
         await self.channel.send("battle" + str(self.uid))
