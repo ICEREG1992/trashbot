@@ -311,7 +311,6 @@ class BattleU:
                 for n in range(len(reactions)):
                     await reactions[n].remove(self.bot.user)
                 
-
     async def left_heal(self):
         if self.active:
             self.turn = not self.turn
@@ -371,39 +370,48 @@ class BattleU:
                 await reactions[n].remove(self.bot.user)
 
 class BattleB:
-    attack_response = ["oh damn they goin in!",
-                       "worldstar!!",
-                       "worldstar!",
-                       "oh get them!",
-                       "yea show them the 1-2 mayweather!",
-                       "3-4 mcgreggor!!!",
-                       "yo beat the shit outta them!",
-                       "yooooooooo!!!!!!!",
-                       "show them what fer!",
-                       "ohh damn!",
-                       "they on x-games mode!"]
-    heal_response = ["they chargin up!",
-                     "ohkay!",
-                     "oh damnn!",
-                     "ok dawg he finna heal right up then!",
-                     "weird flex but ok",
+    attack_response = ["take that!",
+                       "alright take this!",
+                       "get a taste of my knuckle sandwich!",
+                       "take that dude",
+                       "i'm punching you i'm punching you i'm punching you",
+                       "you leave me no choice !!",
+                       "this boutta do so much damage"]
+    hurt_response = ["ouchie!",
+                     "ow jeez dude!",
+                     "ok that really hurts!",
+                     "owie owie wowie!",
+                     "oof!",
+                     "oww fuck",
+                     "omg stopppp"]
+    heal_response = ["that doesn't seem very fair",
+                     "oh alright",
+                     "that's sorta unfair but ok",
+                     "sure go ahead and heal up",
+                     "gettin a little dicey?",
                      "ooh!",
-                     "they need some milk!!",
-                     "you aint even seen their final form yet!!!"]
+                     "you need your binkie?!",
+                     "waaahhh waahhhh you're so huuuuuurt"]
+    healing_response = ["ow ow ow ok one second",
+                        "gimme just one second",
+                        "ok gonna heal one sec",
+                        "lemme heal rq",
+                        "sorry one sec",
+                        "ouchie ouchie my bones hurt",
+                        "ok i'm a little in pain"]
     run_response = ["sorta anticlimactic but ok",
-                    "hey how come they can just leave?",
+                    "hey how come you can just leave?",
                     "lame!!!",
-                    "ok they're running now",
-                    "booooooo",
+                    "ok you're just gonna run away?",
+                    "told u dude u can't handle my fury!",
                     "loser"]
     prompt_response = ["ohkay what next tho!",
-                       "brooo hit them back!",
-                       "damn dawg swing at them!",
-                       "HIT THEMMM!!",
+                       "come at me!",
+                       "alright swing mf!",
+                       "HIT ME!!",
                        "AIGHT!",
                        "LES GOOO",
                        "*bruh*!!",
-                       "u just gon let them do that!?!",
                        "what u gon do next tho!?"]
     start_response = ["aight let's go then!!",
                       "aight bet!!!",
@@ -431,7 +439,7 @@ class BattleB:
 
         # set battle vars proper
         self.left_emoji = helperfunctions.pick_string(Battle.normals)
-        self.right_emoji = helperfunctions.pick_string(Battle.robot)
+        self.right_emoji = Battle.robot
         self.left_health = random.randint(10, 30)
         self.right_health = random.randint(10, 30)
         self.active = True
@@ -467,3 +475,114 @@ class BattleB:
         elif (reaction.emoji == Battle.run):
             if uid == self.uid and not self.turn:
                 await self.left_run()
+
+    async def left_attack(self):
+        if self.active:
+            damage = random.randint(5,15)
+            self.turn = not self.turn
+            self.right_emoji = Battle.punch
+            self.update_bars()
+            await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleB.hurt_response))
+            self.right_health -= damage
+            self.right_emoji = Battle.robot
+            helperfunctions.bot_wait()
+            self.update_bars()
+            await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleB.prompt_response))
+            
+            if self.right_health <= 0:
+                self.active = False
+                self.left_emoji = helperfunctions.pick_string(Battle.wins)
+                self.right_emoji = helperfunctions.pick_string(Battle.deads)
+                self.update_bars()
+                await self.message.edit(content=self.bars + "\nalright <@" + self.uid + "> you win...")
+                reactions = [r for r in self.message.reactions]
+                for n in range(len(reactions)):
+                    await reactions[n].remove(self.bot.user)
+            else: # trashbot's move
+                if self.right_health <= 10:
+                    if helperfunctions.chance(80):
+                        self.right_heal()
+                    else:
+                        self.right_attack()
+                else:
+                    if helperfunctions.chance(75):
+                        self.right_attack()
+                    else:
+                        self.right_heal()
+
+    async def right_attack(self):
+        if self.active:
+            helperfunctions.bot_wait()
+            damage = random.randint(5,15)
+            self.turn = not self.turn
+            self.left_emoji = Battle.punch
+            self.update_bars()
+            await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleB.attack_response))
+            self.left_health -= damage
+            self.left_emoji = helperfunctions.pick_string(Battle.hurts)
+            helperfunctions.bot_wait()
+            self.update_bars()
+            await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleB.prompt_response))
+
+            if self.left_health <= 0:
+                self.active = False
+                self.right_emoji = Battle.robot
+                self.left_emoji = helperfunctions.pick_string(Battle.deads)
+                self.update_bars()
+                await self.message.edit(content=self.bars + "\nOKAY <@" + self.uid + "> you better think next time you step to me!")
+                for reaction in self.message.reactions:
+                    await reaction.remove(self.bot.user)
+                reactions = [r for r in self.message.reactions]
+                for n in range(len(reactions)):
+                    await reactions[n].remove(self.bot.user)
+    
+    async def left_heal(self):
+        if self.active:
+            self.turn = not self.turn
+            heal = random.randint(10,20)
+            self.left_emoji = Battle.hospital
+            self.update_bars()
+            await self.message.edit(content = self.bars + "\n" + helperfunctions.pick_string(BattleB.heal_response))
+            self.left_health += heal
+            self.left_emoji = helperfunctions.pick_string(Battle.normals)
+            helperfunctions.bot_wait()
+            self.update_bars()
+            await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleB.prompt_response))
+            # trashbot's move
+            if self.right_health <= 10:
+                if helperfunctions.chance(80):
+                    self.right_heal()
+                else:
+                    self.right_attack()
+            else:
+                if helperfunctions.chance(75):
+                    self.right_attack()
+                else:
+                    self.right_heal()
+
+    async def right_heal(self):
+        if self.active:
+            self.turn = not self.turn
+            heal = random.randint(10,20)
+            self.right_emoji = Battle.hospital
+            self.update_bars()
+            await self.message.edit(content = self.bars + "\n" + helperfunctions.pick_string(BattleB.healing_response))
+            self.right_health += heal
+            self.right_emoji = Battle.robot
+            helperfunctions.bot_wait()
+            self.update_bars()
+            await self.message.edit(content=self.bars + "\n" + helperfunctions.pick_string(BattleB.prompt_response))
+    
+    async def left_run(self):
+        if self.active:
+            self.left_emoji = Battle.run
+            self.update_bars()
+            await self.message.edit(content = self.bars + "\n" + helperfunctions.pick_string(BattleB.run_response))
+            self.active = False
+            helperfunctions.bot_wait()
+            self.left_health = 0
+            self.update_bars()
+            await self.message.edit(content = self.bars + "\n guess you can't handle the TB !!!!!")
+            reactions = [r for r in self.message.reactions]
+            for n in range(len(reactions)):
+                await reactions[n].remove(self.bot.user)
