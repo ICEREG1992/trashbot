@@ -11,11 +11,9 @@ from uptime import uptime
 from todo import todo
 from food import food
 from finally_img import finally_img
-from karaoke import karaoke_manager
 from battle import battle_manager
 from train import spam_train
 from log_manager import logging_manager
-from wordplay import wordplay
 from servers import servers
 from powerswitch import powerswitch
 from numerology import numerology
@@ -46,8 +44,6 @@ class MyClient(discord.Client):
         permissions.init() 
         todo.init()
         servers.init()
-        # karaoke_manager.init()
-        # wordplay.init()
         uptime.init()
         food.init()
         lipo.init()
@@ -80,8 +76,6 @@ class MyClient(discord.Client):
                 await pan.run(self, message)
                 await qat.run(self, message)
                 await numerology.run(self, message)
-                # await wordplay.run(self, message)
-                # await karaoke_manager.run(self, message)
                 
                 if message.content.startswith("!ban "):
                     await message.channel.send(message.content[5:] + " has been banned.")

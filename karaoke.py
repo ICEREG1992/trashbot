@@ -13,7 +13,8 @@ lyrics = "•"
 k = {}
 
 class karaoke_manager:
-
+    # this module is included for historical purposes
+    # it acts a little weird around the end of songs but otherwise is pretty good
     def init():
         d = db.get_item(TableName="trashbot", Key={'name':{'S':'lyrics'}})
         global lyrics
