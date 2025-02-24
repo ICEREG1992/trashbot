@@ -166,7 +166,7 @@ class servers:
                 ]))
         elif message.content == "!svenip":
             if servers.runningServer():
-                r = requests.get('ipecho.net/plain')
+                r = requests.get('https://ipecho.net/plain')
                 await message.channel.send(r.text)
 
         # tf2
@@ -202,7 +202,7 @@ class servers:
                 ]))
         elif message.content == "!tf2ip":
             if servers.runningServer():
-                r = requests.get('ipecho.net/plain')
+                r = requests.get('https://ipecho.net/plain')
                 await message.channel.send(r.text)
 
         # css
@@ -238,7 +238,7 @@ class servers:
                 ]))
         elif message.content == "!cssip":
             if servers.runningServer():
-                r = requests.get('ipecho.net/plain')
+                r = requests.get('https://ipecho.net/plain')
                 await message.channel.send(r.text)
 
         # ttt
@@ -282,7 +282,7 @@ class servers:
                 ]))
         elif message.content == "!tttip":
             if servers.runningServer():
-                r = requests.get('ipecho.net/plain')
+                r = requests.get('https://ipecho.net/plain')
                 await message.channel.send(r.text)
 
         # poweroff                
