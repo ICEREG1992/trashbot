@@ -245,7 +245,7 @@ class servers:
         elif message.content == "!hostttt" and permissions.allowed(message.author.id, "blue"):
             if not servers.runningServer():
                 # figure out map first
-                map = 'ttt_rooftps_2016_v1'
+                map = 'ttt_rooftops_2016_v1'
                 if len(message.content) > 8:
                     map = message.content[9:]
                     map = helperfunctions.sanitize(map)
