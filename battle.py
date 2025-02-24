@@ -459,13 +459,13 @@ class BattleB:
         if self.right_health < 0:
             self.right_health = 0
         blanks = (30-self.left_health) + (30-self.right_health)
-        self.bars = self.left_emoji + ":" +\
+        self.bars = self.left_emoji + (Battle.left if self.turn else Battle.left_red) +\
             (Battle.green * math.floor(self.left_health / 2)) +\
             (Battle.half_green if self.left_health % 2 != 0 else "") +\
             (Battle.blank * math.floor(blanks / 2)) +\
             (Battle.half_purple if self.right_health % 2 != 0 else "") +\
             (Battle.purple * math.floor(self.right_health / 2)) +\
-            ":" + self.right_emoji
+            (Battle.right if not self.turn else Battle.right_red) + self.right_emoji
         
     async def battle(self, uid, reaction):
         if (reaction.emoji == Battle.attack):
