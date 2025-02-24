@@ -10,7 +10,7 @@ class battle_manager:
         if message.content == "!battle" or message.content == "!battle <@!450507364768940034>":
             # bot battle
             logcommand.log_globally(logging.INFO, "Bot battle started by " + message.author.name)
-            await battle_manager.add_bot_battle(str(message.author.id), message.channel)
+            await battle_manager.add_bot_battle(str(message.author.id), self, message.channel)
         elif message.content.startswith("!battle <@"):
             # user battle
             if (message.mentions[0].id != message.author.id):
@@ -26,7 +26,7 @@ class battle_manager:
         if uid in b:
             await b[uid].battle(uid, reaction)
 
-    async def add_bot_battle(uid, channel):
+    async def add_bot_battle(uid, bot, channel):
         battle_manager.clean_battles()
         if uid in b:
             channel.send(helperfunctions.pick_string([
@@ -35,8 +35,9 @@ class battle_manager:
                 "easy easy EASY EASY bro deep breaths, u dont have to do this"
             ]))
         else:
-            bat = BattleB(channel, uid)
+            bat = BattleB(channel, uid, bot)
             b[uid] = bat
+            await bat.spawn()
 
     async def add_user_battle(uid, eid, bot, channel):
         battle_manager.clean_battles()
