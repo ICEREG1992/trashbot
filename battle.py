@@ -503,14 +503,14 @@ class BattleB:
             else: # trashbot's move
                 if self.right_health <= 10:
                     if helperfunctions.chance(80):
-                        self.right_heal()
+                        await self.right_heal()
                     else:
-                        self.right_attack()
+                        await self.right_attack()
                 else:
                     if helperfunctions.chance(75):
-                        self.right_attack()
+                        await self.right_attack()
                     else:
-                        self.right_heal()
+                        await self.right_heal()
 
     async def right_attack(self):
         if self.active:
@@ -553,14 +553,14 @@ class BattleB:
             # trashbot's move
             if self.right_health <= 10:
                 if helperfunctions.chance(80):
-                    self.right_heal()
+                    await self.right_heal()
                 else:
-                    self.right_attack()
+                    await self.right_attack()
             else:
                 if helperfunctions.chance(75):
-                    self.right_attack()
+                    await self.right_attack()
                 else:
-                    self.right_heal()
+                    await self.right_heal()
 
     async def right_heal(self):
         if self.active:
