@@ -37,7 +37,7 @@ class pan:
             for l in sorted(participants.items(), key=lambda item: item[1]['points'], reverse=True)[0:8]:
                 embed.add_field(name=l[1]['name'], value=str(l[1]['points']) + " points since <t:" + str(int(l[1]['start'])) + ">", inline=False)
             await message.channel.send(embed=embed)
-        elif (message.content.startswith("!pan")):
+        elif (message.content.equals("!pan")):
             if uid not in participants:
                 participants[uid] = {}
                 participants[uid]['points'] = 0
