@@ -13,6 +13,9 @@ def pick_string(set):
 def bot_wait():
     time.sleep(1.5)
 
+def bot_wait_medium():
+    time.sleep(10)
+
 def bot_wait_long():
     time.sleep(60)
 
