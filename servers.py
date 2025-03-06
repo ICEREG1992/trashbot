@@ -151,7 +151,7 @@ class servers:
                     "ok one sec"
                 ]))
                 subprocess.Popen(['bash','svends_run', '+maxplayers', '16'], cwd=r'/home/william/Steam/steamapps/common/Sven Co-op Dedicated Server', stdin=subprocess.PIPE)
-                helperfunctions.bot_wait_long()
+                helperfunctions.bot_wait()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
                     "epic sven",
@@ -187,7 +187,7 @@ class servers:
                     await message.channel.send("will doesn't have the token set up right")
                     return
                 subprocess.Popen(['bash','srcds_run', '-game', 'tf', '+maxplayers', '16', '+map', 'ctf_2fort', '+sv_setsteamaccount', token], cwd=r'/home/william/Steam/steamapps/common/Team Fortress 2 Dedicated Server', stdin=subprocess.PIPE)
-                helperfunctions.bot_wait_long()
+                helperfunctions.bot_wait()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
                     "epic tf2",
@@ -223,7 +223,7 @@ class servers:
                     await message.channel.send("will doesn't have the token set up right")
                     return
                 subprocess.Popen(['bash','srcds_run', '-game', 'cstrike', '+maxplayers', '16', '+map', 'de_dust2', '+sv_setsteamaccount', token], cwd=r'/home/william/Steam/steamapps/common/Counter-Strike Source Dedicated Server', stdin=subprocess.PIPE)
-                helperfunctions.bot_wait_long()
+                helperfunctions.bot_wait()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
                     "epic cs:s",
@@ -267,7 +267,7 @@ class servers:
                     await message.channel.send("will doesn't have the token set up right")
                     return
                 subprocess.Popen(['bash','srcds_run', '-game', 'garrysmod', '+gamemode', 'terrortown', '+maxplayers', '16', '+map', map, '+host_workshop_collection', '3100438906', '+sv_setsteamaccount', token], cwd=r'/home/william/Steam/steamapps/common/GarrysModDS', stdin=subprocess.PIPE)
-                helperfunctions.bot_wait_long()
+                helperfunctions.bot_wait_medium()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
                     "epic ttt",
@@ -285,6 +285,34 @@ class servers:
                 r = requests.get('https://ipecho.net/plain')
                 await message.channel.send(r.text)
 
+        # tron
+        elif message.content == "!hosttron" and permissions.allowed(message.author.id, "blue"):
+            if not servers.runningServer():
+                await message.channel.send(helperfunctions.pick_string([
+                    "hhhhnnnnnnngggggg...",
+                    "\*inhales\*",
+                    "ok one sec"
+                ]))
+                subprocess.Popen(['bash','./AppRun'], cwd=r'/home/william/armagetron/squashfs-root', stdin=subprocess.PIPE)
+                helperfunctions.bot_wait()
+                await message.channel.send(helperfunctions.pick_string([
+                    "ok im runnin",
+                    "epic tron",
+                    "its the game grid :O"
+                ]))
+            else:
+                await message.channel.send(helperfunctions.pick_string([
+                    "looks like i'm already running " + servers.runningServer(),
+                    "it's already " + servers.runningServer(),
+                    "it's actually " + servers.runningServer() + " time rn baybee",
+                    "i'll keep hosting " + servers.runningServer() + " instead ok"
+                ]))
+        elif message.content == "!tronip":
+            if servers.runningServer():
+                r = requests.get('https://ipecho.net/plain')
+                await message.channel.send(r.text + ":4535")
+
+
         # poweroff                
         elif message.content == "!stophost" and permissions.allowed(message.author.id, "blue"):
             if servers.runningServer():
@@ -292,6 +320,7 @@ class servers:
                 subprocess.run(['pkill', '-f', 'server.jar'])
                 subprocess.run(['pkill', '-f', 'svends'])
                 subprocess.run(['pkill', '-f', 'srcds'])
+                subprocess.run(['pkill', '-f', 'armagetronad-dedicated'])
                 await message.channel.send(helperfunctions.pick_string([
                     "it's dead, jim",
                     "kablam",
@@ -316,7 +345,11 @@ class servers:
                     subprocess.check_output(["pgrep", '-f', "srcds"])
                     out = "a source game"
                 except subprocess.CalledProcessError as e:
-                    return ""
+                    try:
+                        subprocess.check_output(["pgrep", '-f', "armagetronad-dedicated"])
+                        out = "tron"
+                    except subprocess.CalledProcessError as e:
+                        return ""
         return out
 
     def save():
