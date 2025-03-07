@@ -107,7 +107,7 @@ class servers:
                 # now boot
                 await message.channel.send(helperfunctions.pick_string([
                     "hhhhnnnnnnngggggg...",
-                    "\*inhales\*",
+                    "*inhales*",
                     "ok one sec"
                 ]))
                 subprocess.Popen(['java', '-Xms3072M', '-Xmx3072M', '-jar', 'server.jar', 'nogui'], cwd=r'/home/william/minecraft/', stdin=subprocess.PIPE)
@@ -147,7 +147,7 @@ class servers:
             if not servers.runningServer():
                 await message.channel.send(helperfunctions.pick_string([
                     "hhhhnnnnnnngggggg...",
-                    "\*inhales\*",
+                    "*inhales*",
                     "ok one sec"
                 ]))
                 subprocess.Popen(['bash','svends_run', '+maxplayers', '16'], cwd=r'/home/william/Steam/steamapps/common/Sven Co-op Dedicated Server', stdin=subprocess.PIPE)
@@ -174,7 +174,7 @@ class servers:
             if not servers.runningServer():
                 await message.channel.send(helperfunctions.pick_string([
                     "hhhhnnnnnnngggggg...",
-                    "\*inhales\*",
+                    "*inhales*",
                     "ok one sec"
                 ]))
                 # first get game server account login token
@@ -210,7 +210,7 @@ class servers:
             if not servers.runningServer():
                 await message.channel.send(helperfunctions.pick_string([
                     "hhhhnnnnnnngggggg...",
-                    "\*inhales\*",
+                    "*inhales*",
                     "ok one sec"
                 ]))
                 # first get game server account login token
@@ -254,7 +254,7 @@ class servers:
                         return
                 await message.channel.send(helperfunctions.pick_string([
                     "hhhhnnnnnnngggggg...",
-                    "\*inhales\*",
+                    "*inhales*",
                     "ok one sec"
                 ]))
                 # first get game server account login token
@@ -290,7 +290,7 @@ class servers:
             if not servers.runningServer():
                 await message.channel.send(helperfunctions.pick_string([
                     "hhhhnnnnnnngggggg...",
-                    "\*inhales\*",
+                    "*inhales*",
                     "ok one sec"
                 ]))
                 subprocess.Popen(['bash', '-c', './AppRun > >(grep --line-buffered "[0] New Match" | ./rotate.sh)'], cwd=r'/home/william/armagetron/squashfs-root', stdin=subprocess.PIPE)
