@@ -293,7 +293,7 @@ class servers:
                     "\*inhales\*",
                     "ok one sec"
                 ]))
-                subprocess.Popen(['bash','./AppRun'], cwd=r'/home/william/armagetron/squashfs-root', stdin=subprocess.PIPE)
+                subprocess.Popen(['bash', '-c', './AppRun > >(grep --line-buffered "[0] New Match" | ./rotate.sh)'], cwd=r'/home/william/armagetron/squashfs-root', stdin=subprocess.PIPE)
                 helperfunctions.bot_wait()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
