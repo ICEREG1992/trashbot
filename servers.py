@@ -310,7 +310,7 @@ class servers:
         elif message.content == "!tronip":
             if servers.runningServer():
                 r = requests.get('https://ipecho.net/plain')
-                await message.channel.send(r.text + ":4535")
+                await message.channel.send(r.text + ":4534")
 
 
         # poweroff                
