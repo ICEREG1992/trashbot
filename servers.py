@@ -266,7 +266,7 @@ class servers:
                 else:
                     await message.channel.send("will doesn't have the token set up right")
                     return
-                subprocess.Popen(['bash','srcds_run', '-game', 'garrysmod', '+gamemode', 'terrortown', '+maxplayers', '16', '+map', map, '+host_workshop_collection', '3100438906', '+sv_setsteamaccount', token], cwd=r'/home/william/Steam/steamapps/common/GarrysModDS', stdin=subprocess.PIPE)
+                subprocess.Popen(['bash','srcds_run', '-game', 'garrysmod', '+gamemode', 'terrortown', '+maxplayers', '16', '+map', map, '+host_workshop_collection', '3441889366', '+sv_setsteamaccount', token], cwd=r'/home/william/Steam/steamapps/common/GarrysModDS', stdin=subprocess.PIPE)
                 helperfunctions.bot_wait_medium()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
