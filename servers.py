@@ -242,21 +242,32 @@ class servers:
                 await message.channel.send(r.text)
 
         # ttt
-        elif message.content == "!hostttt" and permissions.allowed(message.author.id, "blue"):
+        elif message.content.startswith("!hostttt") and permissions.allowed(message.author.id, "blue"):
             if not servers.runningServer():
                 # figure out map first
                 map = 'ttt_rooftops_2016_v1'
-                if len(message.content) > 8:
-                    map = message.content[9:]
+                if len(message.content.split(' ')) > 1:
+                    map = message.content.split(' ')[1]
                     map = helperfunctions.sanitize(map)
+                    if map == "rooftops":
+                        map = "ttt_rooftops_2016_v1"
+                    if map == "college":
+                        map = "ttt_college"
                     if map not in ['ttt_rooftops_2016_v1', 'ttt_college']:
                         await message.channel.send("that's not a map i can start on")
                         return
-                await message.channel.send(helperfunctions.pick_string([
-                    "hhhhnnnnnnngggggg...",
-                    "\\*inhales\\*",
-                    "ok one sec"
-                ]))
+                if (message.content.split(' ')[0].count('t') > 4):
+                    await message.channel.send(helperfunctions.pick_string([
+                        "whoa that's a lot of t's",
+                        "tttttttttttttttt",
+                        "gimme one momentttttttttttt"
+                    ]))
+                else:
+                    await message.channel.send(helperfunctions.pick_string([
+                        "hhhhnnnnnnngggggg...",
+                        "\\*inhales\\*",
+                        "ok one sec"
+                    ]))
                 # first get game server account login token
                 token = ""
                 if os.path.exists('/home/william/Steam/steamapps/common/GarrysModDS/' + 'token.txt'):
