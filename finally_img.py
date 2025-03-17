@@ -89,7 +89,7 @@ class finally_img:
                     draw.text((x+2, y+2), text, font=font, fill=shadowcolor)
                     # now draw the text over it
                     draw.text((x, y), text, font=font, fill=fillcolor)
-                    if(google_image.is_animated):
+                    if(getattr(google_image, "is_animated", False)):
                         imageout = finally_img.process_gif(template_img, google_image)
                         await finally_img.send_gif(imageout, message.channel, text)
                     else:
@@ -98,6 +98,7 @@ class finally_img:
                         # paste image onto template
                         finally_img.paste_with_transparency(template_img, google_image, (180,70))
                         await finally_img.send_image(template_img, message.channel, text)
+                    google_image.close()
                 elif (c[1] >= 80):
                     await message.channel.send("out of requests for today, sry")
         elif "!finally " in message.content:
