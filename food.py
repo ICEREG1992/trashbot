@@ -98,7 +98,7 @@ class food:
                         "i'm gonna just eat that right up ty",
                         "god damn that's tasty",
                         "i'm munching and crunching like a bunch of crunch n munch",
-                        "scarfing it down really fast like a monster would",
+                        "scarfing it down really fast like a monster would"
                     ]))
                 elif chance(50): # underwhelmed response
                     await message.channel.send(pick_string([
