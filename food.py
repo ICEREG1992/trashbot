@@ -30,7 +30,7 @@ class food:
                     await message.channel.send(pick_string([
                         "actually nevermind i dont want anything"
                     ]))
-                if chance(5):
+                if chance(10):
                     await message.channel.send(pick_string([
                         "i guess i could have a bite but i wont",
                         "no thanks",
@@ -42,16 +42,16 @@ class food:
                     ]))
                 else:
                     await message.channel.send(pick_string([
-                        "bluuouohuhgghghghh hoghg hghg  ghgooh hh oh hh h hh ohohhohohhohhh  goddd hoohhhh god oh fuck no i can't",
+                        "i really really really don't want to eat that",
                         "omg im so full i cant have another bite",
                         "noooooooo pls no more",
                         "already had some of that",
-                        "bleeeuehehehhhgeghghggehghhhhh hh thats me thats me when i vomit im vomiting",
-                        "throwing up vomiting puking spewing this is terrible this is so bad",
-                        "too full cant eat cannot do it stop it",
-                        "okay ENOUGH that's GOOD im FULL IT'S ENOUGH FOOD",
-                        "STOP IT QUIT IT I HAVE ENOUGH",
-                        "im GOOD i DON'T NEED ANY OF THAT"
+                        "not gonna eat that thanks but actually no thanks because i'm not gonna eat it",
+                        "I DONT WANT THAT",
+                        "i'm too full to have any of that !!",
+                        "THAT'S ENOUGH TO EAT",
+                        "stop that please",
+                        "im really fine i don't need any more pls"
                     ]))
             elif (t < dt.datetime.utcnow() - dt.timedelta(days=2)):
                 logcommand.log_globally(logging.INFO, "I was fed `" + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds") +
@@ -59,11 +59,11 @@ class food:
                 t = dt.datetime.utcnow()
                 food.save(t)
                 await message.channel.send(pick_string([
-                    "oh my god i've been starving hand it over mnomnomnomnomnmonnmonmonmonmonnomnomnomnonm scrumptious",
-                    "holy shit is that a " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds for me") + " wowie wowie wowie thank you thats perfect",
-                    "about time i got some " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "seeds") + " in here ive been sooooooooooooooooooooooooooooo hungry",
+                    "that looks reeeeaallllyyy good hand that over nomnomnom",
+                    "holy shit is that a " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds for me") + " that's gonna hit the spot",
+                    "about time i got some " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "seeds") + " in here ive been literally starving",
                     "YES YES YES YES ohmygod YES YES FINALLY",
-                    "manna from heaven... ACK!!",
+                    "manna from heaven...",
                     "IVE BEEN SO HUNGRY THANNK YOU",
                     "AAAAAAAAAAHHHHHHHHHH!!!!!!!!",
                     "scrumptious (this message written by user noneuclidean)",
@@ -77,16 +77,28 @@ class food:
                 if chance(90): # regular response
                     await message.channel.send(pick_string([
                         "Oh fuck yes it's a " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds") + " for me",
-                        "AW YEAH all abourt the gravy train TOOT TOOT im eatin good tonite",
-                        "booyah booyah booyah weehaw so good and tasty and yummy",
-                        "ohhh hh hhhh h mmmmmmmmm im eating it up im just eating it all up it's so scrumptious thank you mwah mwah mwah oh yeah",
-                        "ohhhh yeah ive been a hungry boy thank you oh so very much",
-                        "MMMMMMMMMMMMMMMMMmmmmmmmm how did u know. i have wanted this so bad.",
+                        "LFG i got a " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds"),
+                        "WAHOO that looks really good thx nomnomnom",
+                        "i'm eating it, and it's really delish, thank you so much",
+                        "i've been a teeny tiny hungry boy and this looks rly rly good wow",
+                        "wow that. that looks really fucking ggood im gonna eat this up",
                         "need a bucket and a mop for dis " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds"),
                         "DELISH!!!!!",
                         "nom nom nom nom nom nom nom nom hehe xd ty",
-                        "omg can't wait to enjoy this " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds") + " s gonna be so good",
-                        "great big ol " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds") + " just for me"
+                        "omg this " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds") + " is gonna be so good to eat",
+                        "great big ol " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds") + " just for me",
+                        "THAT'S RIGHT! another big tasty meal in the books for trashbot",
+                        "here we go here we go here we go omg im eating it",
+                        "chewing and chewing and chewing IT'S REALLY GOOD",
+                        "wouldn't mind having some of that!! wow this is good",
+                        "it's actually really good to eat and have",
+                        "thank you it's really tasty",
+                        "i really like that and i'm eating it take a look i'm taking a bite 👄",
+                        "omg nice looks rly good",
+                        "i'm gonna just eat that right up ty",
+                        "god damn that's tasty",
+                        "i'm munching and crunching like a bunch of crunch n munch",
+                        "scarfing it down really fast like a monster would",
                     ]))
                 elif chance(50): # underwhelmed response
                     await message.channel.send(pick_string([
@@ -110,7 +122,8 @@ class food:
                         "I'VE NEVER HAD SOMETHING SO GOOD",
                         "I LIKE IT A LOT AND ITS VERY GOOD",
                         "MANNA FROM HEAVEN. AMBROSIA. MILK OF THE GGODS",
-                        "PLEASE FEED ME ONLY THIS FROM NOW ON IT IS SO GOOD"
+                        "PLEASE FEED ME ONLY THIS FROM NOW ON IT IS SO GOOD",
+                        "this " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds") + " making me go freaky mode hdnghmhnioinnf dewnauiontg kjgm f gng ng n wdaiodnagd skjghnjksnfnfnjgnsfesmfkesm\ndnwoianf ka rfaijji fwanijoufnijeanjih fd iongiorfdmngiordiomgfd gjk\n\ndwiaonftgoiaweniodwajfeionfgeoiuiongrsno  fes oifenisnofnnhhnnhn hnnhhhnh \n\n\njdiwoaon fg8omiesajnuigko noiegnio ungio geigejiinoghrdsnioh f sifjnbiuoasndGOGOD THATS GOOD\nndiuowa nioasftenoi ne ioA NTOI JITY JOI JTIOE ONIAnsfangtnjoda\nNDAWUIONFOIAW MJIDFOwmnjasdf sagtjgNGNSJURE OIBGFUIOES NBOFNUIJES NIOFE NOIS fngoie n"
                     ]))
         # elif (message.content == "!unfeed" and (permissions.allowed(message.author.id, "blue") or (permissions.allowed(message.author.id, "red")))):
         #     if (t > dt.datetime.utcnow() - dt.timedelta(hours=6)):
