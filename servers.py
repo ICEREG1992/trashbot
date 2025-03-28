@@ -21,6 +21,21 @@ class servers:
 
     async def run(self, message):
         global mcIP
+        if message.content == "!host":
+            if servers.runningServer():
+                await message.channel.send(helperfunctions.pick_string([
+                    "looks like i'm already running " + servers.runningServer(),
+                    "it's already " + servers.runningServer(),
+                    "it's actually " + servers.runningServer() + " time rn baybee",
+                    "i'll keep hosting " + servers.runningServer() + " instead ok"
+                ]))
+            else:
+                await message.channel.send(helperfunctions.pick_string([
+                    "nothing rn",
+                    "not hosting anything right now",
+                    "the world's your oyster",
+                    "it's free real estate"
+                ]))
         if mcIP and message.content == "!whosuprn":
             r = requests.get('https://api.mcsrvstat.us/3/' + mcIP)
             o = r.json()
