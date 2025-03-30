@@ -22,7 +22,7 @@ class rdj:
                 draw.text((60, offset), line, font=font, fill=color)
                 bbox = font.getbbox(line)
                 offset += bbox[3]-bbox[1]
-            await rdj.send_image(rdj_img, message.channel, text)
+            await rdj.send_image(rdj_img, message.channel, "robert downy junior meme that says \"" + text + "\"")
         elif (message.content.startswith("!rdj")):
             rdj_img = Image.open("rdj.png")
             draw = ImageDraw.Draw(rdj_img)
@@ -43,17 +43,17 @@ class rdj:
                 draw.text((60, offset), line, font=font, fill="black")
                 bbox = font.getbbox(line)
                 offset += bbox[3]-bbox[1]
-            await rdj.send_image(rdj_img, message.channel, text)
+            await rdj.send_image(rdj_img, message.channel, "robert downy junior meme that says \"" + text + "\"")
         elif (message.content.startswith("!ithinkitis ")):
             ithink_img = Image.open("ithink.png")
             draw = ImageDraw.Draw(ithink_img)
             font = ImageFont.truetype('arialbd.ttf', 46)
             text = message.content[12:]
             draw.text((330, 6), text, font=font, fill="black")
-            await rdj.send_image(ithink_img, message.channel, text)
-    async def send_image(img, channel, text):
+            await rdj.send_image(ithink_img, message.channel, "man with splayed hands with caption \"I think it is " + text + " but for a different reason\"")
+    async def send_image(img, channel, desc):
         with io.BytesIO() as out:
             img.save(out, format="PNG")
             out.seek(0)
-            f = discord.File(fp=out, filename="rdj.png", description="robert downy junior meme that says \"" + text + "\"")
+            f = discord.File(fp=out, filename="rdj.png", description=desc)
             await channel.send(file=f)
