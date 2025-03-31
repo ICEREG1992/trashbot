@@ -1,3 +1,4 @@
+import shutil
 import requests
 import helperfunctions
 from permissions import permissions
@@ -84,6 +85,7 @@ class servers:
         # minecraft
         elif message.content.startswith("!hostmc") and permissions.allowed(message.author.id, "blue"):
             if not servers.runningServer():
+                jar = ""
                 # set map first
                 if len(message.content) > 7:
                     map = message.content[8:]
@@ -101,6 +103,24 @@ class servers:
                         file.seek(0)
                         file.truncate(0)
                         config.store(file, encoding="utf-8")
+                    jar_path = f"/home/william/minecraft/{map}/jar.txt"
+                    if os.path.isfile(jar_path):
+                        with open(jar_path, "r") as f:
+                            jar_name = f.read().strip()
+                        source_jar = f"/home/william/minecraft/versions/{jar_name}/server.jar"
+                        destination_jar = "/home/william/minecraft/tempserver.jar"
+
+                        if os.path.isfile(source_jar):
+                            shutil.copyfile(source_jar, destination_jar)
+                            await message.channel.send(f"booting with {jar_name}")
+                            jar = "tempserver.jar"
+                        else:
+                            await message.channel.send(f"Jar {jar_name} not found in /versions, using default")
+                            jar = "server.jar"
+                        jar = "tempserver.jar"
+                    else:
+                        await message.channel.send("i'll boot this from the default jar")
+                        jar = "server.jar"
                 else:
                     intro = "pls tell me a map.. i see these map names:\n"
                     maps = os.walk('/home/william/minecraft/')
