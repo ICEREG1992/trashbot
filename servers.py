@@ -132,7 +132,7 @@ class servers:
                     # fuckery
                     maps = next(maps)[1]
                     # trim folders we don't want
-                    for x in ['crash-reports','libraries','logs','versions','.fabric', 'debug', 'plugins', 'bundler']:
+                    for x in ['crash-reports','libraries','logs','versions','.fabric', 'debug', 'plugins', 'bundler', 'mods']:
                         if x in maps:
                             maps.remove(x)
                     # sort
