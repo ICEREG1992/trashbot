@@ -4,23 +4,24 @@ import time
 import boto3
 import logging
 import re
+import asyncio
 
 logging.basicConfig(level=logging.INFO)
 
 def pick_string(set):
     return random.choice(set)
 
-def bot_wait():
-    time.sleep(1.5)
+async def bot_wait():
+    await asyncio.sleep(1.5)
 
-def bot_wait_medium():
-    time.sleep(10)
+async def bot_wait_medium():
+    await asyncio.sleep(10)
 
-def bot_wait_long():
-    time.sleep(60)
+async def bot_wait_long():
+    await asyncio.sleep(60)
 
-def bot_wait_short():
-    time.sleep(.3)
+async def bot_wait_short():
+    await asyncio.sleep(.3)
 
 def chance(rate):
     return random.uniform(0,100) < rate
