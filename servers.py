@@ -116,7 +116,7 @@ class servers:
                             shutil.copyfile(f"/home/william/minecraft/versions/{jar_name}/run.sh", "/home/william/minecraft/run.sh")
                             shutil.copyfile(f"/home/william/minecraft/versions/{jar_name}/user_jvm_args.txt", "/home/william/minecraft/user_jvm_args.txt")
                             jar = "forge"
-                        if os.path.isfile(source_jar):
+                        elif os.path.isfile(source_jar):
                             shutil.copyfile(source_jar, destination_jar)
                             await message.channel.send(f"booting with {jar_name}")
                             jar = "tempserver.jar"
