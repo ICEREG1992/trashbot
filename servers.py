@@ -115,6 +115,7 @@ class servers:
                             shutil.copytree(f"/home/william/minecraft/versions/{jar_name}/libraries", "/home/william/minecraft/libraries")
                             shutil.copyfile(f"/home/william/minecraft/versions/{jar_name}/run.sh", "/home/william/minecraft/run.sh")
                             shutil.copyfile(f"/home/william/minecraft/versions/{jar_name}/user_jvm_args.txt", "/home/william/minecraft/user_jvm_args.txt")
+                            await message.channel.send(f"booting with {jar_name}")
                             jar = "forge"
                         elif os.path.isfile(source_jar):
                             shutil.copyfile(source_jar, destination_jar)
