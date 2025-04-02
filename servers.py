@@ -372,7 +372,7 @@ class servers:
         elif message.content == "!stophost" and permissions.allowed(message.author.id, "blue"):
             if servers.runningServer():
                 subprocess.run(['pkill', '-f', '\'bash launch.sh\''])
-                subprocess.run(['pkill', '-f', 'server.jar'])
+                subprocess.run(['pkill', '-f', 'java'])
                 subprocess.run(['pkill', '-f', 'svends'])
                 subprocess.run(['pkill', '-f', 'srcds'])
                 subprocess.run(['pkill', '-f', 'armagetronad-dedicated'])
