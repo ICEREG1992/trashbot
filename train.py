@@ -17,7 +17,7 @@ class spam_train:
                 # if it's the first time (not set active yet) reply all the time, else reply 10% of the time
                 if not q.active or (q.active and helperfunctions.chance(10)):
                     logcommand.log_globally(logging.INFO, "Train triggered: `" + q.mem.content + "`")
-                    helperfunctions.bot_wait()
+                    await helperfunctions.bot_wait()
                     await message.channel.send(message.content)
         else:
             # add channel to channels

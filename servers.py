@@ -113,8 +113,8 @@ class servers:
                             if os.path.isdir("/home/william/minecraft/libraries"):
                                 shutil.rmtree("/home/william/minecraft/libraries")
                             shutil.copytree(f"/home/william/minecraft/versions/{jar_name}/libraries", "/home/william/minecraft/libraries")
-                            shutil.copyfile(f"/home/william/minecraft/versions/{jar_name}/run.sh", "/home/william.minecraft/run.sh")
-                            shutil.copyfile(f"/home/william/minecraft/versions/{jar_name}/user_jvm_args.txt", "/home/william.minecraft/user_jvm_args.txt")
+                            shutil.copyfile(f"/home/william/minecraft/versions/{jar_name}/run.sh", "/home/william/minecraft/run.sh")
+                            shutil.copyfile(f"/home/william/minecraft/versions/{jar_name}/user_jvm_args.txt", "/home/william/minecraft/user_jvm_args.txt")
                             jar = "forge"
                         if os.path.isfile(source_jar):
                             shutil.copyfile(source_jar, destination_jar)
@@ -154,7 +154,7 @@ class servers:
                     subprocess.Popen(['bash', 'run.sh'], cwd=r'/home/william/minecraft/', stdin=subprocess.PIPE)
                 else:
                     subprocess.Popen(['java', '-Xms3072M', '-Xmx3072M', '-jar', jar, 'nogui'], cwd=r'/home/william/minecraft/', stdin=subprocess.PIPE)
-                helperfunctions.bot_wait_long()
+                await helperfunctions.bot_wait_long()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
                     "epic minecraft",
@@ -194,7 +194,7 @@ class servers:
                     "ok one sec"
                 ]))
                 subprocess.Popen(['bash','svends_run', '+maxplayers', '16'], cwd=r'/home/william/Steam/steamapps/common/Sven Co-op Dedicated Server', stdin=subprocess.PIPE)
-                helperfunctions.bot_wait()
+                await helperfunctions.bot_wait()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
                     "epic sven",
@@ -230,7 +230,7 @@ class servers:
                     await message.channel.send("will doesn't have the token set up right")
                     return
                 subprocess.Popen(['bash','srcds_run', '-game', 'tf', '+maxplayers', '16', '+map', 'ctf_2fort', '+sv_setsteamaccount', token], cwd=r'/home/william/Steam/steamapps/common/Team Fortress 2 Dedicated Server', stdin=subprocess.PIPE)
-                helperfunctions.bot_wait()
+                await helperfunctions.bot_wait()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
                     "epic tf2",
@@ -266,7 +266,7 @@ class servers:
                     await message.channel.send("will doesn't have the token set up right")
                     return
                 subprocess.Popen(['bash','srcds_run', '-game', 'cstrike', '+maxplayers', '16', '+map', 'de_dust2', '+sv_setsteamaccount', token], cwd=r'/home/william/Steam/steamapps/common/Counter-Strike Source Dedicated Server', stdin=subprocess.PIPE)
-                helperfunctions.bot_wait()
+                await helperfunctions.bot_wait()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
                     "epic cs:s",
@@ -321,7 +321,7 @@ class servers:
                     await message.channel.send("will doesn't have the token set up right")
                     return
                 subprocess.Popen(['bash','srcds_run', '-game', 'garrysmod', '+gamemode', 'terrortown', '+maxplayers', '16', '+map', map, '+host_workshop_collection', '3441889366', '+sv_setsteamaccount', token], cwd=r'/home/william/Steam/steamapps/common/GarrysModDS', stdin=subprocess.PIPE)
-                helperfunctions.bot_wait_medium()
+                await helperfunctions.bot_wait_medium()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
                     "epic ttt",
@@ -348,7 +348,7 @@ class servers:
                     "ok one sec"
                 ]))
                 subprocess.Popen(['bash', '-c', './AppRun'], cwd=r'/home/william/armagetron/squashfs-root', stdin=subprocess.PIPE)
-                helperfunctions.bot_wait_medium()
+                await helperfunctions.bot_wait_medium()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
                     "epic tron",

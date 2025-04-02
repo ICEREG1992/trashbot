@@ -64,7 +64,7 @@ class Karaoke:
 
     async def start(self):
         await self.channel.send("duuuuude i love this song. okay i'll start")
-        helperfunctions.bot_wait()
+        await helperfunctions.bot_wait()
         await self.channel.send(self.next_line)
         self.next()
 
