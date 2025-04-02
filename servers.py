@@ -389,7 +389,7 @@ class servers:
     def runningServer():
         out = ""
         try:
-            subprocess.check_output(["pgrep", '-f', "server.jar"])
+            subprocess.check_output(["pgrep", '-f', "java"])
             out = "minecraft"
         except subprocess.CalledProcessError as e:
             try:
