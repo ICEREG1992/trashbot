@@ -34,7 +34,7 @@ def humor_escape(msg, text, match=None):
             text = text.replace("$" + str(i+1), match[i+1])
     
     if (' ' in msg.content):
-        text = text.replace("$pc", msg.content[msg.content.index(' '):])
+        text = text.replace("$pc", msg.content[msg.content.index(' ') + 1:])
 
     if hasattr(msg.author, 'nick') and msg.author.nick is not None:
         text = text.replace("$n", msg.author.nick)
