@@ -91,7 +91,7 @@ class servers:
                     map = message.content[8:]
                     map = helperfunctions.sanitize(map)
                     try:
-                        subprocess.check_output(['test', '-d', '/home/william/minecraft/' + map])
+                        subprocess.check_output(['test', '-d', '/home/william/minecraft/worlds/' + map])
                     except subprocess.CalledProcessError as e:
                         await message.channel.send("i was not able to find a map called that")
                         return
@@ -99,11 +99,11 @@ class servers:
                     config = jproperties.Properties()
                     with open('/home/william/minecraft/' + 'server.properties', 'r+b') as file:
                         config.load(file, "utf-8")
-                        config["level-name"] = map
+                        config["level-name"] = "worlds/" + map
                         file.seek(0)
                         file.truncate(0)
                         config.store(file, encoding="utf-8")
-                    jar_path = f"/home/william/minecraft/{map}/jar.txt"
+                    jar_path = f"/home/william/minecraft/worlds/{map}/jar.txt"
                     if os.path.isfile(jar_path):
                         with open(jar_path, "r") as f:
                             jar_name = f.read().strip()
@@ -129,13 +129,9 @@ class servers:
                         jar = "server.jar"
                 else:
                     intro = "pls tell me a map.. i see these map names:\n"
-                    maps = os.walk('/home/william/minecraft/')
+                    maps = os.walk('/home/william/minecraft/worlds')
                     # fuckery
                     maps = next(maps)[1]
-                    # trim folders we don't want
-                    for x in ['crash-reports','libraries','logs','versions','.fabric', 'debug', 'plugins', 'bundler', 'mods']:
-                        if x in maps:
-                            maps.remove(x)
                     # sort
                     maps.sort()
                     # print list of maps
