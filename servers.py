@@ -335,6 +335,12 @@ class servers:
             if servers.runningServer():
                 r = requests.get('https://ipecho.net/plain')
                 await message.channel.send(r.text)
+        elif message.content == "!updatettt":
+            if not servers.runningServer():
+                subprocess.Popen(['steamcmd', '+login', 'anonymous', '+app_update', '4020', 'validate', '+quit'], cwd=r'/home/william', stdin=subprocess.PIPE)
+                await message.channel.send("ok i'll update the ttt server")
+            else:
+                await message.channel.send("i'm hosting something right now, i don't want to update im scared to do it")
 
         # tron
         elif message.content == "!hosttron" and permissions.allowed(message.author.id, "blue"):
