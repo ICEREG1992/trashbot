@@ -198,7 +198,7 @@ class BattleU:
                 await self.right_run()
         elif (reaction.emoji in Battle.crits):
             # check to make sure trashbot actually added that emoji
-            if any(user == self.user async for user in reaction.users()):
+            if reaction.me:
                 if uid == self.uid:
                     await self.left_crit()
                 elif uid == self.eid:
