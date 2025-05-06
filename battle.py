@@ -7,7 +7,7 @@ b = {}
 
 class battle_manager:
     async def run(self, message):
-        if message.content == "!battle" or message.content == "!battle <@!450507364768940034>":
+        if message.content == "!battle" or message.content == "!battle <@450507364768940034>":
             # bot battle
             logcommand.log_globally(logging.INFO, "Bot battle started by " + message.author.name)
             await battle_manager.add_bot_battle(str(message.author.id), self, message.channel)
