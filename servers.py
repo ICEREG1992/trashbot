@@ -389,25 +389,21 @@ class servers:
                 await message.channel.send("im not hosting anything rn")
 
     def runningServer():
-        out = ""
-        try:
-            subprocess.check_output(["pgrep", '-f', "java"])
-            out = "minecraft"
-        except subprocess.CalledProcessError as e:
+        processes = [
+            ("java", "minecraft"),
+            ("svends", "sven"),
+            ("srcds", "a source game"),
+            ("armagetronad-dedicated", "tron")
+        ]
+
+        for pattern, name in processes:
             try:
-                subprocess.check_output(["pgrep", '-f', "svends"])
-                out = "sven"
-            except subprocess.CalledProcessError as e:
-                try:
-                    subprocess.check_output(["pgrep", '-f', "srcds"])
-                    out = "a source game"
-                except subprocess.CalledProcessError as e:
-                    try:
-                        subprocess.check_output(["pgrep", '-f', "armagetronad-dedicated"])
-                        out = "tron"
-                    except subprocess.CalledProcessError as e:
-                        return ""
-        return out
+                subprocess.check_output(["pgrep", "-f", pattern])
+                return name
+            except subprocess.CalledProcessError:
+                continue
+
+        return ""
 
     def save():
         global mcIP
