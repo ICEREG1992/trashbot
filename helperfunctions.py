@@ -91,8 +91,8 @@ def ensure_table():
 
 def fill_defaults(db):
     # fill empty required values with defaults
-    keynames = ["contains_phrases", "equals_phrases", "regex_phrases", "hunger", "lyrics", "mc_ip", "permissions", "uptime", "todo", "wordplay_keywords", "on", "lipo", "pan"]
-    defaults = ["{}", "{}", "{}", "0", "•", "", "{}", "0", "[]", "{}", "True", "{}", "{}"]
+    keynames = ["contains_phrases", "equals_phrases", "regex_phrases", "hunger", "lyrics", "mc_ip", "permissions", "uptime", "todo", "wordplay_keywords", "on", "lipo", "pan", "reminders"]
+    defaults = ["{}", "{}", "{}", "0", "•", "", "{}", "0", "[]", "{}", "True", "{}", "{}", "[]"]
     for i in range(len(keynames)):
         n = db.get_item(TableName="trashbot", Key={'name':{'S':keynames[i]}})
         if ('Item' not in n):
