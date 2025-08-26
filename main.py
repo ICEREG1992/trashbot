@@ -104,6 +104,10 @@ class MyClient(discord.Client):
                     await message.channel.send("u last pushed to me _DATE_")
 
                 if message.content == "!join":
+                    vcs = self.voice_clients
+                    print(vcs)
+                    for c in vcs:
+                        await c.disconnect(force=True)
                     await message.author.voice.channel.connect(self_mute=helperfunctions.chance(50), self_deaf=helperfunctions.chance(5))
 
                 if message.content == "!leave":
@@ -111,8 +115,7 @@ class MyClient(discord.Client):
                     print(vcs)
                     for c in vcs:
                         await c.disconnect(force=True)
-                        await c.cleanup()
-
+                
                 if message.content == "!doublegulp":
                     vcs = self.voice_clients
                     for c in vcs:
