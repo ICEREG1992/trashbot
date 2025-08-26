@@ -11,7 +11,7 @@ global db
 db = boto3.client('dynamodb', region_name='us-east-2')
 
 global t
-t = dt.datetime.utcnow() - dt.timedelta(hours=6)
+t = dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)
 
 class food:
     
@@ -25,7 +25,7 @@ class food:
         global t
         # send messages if fed
         if (message.content.startswith("!feed")):
-            if (t > dt.datetime.utcnow() - dt.timedelta(hours=6)):
+            if (t > dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)):
                 if message.content[message.content.index(' ')+1:] is "cheeseburger":
                     await message.channel.send(pick_string([
                         "actually nevermind i dont want anything"
@@ -53,10 +53,10 @@ class food:
                         "stop that please",
                         "im really fine i don't need any more pls"
                     ]))
-            elif (t < dt.datetime.utcnow() - dt.timedelta(days=2)):
+            elif (t < dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=2)):
                 logcommand.log_globally(logging.INFO, "I was fed `" + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds") +
-                "` by user " + message.author.name + " after starving for " + str(humanize.precisedelta((dt.datetime.utcnow() - dt.timedelta(hours=6) - t), suppress=['milliseconds','microseconds'])) )
-                t = dt.datetime.utcnow()
+                "` by user " + message.author.name + " after starving for " + str(humanize.precisedelta((dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6) - t), suppress=['milliseconds','microseconds'])) )
+                t = dt.datetime.now(dt.timezone.utc)
                 food.save(t)
                 await message.channel.send(pick_string([
                     "that looks reeeeaallllyyy good hand that over nomnomnom",
@@ -71,8 +71,8 @@ class food:
                 ]))
             else:
                 logcommand.log_globally(logging.INFO, "I was fed `" + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds") +
-                "` by user " + message.author.name + " after being hungry for " + str(humanize.precisedelta((dt.datetime.utcnow() - dt.timedelta(hours=6) - t), suppress=['milliseconds','microseconds'])))
-                t = dt.datetime.utcnow()
+                "` by user " + message.author.name + " after being hungry for " + str(humanize.precisedelta((dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6) - t), suppress=['milliseconds','microseconds'])))
+                t = dt.datetime.now(dt.timezone.utc)
                 food.save(t)
                 if chance(90): # regular response
                     await message.channel.send(pick_string([
@@ -126,8 +126,8 @@ class food:
                         "this " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds") + " making me go freaky mode hdnghmhnioinnf dewnauiontg kjgm f gng ng n wdaiodnagd skjghnjksnfnfnjgnsfesmfkesm\ndnwoianf ka rfaijji fwanijoufnijeanjih fd iongiorfdmngiordiomgfd gjk\n\ndwiaonftgoiaweniodwajfeionfgeoiuiongrsno  fes oifenisnofnnhhnnhn hnnhhhnh \n\n\njdiwoaon fg8omiesajnuigko noiegnio ungio geigejiinoghrdsnioh f sifjnbiuoasndGOGOD THATS GOOD\nndiuowa nioasftenoi ne ioA NTOI JITY JOI JTIOE ONIAnsfangtnjoda\nNDAWUIONFOIAW MJIDFOwmnjasdf sagtjgNGNSJURE OIBGFUIOES NBOFNUIJES NIOFE NOIS fngoie n"
                     ]))
         # elif (message.content == "!unfeed" and (permissions.allowed(message.author.id, "blue") or (permissions.allowed(message.author.id, "red")))):
-        #     if (t > dt.datetime.utcnow() - dt.timedelta(hours=6)):
-        #         t = dt.datetime.utcnow() - dt.timedelta(hours=6)
+        #     if (t > dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)):
+        #         t = dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)
         #         food.save(t)
         #     await message.channel.send(pick_string([
         #         "What's your problem?",
@@ -140,16 +140,16 @@ class food:
         #     ]))
         
         # update status on message receive
-        if (t > dt.datetime.utcnow() - dt.timedelta(hours=6)):
+        if (t > dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)):
             # full
             await self.change_presence(status=None, activity=discord.Game(name='Full for now'))
-        elif (t < dt.datetime.utcnow() - dt.timedelta(days=5)):
+        elif (t < dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=5)):
             await self.change_presence(status=discord.Status.dnd, activity=discord.Game(name='Trashbot has died.'))
             switch.poweroff()
-        elif (t < dt.datetime.utcnow() - dt.timedelta(days=2)):
-            await self.change_presence(status=discord.Status.idle, activity=discord.Game(name='Starving for ' + humanize.naturaldelta((dt.datetime.utcnow() - dt.timedelta(hours=6)) - t)))
+        elif (t < dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=2)):
+            await self.change_presence(status=discord.Status.idle, activity=discord.Game(name='Starving for ' + humanize.naturaldelta((dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)) - t)))
         else:
-            await self.change_presence(status=None, activity=discord.Game(name='Hungry for ' + humanize.naturaldelta((dt.datetime.utcnow() - dt.timedelta(hours=6)) - t)))
+            await self.change_presence(status=None, activity=discord.Game(name='Hungry for ' + humanize.naturaldelta((dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)) - t)))
     
     def save(t):
         db.put_item(TableName="trashbot", Item={'name':{'S':'hunger'}, 'data':{'S':str(t.timestamp())}})
