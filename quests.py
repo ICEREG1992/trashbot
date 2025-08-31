@@ -206,6 +206,14 @@ class quests:
                 msg += f"{len(questsData['punishments'])} punishments\n"
                 await message.channel.send(msg)
 
+            elif message.content == "!clearquests" and permissions.allowed(message.author.id, "blue"):
+                questsData['quests'] = []
+                questsData['rewards'] = []
+                questsData['punishments'] = []
+                questsData['tags'] = {}
+                quests.save()
+                await message.channel.send("cleared all quests")
+            
             elif message.content == "!disablequests" and permissions.allowed(message.author.id, "blue"):
                 questsData["enabled"] = False
                 quests.save()
