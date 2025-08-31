@@ -107,6 +107,7 @@ class quests:
                             ind = len(questsData["quests"])
                             questsData["quests"].append(quest)
                             questsData["tags"][tag] = {"quests": [ind], "rewards": []}
+                            quests.save()
                             await message.channel.send(f"created new tag {tag} and added quest")
                 else:
                     await message.channel.send("try giving me a tag and a quest")
@@ -151,6 +152,7 @@ class quests:
                             ind = len(questsData["rewards"])
                             questsData["rewards"].append(reward)
                             questsData["tags"][tag] = {"quests": [], "rewards": [ind]}
+                            quests.save()
                             await message.channel.send(f"created new tag {tag} and added reward")
                 else:
                     await message.channel.send("try giving me a tag and a reward")
@@ -171,7 +173,7 @@ class quests:
                     else:
                         await message.channel.send(f"that reward over there is NOT real")
 
-            elif message.content.startswith("!addpunishment ") and permissions.allowed(message.author.id, "blue"):
+            elif message.content.startswith("!addpunishment") and permissions.allowed(message.author.id, "blue"):
                 parts = message.content.split(' ')
                 if len(parts) >= 2:
                     punishment = ' '.join(parts[1:])
@@ -179,7 +181,7 @@ class quests:
                     quests.save()
                     await message.channel.send(f"added punishment")
                 else:
-                    await message.channel.send("try giving me a tag and a punishment")
+                    await message.channel.send("add punishment what")
                     return
 
             elif message.content.startswith("!removepunishment ") and permissions.allowed(message.author.id, "blue"):
