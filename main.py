@@ -22,6 +22,7 @@ from lipo import lipo
 from pan import pan
 from qat import qat
 from remind import remind
+from quests import quests
 import logcommand, logging
 logging.basicConfig(level=logging.INFO)
 
@@ -50,6 +51,7 @@ class MyClient(discord.Client):
         lipo.init()
         pan.init()
         remind.init()
+        quests.init()
         await powerswitch.init(self)
 
     async def on_message(self, message):
@@ -79,6 +81,7 @@ class MyClient(discord.Client):
                 await qat.run(self, message)
                 await numerology.run(self, message)
                 await remind.run(self, message)
+                await quests.run(self, message)
                 
                 if message.content.startswith("!ban "):
                     await message.channel.send(message.content[5:] + " has been banned.")
