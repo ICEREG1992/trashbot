@@ -70,8 +70,10 @@ class quests:
                     else:
                         q = await quests.getQuestTag(self, message.reference.message_id, message.reference.channel_id)
                         if q:
-                            
-                            r = questsData["rewards"][random.choice(questsData["tags"][q]["rewards"])]
+                            if q in basetags:
+                                r = random.choice(questsData["rewards"])
+                            else:
+                                r = questsData["rewards"][random.choice(questsData["tags"][q]["rewards"])]
                             if r:
                                 await message.channel.send(r)
                             else:
@@ -195,7 +197,7 @@ class quests:
                     else:
                         await message.channel.send(f"that punishment over there is NOT real")
 
-            elif message.content == "!questlist":
+            elif message.content == "!questlist" and permissions.allowed(message.author.id, "blue"):
                 msg = ""
                 tags = list(questsData["tags"].keys())
                 if len(tags) == 0:
@@ -235,6 +237,8 @@ class quests:
                 for t in questsData["tags"].keys():
                     if i in questsData["tags"][t]["quests"]:
                         return t
+                # this is a base tag quest
+                return "random"
         return None
             
 
