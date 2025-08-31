@@ -194,10 +194,11 @@ class quests:
                         await message.channel.send(f"that punishment over there is NOT real")
 
             elif message.content == "!questlist":
+                msg = ""
                 tags = list(questsData["tags"].keys())
                 if len(tags) == 0:
                     msg += ("no quests or rewards yet\n")
-                else :
+                else:
                     for t in tags:
                         msg += f"**{t}**: {len(questsData['tags'][t]['quests'])} quests, {len(questsData['tags'][t]['rewards'])} rewards\n"
                 msg += f"{len(questsData['punishments'])} punishments\n"
