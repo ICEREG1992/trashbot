@@ -6,3 +6,4 @@ awscli >= 1.19.80
 requests >= 2.26.0
 Pillow >= 9.4.0
 jproperties >= 2.1.1
+comics >= 0.8.0
