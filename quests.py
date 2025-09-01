@@ -5,6 +5,7 @@ import logcommand, logging
 import datetime as dt
 import boto3
 from discord import MessageType
+from types import SimpleNamespace
 
 from permissions import permissions
 
@@ -94,6 +95,7 @@ class quests:
                 if len(parts) >= 3:
                     tag = parts[1]
                     quest = ' '.join(parts[2:])
+                    quest = quest.replace('//', '\n')
                     tags = tag.split(',')
                     for tag in tags:
                         if tag in questsData["tags"].keys():
@@ -119,6 +121,7 @@ class quests:
                 parts = message.content.split(' ')
                 if len(parts) > 1:
                     quest = ' '.join(parts[1:])
+                    quest = quest.replace('//', '\n')
                     if quest in questsData["quests"]:
                         i = questsData["quests"].index(quest)
                         questsData["quests"].remove(quest)
@@ -139,6 +142,7 @@ class quests:
                 if len(parts) >= 3:
                     tag = parts[1]
                     reward = ' '.join(parts[2:])
+                    reward = reward.replace('//', '\n')
                     tags = tag.split(',')
                     for tag in tags:
                         if tag in questsData["tags"].keys():
@@ -164,6 +168,7 @@ class quests:
                 parts = message.content.split(' ')
                 if len(parts) > 1:
                     reward = ' '.join(parts[1:])
+                    reward = reward.replace('//', '\n')
                     if reward in questsData["rewards"]:
                         i = questsData["rewards"].index(reward)
                         questsData["rewards"].remove(reward)
@@ -179,6 +184,7 @@ class quests:
                 parts = message.content.split(' ')
                 if len(parts) >= 2:
                     punishment = ' '.join(parts[1:])
+                    punishment = punishment.replace('//', '\n')
                     questsData["punishments"].append(punishment)
                     quests.save()
                     await message.channel.send(f"added punishment")
@@ -190,12 +196,22 @@ class quests:
                 parts = message.content.split(' ')
                 if len(parts) > 1:
                     punishment = ' '.join(parts[1:])
+                    punishment = punishment.replace('//', '\n')
                     if punishment in questsData["punishments"]:
                         questsData["punishments"].remove(punishment)
                         quests.save()
                         await message.channel.send(f"removed punishment")
                     else:
                         await message.channel.send(f"that punishment over there is NOT real")
+
+            elif message.content.startswith("!bulkadd") and permissions.allowed(message.author.id, "blue"):
+                if len(message.content) < 9:
+                    await message.channel.send("bulk add what")
+                    return
+                content = message.content[len("!bulkadd "):]
+                lines = content.split('\n')
+                for line in lines:
+                    await quests.run(self, SimpleNamespace(content=line, author=message.author, channel=message.channel))
 
             elif message.content == "!questlist" and permissions.allowed(message.author.id, "blue"):
                 msg = ""
