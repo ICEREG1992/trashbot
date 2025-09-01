@@ -43,7 +43,9 @@ class quests:
                     if parts[1] in questsData["tags"].keys():
                         q = questsData["quests"][random.choice(questsData["tags"][parts[1]]["quests"])]
                         i = (await message.channel.send(q)).id
-                        quests.save()
+                    elif parts[1] in basetags:
+                        q = random.choice(questsData["quests"])
+                        i = (await message.channel.send(q)).id
                     else:
                         await message.channel.send(f"that's not a tag i know")
                 else:
@@ -95,7 +97,7 @@ class quests:
                 if len(parts) >= 3:
                     tag = parts[1]
                     quest = ' '.join(parts[2:])
-                    quest = quest.replace('//', '\n')
+                    quest = quest.replace(' // ', '\n')
                     tags = tag.split(',')
                     for tag in tags:
                         if tag in questsData["tags"].keys():
@@ -121,7 +123,7 @@ class quests:
                 parts = message.content.split(' ')
                 if len(parts) > 1:
                     quest = ' '.join(parts[1:])
-                    quest = quest.replace('//', '\n')
+                    quest = quest.replace(' // ', '\n')
                     if quest in questsData["quests"]:
                         i = questsData["quests"].index(quest)
                         questsData["quests"].remove(quest)
@@ -142,7 +144,7 @@ class quests:
                 if len(parts) >= 3:
                     tag = parts[1]
                     reward = ' '.join(parts[2:])
-                    reward = reward.replace('//', '\n')
+                    reward = reward.replace(' // ', '\n')
                     tags = tag.split(',')
                     for tag in tags:
                         if tag in questsData["tags"].keys():
@@ -168,7 +170,7 @@ class quests:
                 parts = message.content.split(' ')
                 if len(parts) > 1:
                     reward = ' '.join(parts[1:])
-                    reward = reward.replace('//', '\n')
+                    reward = reward.replace(' // ', '\n')
                     if reward in questsData["rewards"]:
                         i = questsData["rewards"].index(reward)
                         questsData["rewards"].remove(reward)
@@ -184,7 +186,7 @@ class quests:
                 parts = message.content.split(' ')
                 if len(parts) >= 2:
                     punishment = ' '.join(parts[1:])
-                    punishment = punishment.replace('//', '\n')
+                    punishment = punishment.replace(' // ', '\n')
                     questsData["punishments"].append(punishment)
                     quests.save()
                     await message.channel.send(f"added punishment")
@@ -196,7 +198,7 @@ class quests:
                 parts = message.content.split(' ')
                 if len(parts) > 1:
                     punishment = ' '.join(parts[1:])
-                    punishment = punishment.replace('//', '\n')
+                    punishment = punishment.replace(' // ', '\n')
                     if punishment in questsData["punishments"]:
                         questsData["punishments"].remove(punishment)
                         quests.save()
