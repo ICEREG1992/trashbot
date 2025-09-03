@@ -235,7 +235,11 @@ class quests:
                     else:
                         questsData["messages"][tag] = msg
                         quests.save()
-                        await message.channel.send(f"added message for tag {tag}")
+                        await message.channel.send(f"added message for `!quest {tag}`")
+                elif len(parts) == 2:
+                    questsData["messages"][tag] = ""
+                    quests.save()
+                    await message.channel.send(f"disabled response for `!quest {tag}`")
                 else:
                     await message.channel.send("try giving me a tag and a message")
                     return
