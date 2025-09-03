@@ -34,6 +34,8 @@ class quests:
                 questsData['tags'] = {}
             if 'enabled' not in questsData:
                 questsData['enabled'] = True
+            if 'messages' not in questsData:
+                questsData['messages'] = {}
     
     async def run(self, message):
         if questsData["enabled"] == True:
@@ -46,6 +48,8 @@ class quests:
                     elif parts[1] in basetags:
                         q = random.choice(questsData["quests"])
                         i = (await message.channel.send(q)).id
+                    elif parts[1] in questsData["messages"].keys():
+                        await message.channel.send(questsData["messages"][parts[1]])
                     else:
                         await message.channel.send(f"that's not a tag i know")
                 else:
@@ -85,11 +89,19 @@ class quests:
                             await message.channel.send(f"that doesn't look like a quest")
                     
             elif message.content.startswith("!punishment ") or message.content == "!punishment":
-                if message.type == "reply":
+                if message.type == MessageType.reply:
                     parts = message.content.split(' ')
                     if len(parts) > 1:
                         await message.channel.send(f"no tags for punishments")
                     else:
+                        # get message to check it's from bot
+                        channel_id = message.reference.channel_id
+                        message_id = message.reference.message_id
+                        c = await self.fetch_channel(channel_id)
+                        m = await c.fetch_message(message_id)
+                        if m.author != self.user:
+                            await message.channel.send(f"that ain't me foo")
+                            return
                         await message.channel.send(random.choice(questsData["punishments"]))
 
             elif message.content.startswith("!addquest ") and permissions.allowed(message.author.id, "blue"):
@@ -130,10 +142,10 @@ class quests:
                         for t in questsData["tags"].keys():
                             if i in questsData["tags"][t]["quests"]:
                                 questsData["tags"][t]["quests"].remove(i)
-                        for p in questsData.get("players", {}).keys():
-                            for q in questsData["players"][p]["quests"]:
-                                if q.message == i:
-                                    questsData["players"][p]["quests"].remove(q)
+                        # if tag has no quests and no rewards, remove it
+                        for t in list(questsData["tags"].keys()):
+                            if len(questsData["tags"][t]["quests"]) == 0 and len(questsData["tags"][t]["rewards"]) == 0:
+                                del questsData["tags"][t]
                         quests.save()
                         await message.channel.send(f"removed quest")
                     else:
@@ -177,6 +189,10 @@ class quests:
                         for t in questsData["tags"].keys():
                             if i in questsData["tags"][t]["rewards"]:
                                 questsData["tags"][t]["rewards"].remove(i)
+                        # if tag has no quests and no rewards, remove it
+                        for t in list(questsData["tags"].keys()):
+                            if len(questsData["tags"][t]["quests"]) == 0 and len(questsData["tags"][t]["rewards"]) == 0:
+                                del questsData["tags"][t]
                         quests.save()
                         await message.channel.send(f"removed reward")
                     else:
@@ -205,6 +221,38 @@ class quests:
                         await message.channel.send(f"removed punishment")
                     else:
                         await message.channel.send(f"that punishment over there is NOT real")
+
+            elif message.content.startswith("!addmessage ") and permissions.allowed(message.author.id, "blue"):
+                parts = message.content.split(' ')
+                if len(parts) >= 3:
+                    tag = parts[1]
+                    msg = ' '.join(parts[2:])
+                    msg = msg.replace(' // ', '\n')
+                    if tag in questsData["messages"].keys():
+                        questsData["messages"][tag] = msg
+                        quests.save()
+                        await message.channel.send(f"overwrote message for `!quest {tag}`")
+                    else:
+                        questsData["messages"][tag] = msg
+                        quests.save()
+                        await message.channel.send(f"added message for tag {tag}")
+                else:
+                    await message.channel.send("try giving me a tag and a message")
+                    return
+                
+            elif message.content.startswith("!removemessage ") and permissions.allowed(message.author.id, "blue"):
+                parts = message.content.split(' ')
+                if len(parts) > 1:
+                    tag = parts[1]
+                    if tag in questsData["messages"].keys():
+                        del questsData["messages"][tag]
+                        quests.save()
+                        await message.channel.send(f"removed message for tag {tag}")
+                    else:
+                        await message.channel.send(f"that doesn't exist yet")
+                else:
+                    await message.channel.send("remove message for what tag")
+                    return
 
             elif message.content.startswith("!bulkadd") and permissions.allowed(message.author.id, "blue"):
                 if len(message.content) < 9:
