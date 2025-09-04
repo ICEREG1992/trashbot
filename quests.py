@@ -111,19 +111,16 @@ class quests:
                     quest = ' '.join(parts[2:])
                     quest = quest.replace(' // ', '\n')
                     tags = tag.split(',')
+                    ind = len(questsData["quests"])
+                    questsData["quests"].append(quest)
                     for tag in tags:
                         if tag in questsData["tags"].keys():
-                            ind = len(questsData["quests"])
-                            questsData["quests"].append(quest)
                             questsData["tags"][tag]["quests"].append(ind)
                             quests.save()
                             await message.channel.send(f"added quest to tag {tag}")
                         elif tag in basetags:
-                            questsData["quests"].append(quest)
                             quests.save()
                         else:
-                            ind = len(questsData["quests"])
-                            questsData["quests"].append(quest)
                             questsData["tags"][tag] = {"quests": [ind], "rewards": []}
                             quests.save()
                             await message.channel.send(f"created new tag {tag} and added quest")
@@ -158,19 +155,16 @@ class quests:
                     reward = ' '.join(parts[2:])
                     reward = reward.replace(' // ', '\n')
                     tags = tag.split(',')
+                    ind = len(questsData["rewards"])
+                    questsData["rewards"].append(reward)
                     for tag in tags:
                         if tag in questsData["tags"].keys():
-                            ind = len(questsData["rewards"])
-                            questsData["rewards"].append(reward)
                             questsData["tags"][tag]["rewards"].append(ind)
                             quests.save()
                             await message.channel.send(f"added reward to tag {tag}")
                         elif tag in basetags:
-                            questsData["rewards"].append(reward)
                             quests.save()
                         else:
-                            ind = len(questsData["rewards"])
-                            questsData["rewards"].append(reward)
                             questsData["tags"][tag] = {"quests": [], "rewards": [ind]}
                             quests.save()
                             await message.channel.send(f"created new tag {tag} and added reward")
