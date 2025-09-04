@@ -274,11 +274,22 @@ class quests:
 
             elif message.content == "!clearquests" and permissions.allowed(message.author.id, "blue"):
                 questsData['quests'] = []
-                questsData['rewards'] = []
-                questsData['punishments'] = []
-                questsData['tags'] = {}
+                for t in questsData["tags"].keys():
+                    questsData["tags"][t]["quests"] = []
                 quests.save()
                 await message.channel.send("cleared all quests")
+
+            elif message.content == "!clearrewards" and permissions.allowed(message.author.id, "blue"):
+                questsData['rewards'] = []
+                for t in questsData["tags"].keys():
+                    questsData["tags"][t]["rewards"] = []
+                quests.save()
+                await message.channel.send("cleared all rewards")
+
+            elif message.content == "!clearpunishments" and permissions.allowed(message.author.id, "blue"):
+                questsData['punishments'] = []
+                quests.save()
+                await message.channel.send("cleared all punishments")
             
             elif message.content == "!disablequests" and permissions.allowed(message.author.id, "blue"):
                 questsData["enabled"] = False
