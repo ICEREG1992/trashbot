@@ -276,6 +276,10 @@ class quests:
                 questsData['quests'] = []
                 for t in questsData["tags"].keys():
                     questsData["tags"][t]["quests"] = []
+                # if tag has no quests and no rewards, remove it
+                for t in list(questsData["tags"].keys()):
+                    if len(questsData["tags"][t]["quests"]) == 0 and len(questsData["tags"][t]["rewards"]) == 0:
+                        del questsData["tags"][t]
                 quests.save()
                 await message.channel.send("cleared all quests")
 
@@ -283,11 +287,19 @@ class quests:
                 questsData['rewards'] = []
                 for t in questsData["tags"].keys():
                     questsData["tags"][t]["rewards"] = []
+                # if tag has no quests and no rewards, remove it
+                for t in list(questsData["tags"].keys()):
+                    if len(questsData["tags"][t]["quests"]) == 0 and len(questsData["tags"][t]["rewards"]) == 0:
+                        del questsData["tags"][t]
                 quests.save()
                 await message.channel.send("cleared all rewards")
 
             elif message.content == "!clearpunishments" and permissions.allowed(message.author.id, "blue"):
                 questsData['punishments'] = []
+                # if tag has no quests and no rewards, remove it
+                for t in list(questsData["tags"].keys()):
+                    if len(questsData["tags"][t]["quests"]) == 0 and len(questsData["tags"][t]["rewards"]) == 0:
+                        del questsData["tags"][t]
                 quests.save()
                 await message.channel.send("cleared all punishments")
             
