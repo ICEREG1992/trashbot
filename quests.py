@@ -37,7 +37,7 @@ class quests:
             if 'messages' not in questsData:
                 questsData['messages'] = {}
     
-    async def run(self, message):
+    async def run(self, message, bulk = False):
         if questsData["enabled"] == True:
             if message.content.startswith("!quest ") or message.content == "!quest":
                 parts = message.content.split(' ')
@@ -117,13 +117,13 @@ class quests:
                         if tag in questsData["tags"].keys():
                             questsData["tags"][tag]["quests"].append(ind)
                             quests.save()
-                            await message.channel.send(f"added quest to tag {tag}")
+                            if not bulk: await message.channel.send(f"added quest to tag {tag}")
                         elif tag in basetags:
                             quests.save()
                         else:
                             questsData["tags"][tag] = {"quests": [ind], "rewards": []}
                             quests.save()
-                            await message.channel.send(f"created new tag {tag} and added quest")
+                            if not bulk: await message.channel.send(f"created new tag {tag} and added quest")
                 else:
                     await message.channel.send("try giving me a tag and a quest")
                     return
@@ -144,7 +144,7 @@ class quests:
                             if len(questsData["tags"][t]["quests"]) == 0 and len(questsData["tags"][t]["rewards"]) == 0:
                                 del questsData["tags"][t]
                         quests.save()
-                        await message.channel.send(f"removed quest")
+                        if not bulk: await message.channel.send(f"removed quest")
                     else:
                         await message.channel.send(f"that quest over there is NOT real")
 
@@ -161,13 +161,13 @@ class quests:
                         if tag in questsData["tags"].keys():
                             questsData["tags"][tag]["rewards"].append(ind)
                             quests.save()
-                            await message.channel.send(f"added reward to tag {tag}")
+                            if not bulk: await message.channel.send(f"added reward to tag {tag}")
                         elif tag in basetags:
                             quests.save()
                         else:
                             questsData["tags"][tag] = {"quests": [], "rewards": [ind]}
                             quests.save()
-                            await message.channel.send(f"created new tag {tag} and added reward")
+                            if not bulk: await message.channel.send(f"created new tag {tag} and added reward")
                 else:
                     await message.channel.send("try giving me a tag and a reward")
                     return
@@ -188,7 +188,7 @@ class quests:
                             if len(questsData["tags"][t]["quests"]) == 0 and len(questsData["tags"][t]["rewards"]) == 0:
                                 del questsData["tags"][t]
                         quests.save()
-                        await message.channel.send(f"removed reward")
+                        if not bulk: await message.channel.send(f"removed reward")
                     else:
                         await message.channel.send(f"that reward over there is NOT real")
 
@@ -199,7 +199,7 @@ class quests:
                     punishment = punishment.replace(' // ', '\n')
                     questsData["punishments"].append(punishment)
                     quests.save()
-                    await message.channel.send(f"added punishment")
+                    if not bulk: await message.channel.send(f"added punishment")
                 else:
                     await message.channel.send("add punishment what")
                     return
@@ -212,7 +212,7 @@ class quests:
                     if punishment in questsData["punishments"]:
                         questsData["punishments"].remove(punishment)
                         quests.save()
-                        await message.channel.send(f"removed punishment")
+                        if not bulk: await message.channel.send(f"removed punishment")
                     else:
                         await message.channel.send(f"that punishment over there is NOT real")
 
@@ -225,15 +225,15 @@ class quests:
                     if tag in questsData["messages"].keys():
                         questsData["messages"][tag] = msg
                         quests.save()
-                        await message.channel.send(f"overwrote message for `!quest {tag}`")
+                        if not bulk: await message.channel.send(f"overwrote message for `!quest {tag}`")
                     else:
                         questsData["messages"][tag] = msg
                         quests.save()
-                        await message.channel.send(f"added message for `!quest {tag}`")
+                        if not bulk: await message.channel.send(f"added message for `!quest {tag}`")
                 elif len(parts) == 2:
                     questsData["messages"][tag] = ""
                     quests.save()
-                    await message.channel.send(f"disabled response for `!quest {tag}`")
+                    if not bulk: await message.channel.send(f"disabled response for `!quest {tag}`")
                 else:
                     await message.channel.send("try giving me a tag and a message")
                     return
@@ -245,7 +245,7 @@ class quests:
                     if tag in questsData["messages"].keys():
                         del questsData["messages"][tag]
                         quests.save()
-                        await message.channel.send(f"removed message for tag {tag}")
+                        if not bulk: await message.channel.send(f"removed message for tag {tag}")
                     else:
                         await message.channel.send(f"that doesn't exist yet")
                 else:
@@ -258,8 +258,10 @@ class quests:
                     return
                 content = message.content[len("!bulkadd "):]
                 lines = content.split('\n')
+                await message.channel.send(f"adding {len(lines)} quests/rewards/punishments")
                 for line in lines:
-                    await quests.run(self, SimpleNamespace(content=line, author=message.author, channel=message.channel))
+                    await quests.run(self, SimpleNamespace(content=line, author=message.author, channel=message.channel), bulk=True)
+                await message.channel.send("all done")
 
             elif message.content == "!questlist" and permissions.allowed(message.author.id, "blue"):
                 msg = ""
@@ -303,6 +305,11 @@ class quests:
                 quests.save()
                 await message.channel.send("cleared all punishments")
             
+            elif message.content == "!clearmessages" and permissions.allowed(message.author.id, "blue"):
+                questsData['messages'] = {}
+                quests.save()
+                await message.channel.send("cleared all messages")
+
             elif message.content == "!disablequests" and permissions.allowed(message.author.id, "blue"):
                 questsData["enabled"] = False
                 quests.save()
