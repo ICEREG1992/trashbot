@@ -43,7 +43,7 @@ class quests:
         if questsData["enabled"] == True:
             if message.content.startswith("!quest ") or message.content == "!quest":
                 parts = message.content.split(' ')
-                if len(questsData["players"][str(message.author.id)]["quests"]) > 0:
+                if quests.playerQuests(message.author.id) > 0:
                     await message.channel.send(f"watch out! you already have a quest active.")
                 if len(parts) > 1:
                     if parts[1] in questsData["tags"].keys():
@@ -380,6 +380,11 @@ class quests:
             questsData["players"][str(player_id)]["inventory"] = []
         questsData["players"][str(player_id)]["inventory"].append({"item": reward, "date": str(dt.datetime.now())})
         quests.save()
+
+    async def playerQuests(self, player_id):
+        if str(player_id) in questsData["players"]:
+            if "quests" in questsData["players"][str(player_id)]:
+                return len(questsData["players"][str(player_id)]["quests"])
 
     def save():
         db.put_item(TableName="trashbot", Item={'name':{'S':'quests'}, 'data':{'S':json.dumps(questsData)}})
