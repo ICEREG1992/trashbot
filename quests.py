@@ -38,6 +38,7 @@ class quests:
                 questsData['messages'] = {}
             if 'players' not in questsData:
                 questsData['players'] = {}
+            quests.save()
     
     async def run(self, message, bulk = False):
         if questsData["enabled"] == True:
@@ -68,14 +69,14 @@ class quests:
                 if len(parts) > 1:
                     mention = parts[1]
                 else:
-                    mention = message.author.id
+                    mention = str(message.author.id)
                 mention = mention.replace("<@", "").replace("!", "").replace(">", "")
                 if mention.isdigit():
                     player_id = int(mention)
                     if str(player_id) in questsData["players"]:
                         if "quests" in questsData["players"][str(player_id)]:
                             if len(questsData["players"][str(player_id)]["quests"]) > 0:
-                                await message.channel.send(f"<@{player_id}> has {len(questsData["players"][str(player_id)]["quests"])} quests active")
+                                await message.channel.send(f"<@{player_id}> has {len(questsData['players'][str(player_id)]['quests'])} quests active")
                             else:
                                 await message.channel.send(f"<@{player_id}> has no current quests")
                         else:
@@ -100,8 +101,14 @@ class quests:
                         if m.content not in questsData["quests"]:
                             await message.channel.send("thats not a quest, silly!")
                             return
-                        r = questsData["rewards"][random.choice(questsData["tags"][parts[1]]["rewards"])]
-                        quests.removeQuestFromPlayer(message.author.id, message_id)
+                        if message_id not in [q["quest"] for q in questsData["players"].get(str(message.author.id), {}).get("quests", [])]:
+                            await message.channel.send("you can't claim a reward for that quest")
+                            return
+                        tag = quests.removeQuestFromPlayer(message.author.id, message_id)
+                        if tag in basetags:
+                            r = random.choice(questsData["rewards"])
+                        else:
+                            r = questsData["rewards"][random.choice(questsData["tags"][tag]["rewards"])]
                         quests.addRewardToPlayer(message.author.id, r)
                         await message.channel.send(r)
                     else:
@@ -124,7 +131,9 @@ class quests:
                         if m.content not in questsData["quests"]:
                             await message.channel.send("thats not a quest, silly!")
                             return
-                        r = questsData["rewards"][random.choice(questsData["tags"][parts[1]]["rewards"])]
+                        if message_id not in [q["quest"] for q in questsData["players"].get(str(message.author.id), {}).get("quests", [])]:
+                            await message.channel.send("that's not your punishment to bear")
+                            return
                         quests.removeQuestFromPlayer(message.author.id, message_id)
                         await message.channel.send(random.choice(questsData["punishments"]))
 
@@ -359,21 +368,24 @@ class quests:
                 return "random"
         return None
     
-    async def addQuestToPlayer(self, player_id, message_id):
+    def addQuestToPlayer(player_id, message_id, tag):
         if str(player_id) not in questsData["players"]:
             questsData["players"][str(player_id)] = {"quests": [], "inventory": []}
         if "quests" not in questsData["players"][str(player_id)]:
             questsData["players"][str(player_id)]["quests"] = []
-        questsData["players"][str(player_id)]["quests"].append({"quest": message_id, "date": str(dt.datetime.now())})
+        questsData["players"][str(player_id)]["quests"].append({"quest": message_id, "tag": tag, "date": str(dt.datetime.now())})
         quests.save()
 
-    async def removeQuestFromPlayer(self, player_id, message_id):
+    def removeQuestFromPlayer(player_id, message_id):
         if str(player_id) in questsData["players"]:
             if "quests" in questsData["players"][str(player_id)]:
+                tag = [q["tag"] for q in questsData["players"][str(player_id)]["quests"] if q["quest"] == message_id][0]
                 questsData["players"][str(player_id)]["quests"] = [q for q in questsData["players"][str(player_id)]["quests"] if q["quest"] != message_id]
                 quests.save()
+                return tag
+        return "random"
 
-    async def addRewardToPlayer(self, player_id, reward):
+    def addRewardToPlayer(player_id, reward):
         if str(player_id) not in questsData["players"]:
             questsData["players"][str(player_id)] = {"quests": [], "inventory": []}
         if "inventory" not in questsData["players"][str(player_id)]:
@@ -381,10 +393,11 @@ class quests:
         questsData["players"][str(player_id)]["inventory"].append({"item": reward, "date": str(dt.datetime.now())})
         quests.save()
 
-    async def playerQuests(self, player_id):
+    def playerQuests(player_id):
         if str(player_id) in questsData["players"]:
             if "quests" in questsData["players"][str(player_id)]:
                 return len(questsData["players"][str(player_id)]["quests"])
+        return 0
 
     def save():
         db.put_item(TableName="trashbot", Item={'name':{'S':'quests'}, 'data':{'S':json.dumps(questsData)}})
