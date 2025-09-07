@@ -137,6 +137,34 @@ class quests:
                         quests.removeQuestFromPlayer(message.author.id, message_id)
                         await message.channel.send(random.choice(questsData["punishments"]))
 
+            elif message.content == "!reroll":
+                if message.type == MessageType.reply:
+                    # get message to check it's from bot
+                    channel_id = message.reference.channel_id
+                    message_id = message.reference.message_id
+                    c = await self.fetch_channel(channel_id)
+                    m = await c.fetch_message(message_id)
+                    if m.author != self.user:
+                        await message.channel.send(f"that ain't me foo")
+                        return
+                    if m.content not in questsData["quests"]:
+                        await message.channel.send("thats not a quest, silly!")
+                        return
+                    if message_id not in [q["quest"] for q in questsData["players"].get(str(message.author.id), {}).get("quests", [])]:
+                        await message.channel.send("that's not your quest to reroll")
+                        return
+                    tag = quests.removeQuestFromPlayer(message.author.id, message_id)
+                    if tag in basetags:
+                        q = random.choice(questsData["quests"])
+                        i = (await message.channel.send(q)).id
+                        quests.addQuestToPlayer(message.author.id, i, tag="random")
+                    else:
+                        q = questsData["quests"][random.choice(questsData["tags"][tag]["quests"])]
+                        i = (await message.channel.send(q)).id
+                        quests.addQuestToPlayer(message.author.id, i, tag=tag)
+                else:
+                    await message.channel.send(f"you gotta reply to the quest you want to reroll")
+
             elif message.content.startswith("!addquest ") and permissions.allowed(message.author.id, "blue"):
                 parts = message.content.split(' ')
                 if len(parts) >= 3:
