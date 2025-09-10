@@ -2,6 +2,7 @@ import os
 import sys
 import discord
 import humanize
+from dailies import dailies
 import helperfunctions
 from humor_contains import humor_contains
 from humor_equals import humor_equals
@@ -84,6 +85,7 @@ class MyClient(discord.Client):
                 await remind.run(self, message)
                 await quests.run(self, message)
                 await heathcliff.run(self, message)
+                await dailies.run(self, message)
                 
                 if message.content.startswith("!ban "):
                     await message.channel.send(message.content[5:] + " has been banned.")
