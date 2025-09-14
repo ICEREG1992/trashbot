@@ -44,17 +44,17 @@ class quests:
         if questsData["enabled"] == True:
             if message.content.startswith("!quest ") or message.content == "!quest":
                 parts = message.content.split(' ')
-                if quests.playerQuests(message.author.id) > 0:
+                if quests.playerQuests(message.author.id):
                     await message.channel.send(f"watch out! you already have a quest active.")
                 if len(parts) > 1:
                     if parts[1] in questsData["tags"].keys():
                         q = questsData["quests"][random.choice(questsData["tags"][parts[1]]["quests"])]
                         i = (await message.channel.send(q)).id
-                        quests.addQuestToPlayer(message.author.id, i, tag=parts[1])
+                        quests.addQuestToPlayer(message, i, tag=parts[1])
                     elif parts[1] in basetags:
                         q = random.choice(questsData["quests"])
                         i = (await message.channel.send(q)).id
-                        quests.addQuestToPlayer(message.author.id, i, tag="random")
+                        quests.addQuestToPlayer(message, i, tag="random")
                     elif parts[1] in questsData["messages"].keys():
                         await message.channel.send(questsData["messages"][parts[1]])
                     else:
@@ -62,7 +62,7 @@ class quests:
                 else:
                     q = random.choice(questsData["quests"])
                     i = (await message.channel.send(q)).id
-                    quests.addQuestToPlayer(message.author.id, i, tag="random")
+                    quests.addQuestToPlayer(message, i, tag="random")
             
             elif message.content.startswith("!quests ") or message.content == "!quests":
                 parts = message.content.split(' ')
@@ -76,7 +76,12 @@ class quests:
                     if str(player_id) in questsData["players"]:
                         if "quests" in questsData["players"][str(player_id)]:
                             if len(questsData["players"][str(player_id)]["quests"]) > 0:
-                                await message.channel.send(f"<@{player_id}> has {len(questsData['players'][str(player_id)]['quests'])} quests active")
+                                out = f"<@{player_id}> has {len(questsData['players'][str(player_id)]['quests'])} quests active"
+                                for q in questsData['players'][str(player_id)]['quests']:
+                                    if q["guild"] is None or q["channel"] is None or q["quest"] is None:
+                                        continue
+                                    out += f"\n- <https://discord.com/channels/{q['guild']}/{q['channel']}/{q['quest']}> ({q['tag']})"
+                                await message.channel.send(out)
                             else:
                                 await message.channel.send(f"<@{player_id}> has no current quests")
                         else:
@@ -157,11 +162,11 @@ class quests:
                     if tag in basetags:
                         q = random.choice(questsData["quests"])
                         i = (await message.channel.send(q)).id
-                        quests.addQuestToPlayer(message.author.id, i, tag="random")
+                        quests.addQuestToPlayer(message, i, tag="random")
                     else:
                         q = questsData["quests"][random.choice(questsData["tags"][tag]["quests"])]
                         i = (await message.channel.send(q)).id
-                        quests.addQuestToPlayer(message.author.id, i, tag=tag)
+                        quests.addQuestToPlayer(message, i, tag=tag)
                 else:
                     await message.channel.send(f"you gotta reply to the quest you want to reroll")
 
@@ -396,12 +401,17 @@ class quests:
                 return "random"
         return None
     
-    def addQuestToPlayer(player_id, message_id, tag):
+    def addQuestToPlayer(message, message_id, tag):
+        player_id = message.author.id
         if str(player_id) not in questsData["players"]:
             questsData["players"][str(player_id)] = {"quests": [], "inventory": []}
         if "quests" not in questsData["players"][str(player_id)]:
             questsData["players"][str(player_id)]["quests"] = []
-        questsData["players"][str(player_id)]["quests"].append({"quest": message_id, "tag": tag, "date": str(dt.datetime.now())})
+        if message.guild is None:
+            guild = "@me"
+        else:
+            guild = message.guild.id
+        questsData["players"][str(player_id)]["quests"].append({"quest": message_id, "channel": message.channel.id, "guild": guild, "tag": tag, "date": str(dt.datetime.now())})
         quests.save()
 
     def removeQuestFromPlayer(player_id, message_id):
@@ -424,7 +434,7 @@ class quests:
     def playerQuests(player_id):
         if str(player_id) in questsData["players"]:
             if "quests" in questsData["players"][str(player_id)]:
-                return len(questsData["players"][str(player_id)]["quests"])
+                return questsData["players"][str(player_id)]["quests"]
         return 0
 
     def save():
