@@ -80,7 +80,7 @@ class quests:
                                 for q in questsData['players'][str(player_id)]['quests']:
                                     if q["guild"] is None or q["channel"] is None or q["quest"] is None:
                                         continue
-                                    out += f"\n- <https://discord.com/channels/{q['guild']}/{q['channel']}/{q['quest']}> ({q['tag']})"
+                                    out += f"\n- https://discord.com/channels/{q['guild']}/{q['channel']}/{q['quest']} ({q['tag']})"
                                 await message.channel.send(out)
                             else:
                                 await message.channel.send(f"<@{player_id}> has no current quests")
