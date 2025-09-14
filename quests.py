@@ -94,21 +94,22 @@ class quests:
             elif message.content.startswith("!reward ") or message.content == "!reward":
                 if message.type == MessageType.reply:
                     parts = message.content.split(' ')
+                    # get message to check it's from bot
+                    channel_id = message.reference.channel_id
+                    message_id = message.reference.message_id
+                    c = await self.fetch_channel(channel_id)
+                    m = await c.fetch_message(message_id)
+                    if m.author != self.user:
+                        await message.channel.send(f"that ain't me foo")
+                        return
+                    if m.content not in questsData["quests"]:
+                        await message.channel.send("thats not a quest, silly!")
+                        return
+                    if message_id not in [q["quest"] for q in questsData["players"].get(str(message.author.id), {}).get("quests", [])]:
+                        await message.channel.send("you can't claim a reward for that quest")
+                        return
                     if len(parts) == 1:
-                        # get message to check it's from bot
-                        channel_id = message.reference.channel_id
-                        message_id = message.reference.message_id
-                        c = await self.fetch_channel(channel_id)
-                        m = await c.fetch_message(message_id)
-                        if m.author != self.user:
-                            await message.channel.send(f"that ain't me foo")
-                            return
-                        if m.content not in questsData["quests"]:
-                            await message.channel.send("thats not a quest, silly!")
-                            return
-                        if message_id not in [q["quest"] for q in questsData["players"].get(str(message.author.id), {}).get("quests", [])]:
-                            await message.channel.send("you can't claim a reward for that quest")
-                            return
+                        # no tag specified, just give random reward
                         tag = quests.removeQuestFromPlayer(message.author.id, message_id)
                         if tag in basetags:
                             r = random.choice(questsData["rewards"])
@@ -117,7 +118,14 @@ class quests:
                         quests.addRewardToPlayer(message.author.id, r)
                         await message.channel.send(r)
                     else:
-                        await message.channel.send(f"you dont get to choose")
+                        tag = parts[1]
+                        if tag in questsData["tags"].keys() and len(questsData["tags"][tag]["rewards"]) > 0:
+                            quests.removeQuestFromPlayer(message.author.id, message_id)
+                            r = questsData["rewards"][random.choice(questsData["tags"][tag]["rewards"])]
+                            quests.addRewardToPlayer(message.author.id, r)
+                            await message.channel.send(r)
+                        else:
+                            await message.channel.send("i dont know about that tag")
                     
             elif message.content.startswith("!punishment ") or message.content == "!punishment":
                 if message.type == MessageType.reply:
