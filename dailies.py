@@ -1,6 +1,6 @@
 import datetime as dt
 import io
-from PIL import Image, ImageDraw, ImageFont, ImageSequence
+from PIL import Image, ImageDraw, ImageFont, ImageSequence, ImageColor
 import random
 
 import discord
@@ -15,7 +15,6 @@ class dailies:
             number_of_games = 1
             result = random.randint(1, number_of_games)
 
-            result = 1
             match result:
                 case 1:
                     # Connect the dots
@@ -53,20 +52,63 @@ class dailies:
                         draw.ellipse((point[0]-5, point[1]-5, point[0]+5, point[1]+5), fill="blue")
                         draw.text((point[0]+8, point[1]-8), str(idx+1), fill="black")
                     await dailies.send_image(img, message.channel, "Connect the dots")
-                    
+
+                case 2:
+                    # Guess the hex
+                    img = dailies.base_daily_image("Guess the color name!")
+                    c = ImageColor.colormap[random.choice(list(ImageColor.colormap.keys()))]
+                    draw = ImageDraw.Draw(img)
+                    if random.random() < 0.5:
+                        if random.random() < 0.5:
+                            # Draw a filled square
+                            draw.rectangle((106, 125, 406, 425), fill=c)
+                        else:
+                            # Draw a filled circle
+                            draw.ellipse((106, 125, 406, 425), fill=c)
+                    else:
+                        # Write the hex code in black, large and centered                        
+                        font = ImageFont.truetype("ARLRDBD.TTF", 80)
+                        text_bbox = draw.textbbox((0, 0), c, font=font)
+                        text_width = text_bbox[2] - text_bbox[0]
+                        text_height = text_bbox[3] - text_bbox[1]
+                        x = (512 - text_width) // 2
+                        y = (512 - text_height) // 2
+                        draw.text((x, y), c, font=font, fill="black")
+                    await dailies.send_image(img, message.channel, "Guess the hex color")
                 # case 2:
                 #     # Sudoku
                 # case 3:
                 #     # Word ladder
                 # case 4:
                 #     # Guess the rot
-                # case 5:
-                #     # Guess the hex
+                
                 # case 6:
                 #     # Hot dog eating contest
                 case _:
                     await message.channel.send("Error: No daily game found")
 
+
+    def base_daily_image(title):
+        img = Image.new('RGB', (512, 512), color = (255, 255, 255))
+        draw = ImageDraw.Draw(img)
+        font = ImageFont.truetype("ARLRDBD.TTF", 28)
+
+        # Get text size
+        text_bbox = draw.textbbox((0, 0), title, font=font)
+        text_width = text_bbox[2] - text_bbox[0]
+        text_height = text_bbox[3] - text_bbox[1]
+
+        # Position centered horizontally, near top
+        x = (512 - text_width) // 2
+        y = 30
+
+        # Draw text
+        draw.text((x, y), title, font=font, fill="black")
+
+        # Draw underline
+        underline_y = y + text_height + 10
+        draw.line((x, underline_y, x + text_width, underline_y), fill="black", width=2)
+        return img
 
     async def send_image(img, channel, text):
         with io.BytesIO() as out:
