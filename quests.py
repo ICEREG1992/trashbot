@@ -44,16 +44,14 @@ class quests:
         if questsData["enabled"] == True:
             if message.content.startswith("!quest ") or message.content == "!quest":
                 parts = message.content.split(' ')
+                if quests.playerQuests(message.author.id) and parts[1] not in questsData["messages"].keys():
+                    await message.channel.send(f"watch out! you already have a quest active.")
                 if len(parts) > 1:
                     if parts[1] in questsData["tags"].keys():
-                        if quests.playerQuests(message.author.id):
-                            await message.channel.send(f"watch out! you already have a quest active.")
                         q = questsData["quests"][random.choice(questsData["tags"][parts[1]]["quests"])]
                         i = (await message.channel.send(q)).id
                         quests.addQuestToPlayer(message, i, tag=parts[1])
                     elif parts[1] in basetags:
-                        if quests.playerQuests(message.author.id):
-                            await message.channel.send(f"watch out! you already have a quest active.")
                         q = random.choice(questsData["quests"])
                         i = (await message.channel.send(q)).id
                         quests.addQuestToPlayer(message, i, tag="random")
@@ -62,8 +60,6 @@ class quests:
                     else:
                         await message.channel.send(f"that's not a tag i know")
                 else:
-                    if quests.playerQuests(message.author.id):
-                        await message.channel.send(f"watch out! you already have a quest active.")
                     q = random.choice(questsData["quests"])
                     i = (await message.channel.send(q)).id
                     quests.addQuestToPlayer(message, i, tag="random")
