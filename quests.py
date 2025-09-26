@@ -130,6 +130,8 @@ class quests:
                             r = questsData["rewards"][random.choice(questsData["tags"][tag]["rewards"])]
                             quests.addRewardToPlayer(message.author.id, r)
                             await message.channel.send(r)
+                        elif tag in basetags:
+                            r = random.choice(questsData["rewards"])
                         else:
                             await message.channel.send("i dont know about that tag")
                     
