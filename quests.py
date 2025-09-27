@@ -189,15 +189,15 @@ class quests:
             elif message.content.startswith("!addquest ") and permissions.allowed(message.author.id, "blue"):
                 parts = message.content.split(' ')
                 if len(parts) >= 3:
-                    tag = parts[1]
                     quest = ' '.join(parts[2:])
                     quest = quest.replace(' // ', '\n')
-                    tags = tag.split(',')
                     questsData["quests"].append(quest)
+                    tag = parts[1]
+                    tags = tag.split(',')
+                    ind = questsData["quests"].index(quest)
                     for tag in tags:
                         if tag in questsData["tags"].keys():
                             try:
-                                ind = questsData["quests"].index(quest)
                                 questsData["tags"][tag]["quests"].append(ind)
                                 quests.save()
                                 if not bulk: await message.channel.send(f"added quest to tag {tag}")
