@@ -193,13 +193,16 @@ class quests:
                     quest = ' '.join(parts[2:])
                     quest = quest.replace(' // ', '\n')
                     tags = tag.split(',')
-                    ind = len(questsData["quests"])
                     questsData["quests"].append(quest)
                     for tag in tags:
                         if tag in questsData["tags"].keys():
-                            questsData["tags"][tag]["quests"].append(ind)
-                            quests.save()
-                            if not bulk: await message.channel.send(f"added quest to tag {tag}")
+                            try:
+                                ind = questsData["quests"].index(quest)
+                                questsData["tags"][tag]["quests"].append(ind)
+                                quests.save()
+                                if not bulk: await message.channel.send(f"added quest to tag {tag}")
+                            except ValueError:
+                                await message.channel.send("something terrible happened")
                         elif tag in basetags:
                             quests.save()
                         else:
