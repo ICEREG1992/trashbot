@@ -122,7 +122,7 @@ class qat:
                     "outlook not so good"
                 ]))
             # set dict back
-            if dictStorage == -1:
+            if dictStorage != -1:
                 dict = dictStorage
         elif message.content.lower().startswith("!dict"):
             if len(message.content) > 6:
