@@ -135,6 +135,41 @@ class quests:
                         else:
                             await message.channel.send("i dont know about that tag")
                     
+            elif message.content.startswith("!award ") or message.content == "!award":
+                if message.type == MessageType.reply:
+                    parts = message.content.split(' ')
+                    if len(parts) > 1:
+                        await message.channel.send(f"pick someone to award this quest to")
+                    else:
+                        # get message to check it's from bot
+                        channel_id = message.reference.channel_id
+                        message_id = message.reference.message_id
+                        c = await self.fetch_channel(channel_id)
+                        m = await c.fetch_message(message_id)
+                        mention = message.mentions.first()
+                        if mention is None:
+                            await message.channel.send(f"you need to @mention them")
+                            return
+                        if m.author != self.user:
+                            await message.channel.send(f"that ain't me foo")
+                            return
+                        if m.content not in questsData["quests"]:
+                            await message.channel.send("thats not a quest man")
+                            return
+                        if message_id not in [q["quest"] for q in questsData["players"].get(str(message.author.id), {}).get("quests", [])]:
+                            await message.channel.send("you can't award that quest")
+                            return
+                        tag = quests.removeQuestFromPlayer(message.author.id, message_id)
+                        if tag in basetags:
+                            r = random.choice(questsData["rewards"])
+                            i = (await message.channel.send(r)).id
+                            quests.addRewardToPlayer(mention.id, i, tag="random", reward=r)
+                        else:
+                            r = random.choice(questsData["rewards"])
+                            i = (await message.channel.send(r)).id
+                            quests.addRewardToPlayer(mention.id, i, tag=tag, reward=r)
+                        await message.channel.send(f"awarded that quest's reward to <@{mention.id}> :)")
+            
             elif message.content.startswith("!punishment ") or message.content == "!punishment":
                 if message.type == MessageType.reply:
                     parts = message.content.split(' ')
@@ -168,21 +203,29 @@ class quests:
                     if m.author != self.user:
                         await message.channel.send(f"that ain't me foo")
                         return
-                    if m.content not in questsData["quests"]:
-                        await message.channel.send("thats not a quest, silly!")
+                    if message_id not in [q["quest"] for q in questsData["players"].get(str(message.author.id), {}).get("quests", [])] or message_id not in [r["reward"] for r in questsData["players"].get(str(message.author.id), {}).get("inventory", [])]:
+                        await message.channel.send("that's not your quest or reward to reroll")
                         return
-                    if message_id not in [q["quest"] for q in questsData["players"].get(str(message.author.id), {}).get("quests", [])]:
-                        await message.channel.send("that's not your quest to reroll")
-                        return
-                    tag = quests.removeQuestFromPlayer(message.author.id, message_id)
-                    if tag in basetags:
-                        q = random.choice(questsData["quests"])
-                        i = (await message.channel.send(q)).id
-                        quests.addQuestToPlayer(message, i, tag="random")
-                    else:
-                        q = questsData["quests"][random.choice(questsData["tags"][tag]["quests"])]
-                        i = (await message.channel.send(q)).id
-                        quests.addQuestToPlayer(message, i, tag=tag)
+                    if m.content in questsData["quests"]:
+                        tag = quests.removeQuestFromPlayer(message.author.id, message_id)
+                        if tag in basetags:
+                            q = random.choice(questsData["quests"])
+                            i = (await message.channel.send(q)).id
+                            quests.addQuestToPlayer(message, i, tag="random")
+                        else:
+                            q = questsData["quests"][random.choice(questsData["tags"][tag]["quests"])]
+                            i = (await message.channel.send(q)).id
+                            quests.addQuestToPlayer(message, i, tag=tag)
+                    elif m.content in questsData["rewards"]:
+                        tag = quests.removeRewardFromPlayer(message.author.id, message_id)
+                        if tag in basetags:
+                            r = random.choice(questsData["rewards"])
+                            i = (await message.channel.send(r)).id
+                            quests.addRewardToPlayer(message, i, tag="random", reward=r)
+                        else:
+                            r = questsData["rewards"][random.choice(questsData["tags"][tag]["rewards"])]
+                            i = (await message.channel.send(r)).id
+                            quests.addRewardToPlayer(message, i, tag=tag, reward=r)
                 else:
                     await message.channel.send(f"you gotta reply to the quest you want to reroll")
 
@@ -395,6 +438,13 @@ class quests:
                 quests.save()
                 await message.channel.send("cleared all messages")
 
+            elif message.content == "!clearuserrewards" and permissions.allowed(message.author.id, "blue"):
+                for p in questsData["players"].keys():
+                    if "inventory" in questsData["players"][p]:
+                        questsData["players"][p]["inventory"] = []
+                quests.save()
+                await message.channel.send("cleared all user's rewards")
+
             elif message.content == "!disablequests" and permissions.allowed(message.author.id, "blue"):
                 questsData["enabled"] = False
                 quests.save()
@@ -442,13 +492,23 @@ class quests:
                 return tag
         return "random"
 
-    def addRewardToPlayer(player_id, reward):
+    def addRewardToPlayer(message, message_id, tag, reward):
+        player_id = message.author.id
         if str(player_id) not in questsData["players"]:
             questsData["players"][str(player_id)] = {"quests": [], "inventory": []}
         if "inventory" not in questsData["players"][str(player_id)]:
             questsData["players"][str(player_id)]["inventory"] = []
-        questsData["players"][str(player_id)]["inventory"].append({"item": reward, "date": str(dt.datetime.now())})
+        questsData["players"][str(player_id)]["inventory"].append({"reward": message_id, "item": reward, "tag": tag, "date": str(dt.datetime.now())})
         quests.save()
+
+    def removeRewardFromPlayer(player_id, message_id):
+        if str(player_id) in questsData["players"]:
+            if "inventory" in questsData["players"][str(player_id)]:
+                tag = [r.get("tag", "random") for r in questsData["players"][str(player_id)]["inventory"] if r["reward"] == message_id][0]
+                questsData["players"][str(player_id)]["inventory"] = [r for r in questsData["players"][str(player_id)]["inventory"] if r["reward"] != message_id]
+                quests.save()
+                return tag
+        return "random"
 
     def playerQuests(player_id):
         if str(player_id) in questsData["players"]:
