@@ -119,16 +119,18 @@ class quests:
                         tag = quests.removeQuestFromPlayer(message.author.id, message_id)
                         if tag in basetags:
                             r = random.choice(questsData["rewards"])
+                            quests.addRewardToPlayer(message.author.id, r, tag="random", reward=r)
                         else:
                             r = questsData["rewards"][random.choice(questsData["tags"][tag]["rewards"])]
-                        quests.addRewardToPlayer(message.author.id, r)
+                            quests.addRewardToPlayer(message.author.id, r, tag=tag, reward=r)
+                        
                         await message.channel.send(r)
                     else:
                         tag = parts[1]
                         if tag in questsData["tags"].keys() and len(questsData["tags"][tag]["rewards"]) > 0:
                             quests.removeQuestFromPlayer(message.author.id, message_id)
                             r = questsData["rewards"][random.choice(questsData["tags"][tag]["rewards"])]
-                            quests.addRewardToPlayer(message.author.id, r)
+                            quests.addRewardToPlayer(message.author.id, r, tag=tag, reward=r)
                             await message.channel.send(r)
                         elif tag in basetags:
                             r = random.choice(questsData["rewards"])
