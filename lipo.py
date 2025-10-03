@@ -43,7 +43,7 @@ class lipo:
             if ' ' not in message.content:
                 az = list(map(chr, range(97, 123)))
                 c = pick_string(az)
-            elif message.content[6:].isdigit() and int(message.content[6:]) > 2000:
+            elif message.content[6:].isdigit() and int(message.content[6:]) > 1999:
                 await message.channel.send('please try a lower character limit please')
                 return
             elif len(message.content[6:]) >= 1:
