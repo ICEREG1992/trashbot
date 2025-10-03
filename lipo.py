@@ -45,6 +45,7 @@ class lipo:
                 c = pick_string(az)
             elif message.content[6:].isdigit() and int(message.content[6:]) > 2000:
                 await message.channel.send('please try a lower character limit please')
+                return
             elif len(message.content[6:]) >= 1:
                 c = message.content[6:].lower()
             if uid not in participants:
