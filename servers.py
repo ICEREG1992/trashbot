@@ -150,7 +150,7 @@ class servers:
                 if jar == "forge":
                     subprocess.Popen(['bash', 'run.sh'], cwd=r'/home/william/minecraft/', stdin=subprocess.PIPE)
                 else:
-                    subprocess.Popen(['java', '-Xms3072M', '-Xmx3072M', '-jar', jar, 'nogui'], cwd=r'/home/william/minecraft/', stdin=subprocess.PIPE)
+                    subprocess.Popen(['java', '-Xms2560M', '-Xmx2560M', '-jar', jar, 'nogui'], cwd=r'/home/william/minecraft/', stdin=subprocess.PIPE)
                 await helperfunctions.bot_wait_long()
                 await message.channel.send(helperfunctions.pick_string([
                     "ok im runnin",
