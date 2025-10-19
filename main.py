@@ -109,6 +109,16 @@ class MyClient(discord.Client):
                 if message.content == "!version":
                     await message.channel.send("u last pushed to me _DATE_")
 
+                if message.content == "!semoji":
+                    emojis = sorted(message.guild.emojis, key=lambda e: e.name.lower())
+                    rows = []
+                    for i in range(0, len(emojis), 9):
+                        row = ''.join(str(e) for e in emojis[i:i+9])
+                        rows.append(row)
+
+                    out = '\n'.join(rows)
+                    await message.channel.send(out)
+
                 if message.content == "!join":
                     vcs = self.voice_clients
                     print(vcs)
