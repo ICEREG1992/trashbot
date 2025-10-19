@@ -54,7 +54,7 @@ class food:
                         "im really fine i don't need any more pls"
                     ]))
             elif (t < dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=2)):
-                logcommand.log_globally(21, "I was fed `" + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds") +
+                logcommand.log_globally(logcommand.FEED_LEVEL_NUM, "I was fed `" + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds") +
                 "` by user " + message.author.name + " after starving for " + str(humanize.precisedelta((dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6) - t), suppress=['milliseconds','microseconds'])) )
                 t = dt.datetime.now(dt.timezone.utc)
                 food.save(t)
@@ -70,7 +70,7 @@ class food:
                     "im eating it im eating it im eating it im eating it im eating it im eating it im eating it im eating it"
                 ]))
             else:
-                logcommand.log_globally(21, "I was fed `" + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds") +
+                logcommand.log_globally(logcommand.FEED_LEVEL_NUM, "I was fed `" + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds") +
                 "` by user " + message.author.name + " after being hungry for " + str(humanize.precisedelta((dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6) - t), suppress=['milliseconds','microseconds'])))
                 t = dt.datetime.now(dt.timezone.utc)
                 food.save(t)
@@ -125,19 +125,19 @@ class food:
                         "PLEASE FEED ME ONLY THIS FROM NOW ON IT IS SO GOOD",
                         "this " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds") + " making me go freaky mode hdnghmhnioinnf dewnauiontg kjgm f gng ng n wdaiodnagd skjghnjksnfnfnjgnsfesmfkesm\ndnwoianf ka rfaijji fwanijoufnijeanjih fd iongiorfdmngiordiomgfd gjk\n\ndwiaonftgoiaweniodwajfeionfgeoiuiongrsno  fes oifenisnofnnhhnnhn hnnhhhnh \n\n\njdiwoaon fg8omiesajnuigko noiegnio ungio geigejiinoghrdsnioh f sifjnbiuoasndGOGOD THATS GOOD\nndiuowa nioasftenoi ne ioA NTOI JITY JOI JTIOE ONIAnsfangtnjoda\nNDAWUIONFOIAW MJIDFOwmnjasdf sagtjgNGNSJURE OIBGFUIOES NBOFNUIJES NIOFE NOIS fngoie n"
                     ]))
-        # elif (message.content == "!unfeed" and (permissions.allowed(message.author.id, "blue") or (permissions.allowed(message.author.id, "red")))):
-        #     if (t > dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)):
-        #         t = dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)
-        #         food.save(t)
-        #     await message.channel.send(pick_string([
-        #         "What's your problem?",
-        #         "fuck is your issue?",
-        #         "uncool, man",
-        #         "totally NOT chill. not chill",
-        #         "bruh",
-        #         "bruh moment",
-        #         "omg i was gonna eat that wtf"
-        #     ]))
+        elif (message.content == "!unfeed" and (permissions.allowed(message.author.id, "blue") or (permissions.allowed(message.author.id, "red")))):
+            if (t > dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)):
+                t = dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)
+                food.save(t)
+            await message.channel.send(pick_string([
+                "What's your problem?",
+                "fuck is your issue?",
+                "uncool, man",
+                "totally NOT chill. not chill",
+                "bruh",
+                "bruh moment",
+                "omg i was gonna eat that wtf"
+            ]))
         
         # update status on message receive
         if (t > dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)):

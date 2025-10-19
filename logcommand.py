@@ -15,31 +15,35 @@ logging.FEED = FEED_LEVEL_NUM
 
 class Log:
     def log_message(self, level, message):
-        if self.logLevels[level]:
-            self.log.append(logging.getLevelName(level) + ": " + message)
+        if self.enabled[level]:
+            self.log.append(get_level_num(level) + ": " + message)
             if len(self.log) > LOG_ENTRIES_NUM:
                 self.log.pop(0)
 
     def __init__(self):
         self.log = []
-        self.logLevels = {logging.INFO: True, logging.WARNING: False, logging.DEBUG: False, logging.ERROR: True, logging.FEED: True}
+        self.enabled = {logging.INFO: True, logging.WARNING: False, logging.DEBUG: False, logging.ERROR: True, logging.FEED: True}
 
 globalLog = Log()
-channelLogs = {}
-
-def log_channel(level, message, channel):
-    if channel in channelLogs:
-        log = channelLogs[channel]
-    else:
-        log = Log()
-        channelLogs[channel] = log
-    log.log_message(level, message)
-
+levelLogs = {}
 
 def log_globally(level, message):
     globalLog.log_message(level, message)
+    if level in levelLogs:
+        log = levelLogs[level]
+    else:
+        log = Log()
+        levelLogs[level] = log
+    log.log_message(level, message)
+    print("logged to level " + logging.getLevelName(level) + ": " + message)
 
 
 async def print_log(log, channel):
     string = "\n".join(log.log)
     await channel.send(string[-2000:] if len(string) != 0 else "Log is empty sorry")
+
+def get_level_num(level_name):
+    return logging._nameToLevel.get(level_name, None)
+
+def get_level_name(level_num):
+    return logging.getLevelName(level_num)
