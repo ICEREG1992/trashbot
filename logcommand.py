@@ -16,7 +16,7 @@ logging.FEED = FEED_LEVEL_NUM
 class Log:
     def log_message(self, level, message):
         if self.enabled[level]:
-            self.log.append(get_level_num(level) + ": " + message)
+            self.log.append(get_level_name(level) + ": " + message)
             if len(self.log) > LOG_ENTRIES_NUM:
                 self.log.pop(0)
 
