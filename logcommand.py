@@ -4,6 +4,15 @@ from helperfunctions import pick_string
 
 LOG_ENTRIES_NUM = 30
 
+# Define a custom log level "FEED"
+FEED_LEVEL_NUM = 21
+logging.addLevelName(FEED_LEVEL_NUM, "FEED")
+def feed(self, message, *args, **kwargs):
+    if self.isEnabledFor(FEED_LEVEL_NUM):
+        self._log(FEED_LEVEL_NUM, message, args, **kwargs)
+logging.Logger.feed = feed
+logging.FEED = FEED_LEVEL_NUM
+
 class Log:
     def log_message(self, level, message):
         if self.logLevels[level]:
@@ -13,7 +22,7 @@ class Log:
 
     def __init__(self):
         self.log = []
-        self.logLevels = {logging.INFO: True, logging.WARNING: False, logging.DEBUG: False, logging.ERROR: True}
+        self.logLevels = {logging.INFO: True, logging.WARNING: False, logging.DEBUG: False, logging.ERROR: True, logging.FEED: True}
 
 globalLog = Log()
 channelLogs = {}

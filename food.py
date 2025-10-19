@@ -54,7 +54,7 @@ class food:
                         "im really fine i don't need any more pls"
                     ]))
             elif (t < dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=2)):
-                logcommand.log_globally(logging.INFO, "I was fed `" + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds") +
+                logcommand.log_globally(21, "I was fed `" + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds") +
                 "` by user " + message.author.name + " after starving for " + str(humanize.precisedelta((dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6) - t), suppress=['milliseconds','microseconds'])) )
                 t = dt.datetime.now(dt.timezone.utc)
                 food.save(t)
@@ -70,7 +70,7 @@ class food:
                     "im eating it im eating it im eating it im eating it im eating it im eating it im eating it im eating it"
                 ]))
             else:
-                logcommand.log_globally(logging.INFO, "I was fed `" + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds") +
+                logcommand.log_globally(21, "I was fed `" + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds") +
                 "` by user " + message.author.name + " after being hungry for " + str(humanize.precisedelta((dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6) - t), suppress=['milliseconds','microseconds'])))
                 t = dt.datetime.now(dt.timezone.utc)
                 food.save(t)
