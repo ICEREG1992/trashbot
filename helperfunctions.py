@@ -11,8 +11,8 @@ logging.basicConfig(level=logging.INFO)
 def pick_string(set):
     return random.choice(set)
 
-async def bot_wait():
-    await asyncio.sleep(1.5)
+async def bot_wait(time=None):
+    await asyncio.sleep(1.5 if time is None else time)
 
 async def bot_wait_medium():
     await asyncio.sleep(10)

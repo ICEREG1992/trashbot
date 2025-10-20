@@ -45,18 +45,28 @@ class remind:
                 await message.channel.send(f"that doesnt look like a number")
                 return
             reminder_msg = ' '.join(parts[2:])
-            timestamp = dt.datetime.now(dt.timezone.utc).timestamp()
-            reminders.append((message.author.id, message.channel.id, reminder_msg, duration, timestamp))
-            remind.save(reminders)
-            await message.reply(helperfunctions.pick_string([
-                    "heard, chef",
-                    "gotcha",
-                    "i'll remind you",
-                    "you betcha",
-                    "dont worry about it",
-                    "tick tock on the clock"
-                ]))
-            logcommand.log_globally(logging.INFO, f"set reminder for {message.author.name} in {t}: {reminder_msg}")
+            if duration < 30:
+                await helperfunctions.bot_wait(duration * 60)
+                await message.channel.send(helperfunctions.pick_string([
+                        f"{message.author.mention} make sure you remember to `{reminder_msg}`",
+                        f"hey {message.author.mention} you gotta `{reminder_msg}`",
+                        f"{message.author.mention} don't forget `{reminder_msg}`",
+                        f"{message.author.mention} it's been {duration}, `{reminder_msg}`",
+                    ]))
+                logcommand.log_globally(logging.INFO, f"Sent reminder to {message.author.name}: {reminder_msg}")
+            else:
+                timestamp = dt.datetime.now(dt.timezone.utc).timestamp()
+                reminders.append((message.author.id, message.channel.id, reminder_msg, duration, timestamp))
+                remind.save(reminders)
+                await message.reply(helperfunctions.pick_string([
+                        "heard, chef",
+                        "gotcha",
+                        "i'll remind you",
+                        "you betcha",
+                        "dont worry about it",
+                        "tick tock on the clock"
+                    ]))
+                logcommand.log_globally(logging.INFO, f"set reminder for {message.author.name} in {t}: {reminder_msg}")
         
         # if message is reply and is !cancel
         elif message.content.startswith("!cancel") and message.reference is not None:
