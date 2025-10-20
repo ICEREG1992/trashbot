@@ -92,10 +92,11 @@ class lipo:
                     if len(matches[0]) == 0:
                         matches = None
                 elif participants[uid]['c'] == 'qat':
-                    # extract all of the character words found in the string
-                    words = re.split('\W+', st)
+                    # extract all of the character words found in the string, allowing for apostrophes
+                    words = re.split(r"[^\w'-]+", st)
                     # make sure words are in order by word length followed by alphabetical order
-                    sorted_words = sorted(words, key=lambda w: (len(w), w))
+                    sorted_words = sorted(words, key=lambda w: (lipo.qat_length(w), w))
+                    print(words + " # " + sorted_words)
                     if words != sorted_words:
                         # matches is an array with the first word that is out of order in index 0 followed by the reason in index 1
                         for i in range(min(len(words), len(sorted_words))):
@@ -140,3 +141,7 @@ class lipo:
         global participants
         # we have to do shenanigans here to be able to serialize our dict with tuple keys
         db.put_item(TableName="trashbot", Item={'name':{'S':'lipo'}, 'data':{'S':json.dumps(participants)}})
+
+    def qat_length(w):
+        length = len(re.sub(r"[-']", '', w))
+        return (length)
