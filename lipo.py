@@ -96,7 +96,6 @@ class lipo:
                     words = re.split(r"[^\w'-]+", st)
                     # make sure words are in order by word length followed by alphabetical order
                     sorted_words = sorted(words, key=lambda w: (lipo.qat_length(w), w))
-                    print(words + " # " + sorted_words)
                     if words != sorted_words:
                         # matches is an array with the first word that is out of order in index 0 followed by the reason in index 1
                         for i in range(min(len(words), len(sorted_words))):
