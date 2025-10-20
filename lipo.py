@@ -100,7 +100,7 @@ class lipo:
                         # matches is an array with the first word that is out of order in index 0 followed by the reason in index 1
                         for i in range(min(len(words), len(sorted_words))):
                             if words[i] != sorted_words[i]:
-                                matches = [[words[i]], 'word out of qat order']
+                                matches = [[sorted_words[i]], 'word out of qat order']
                                 break
                 else:
                     for n in participants[uid]['c']:
