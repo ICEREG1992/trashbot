@@ -51,7 +51,7 @@ class remind:
                         f"{message.author.mention} make sure you remember to `{reminder_msg}`",
                         f"hey {message.author.mention} you gotta `{reminder_msg}`",
                         f"{message.author.mention} don't forget `{reminder_msg}`",
-                        f"{message.author.mention} it's been {duration}, `{reminder_msg}`",
+                        f"{message.author.mention} it's been {duration} {"minute" if duration == 1 else "minutes"}, `{reminder_msg}`",
                     ]))
                 logcommand.log_globally(logging.INFO, f"Sent reminder to {message.author.name}: {reminder_msg}")
             else:

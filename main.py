@@ -161,28 +161,6 @@ class MyClient(discord.Client):
                         log = log[0:60]
                     logcommand.log_globally(logging.INFO, "tbot message deleted by " + user.name + ": `" + log + "`")
                     await reaction.message.delete(delay=0.5)
-            # elephant logic
-            if user != self.user and reaction.emoji == "🐘":
-                ok = True
-                for r in reaction.message.reactions:
-                    if r.emoji == "🚫":
-                        ok = False
-                if ok and reaction.message.author == self.user:
-                    log = reaction.message.content.replace('`', '')
-                    if len(log) > 60 :
-                        log = log[0:60]
-                    logcommand.log_globally(logging.INFO, "tbot adding elephant and mamoth to own message: `" + log + "`")
-                    await reaction.message.add_reaction("🐘")
-                    await reaction.message.add_reaction("🦣")
-            elif user != self.user and reaction.emoji == "🚫":
-                for r in reaction.message.reactions:
-                    users = [user async for user in r.users()]
-                    if self.user in users and (r.emoji == "🐘" or r.emoji == "🦣"):
-                        log = reaction.message.content.replace('`', '')
-                        if len(log) > 60 :
-                            log = log[0:60]
-                        logcommand.log_globally(logging.INFO, "tbot removing " + r.emoji + " from own message: `" + log + "`")
-                        await r.remove(self.user)
             # n-[emoji] logic
             # if user != self.user and reaction.count == 5 :
             #     if helperfunctions.chance(10):
