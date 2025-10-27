@@ -46,6 +46,14 @@ class remind:
                 return
             reminder_msg = ' '.join(parts[2:])
             if duration < 30:
+                await message.reply(helperfunctions.pick_string([
+                        "heard, chef",
+                        "gotcha",
+                        "i'll remind you",
+                        "you betcha",
+                        "dont worry about it",
+                        "tick tock on the clock"
+                    ]))
                 await helperfunctions.bot_wait(duration * 60)
                 await message.channel.send(helperfunctions.pick_string([
                         f"{message.author.mention} make sure you remember to `{reminder_msg}`",
