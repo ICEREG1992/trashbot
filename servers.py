@@ -113,6 +113,9 @@ class servers:
                             if os.path.isdir("/home/william/minecraft/libraries"):
                                 shutil.rmtree("/home/william/minecraft/libraries")
                             shutil.copytree(f"/home/william/minecraft/versions/{jar_name}/libraries", "/home/william/minecraft/libraries")
+                            if os.path.isdir("/home/william/minecraft/mods"):
+                                shutil.rmtree("/home/william/minecraft/mods")
+                            shutil.copytree(f"/home/william/minecraft/versions/{jar_name}/mods", "/home/william/minecraft/mods")
                             shutil.copyfile(f"/home/william/minecraft/versions/{jar_name}/run.sh", "/home/william/minecraft/run.sh")
                             shutil.copyfile(f"/home/william/minecraft/versions/{jar_name}/user_jvm_args.txt", "/home/william/minecraft/user_jvm_args.txt")
                             await message.channel.send(f"booting with {jar_name}")
