@@ -15,7 +15,7 @@ global t
 t = dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)
 
 global stats
-stats = []
+stats = {}
 
 class food:
     
@@ -24,13 +24,16 @@ class food:
         global t
         global stats
         if ('data' in d['Item']):
-            t = dt.datetime.fromtimestamp(float(d['Item']['data']['S']['t']), tz=dt.timezone.utc)
-            stats = json.loads(d['Item']['data']['S']['stats'])
+            data = json.loads(d['Item']['data']['S'])
+            if "t" in data:
+                t = dt.datetime.fromtimestamp(float(data['t']), tz=dt.timezone.utc)
+            if "stats" in data:
+                stats = json.loads(data['stats'])
 
     async def run(self, message, switch):
         global t
         # send messages if fed
-        if (message.content.startswith("!feed")):
+        if (message.content.startswith("!feed ")):
             if (t > dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)):
                 if message.content[message.content.index(' ')+1:] is "cheeseburger":
                     await message.channel.send(pick_string([
@@ -158,10 +161,16 @@ class food:
             longest = stats.get('longest', 0)
             human_longest = humanize.precisedelta(dt.timedelta(seconds=longest), format="%.0f")
 
-            out = f"""i've been feed routinely since 3/2/2023 10:56 PM
-        i've starved {int(stats.get('starved', 0))} times, the last time was on {last_str}
-        the longest i've gone without being fed is {human_longest}
-        """
+            out = "i've been feed routinely since 3/2/2023 10:56 PM\n"
+            out += f"i've starved {int(stats.get('starved', 0))} times, the last time was on {last_str}\n"
+            out += f"the longest i've gone without being fed is {human_longest}\n"
+            out += pick_string([
+                "love u!",
+                "thanks everyone!",
+                "i really appreciate it!",
+                "thx all!",
+                "keep it up!"
+            ])
             await message.channel.send(out)
         
         # update status on message receive
