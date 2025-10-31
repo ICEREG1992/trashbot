@@ -186,4 +186,4 @@ class food:
             await self.change_presence(status=None, activity=discord.Game(name='Hungry for ' + humanize.naturaldelta((dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)) - t)))
     
     def save(t, stats):
-        db.put_item(TableName="trashbot", Item={'name':{'S':'hunger'}, 'data':{'S':{'t':str(t.timestamp()), 'stats':json.dumps(stats)}}})
+        db.put_item(TableName="trashbot", Item={'name':{'S':'hunger'}, 'data': {'S': json.dumps({'t': t.timestamp(), 'stats': stats})}})
