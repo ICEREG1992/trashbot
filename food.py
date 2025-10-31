@@ -28,7 +28,7 @@ class food:
             if "t" in data:
                 t = dt.datetime.fromtimestamp(float(data['t']), tz=dt.timezone.utc)
             if "stats" in data:
-                stats = json.loads(data['stats'])
+                stats = data['stats']
 
     async def run(self, message, switch):
         global t
