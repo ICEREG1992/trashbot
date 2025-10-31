@@ -86,7 +86,7 @@ class food:
                 logcommand.log_globally(logcommand.FEED_LEVEL_NUM, "I was fed `" + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds") +
                 "` by user " + message.author.name + " after being hungry for " + str(humanize.precisedelta((dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6) - t), suppress=['milliseconds','microseconds'])))
                 t = dt.datetime.now(dt.timezone.utc)
-                if (dt.datetime.now(dt.timezone.utc) - t) > stats.get('longest', 0):
+                if (int((dt.datetime.now(dt.timezone.utc) - t).total_seconds())) > stats.get('longest', 0):
                     stats['longest'] = int((dt.datetime.now(dt.timezone.utc) - t).total_seconds())
                 food.save(t, stats)
                 if chance(90): # regular response
