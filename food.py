@@ -66,10 +66,10 @@ class food:
                 logcommand.log_globally(logcommand.FEED_LEVEL_NUM, "I was fed `" + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds") +
                 "` by user " + message.author.name + " after starving for " + str(humanize.precisedelta((dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6) - t), suppress=['milliseconds','microseconds'])) )
                 stats['starved'] = stats.get('starved', 0) + 1
-                stats['last_starved'] = int(t.timestamp())
                 if (int((dt.datetime.now(dt.timezone.utc) - t).total_seconds())) > stats.get('longest', 0):
                     stats['longest'] = int((dt.datetime.now(dt.timezone.utc) - t).total_seconds())
                 t = dt.datetime.now(dt.timezone.utc)
+                stats['last_starved'] = int(t.timestamp())
                 food.save(t, stats)
                 await message.channel.send(pick_string([
                     "that looks reeeeaallllyyy good hand that over nomnomnom",
