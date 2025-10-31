@@ -67,7 +67,7 @@ class food:
                 "` by user " + message.author.name + " after starving for " + str(humanize.precisedelta((dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6) - t), suppress=['milliseconds','microseconds'])) )
                 stats['starved'] = stats.get('starved', 0) + 1
                 stats['last_starved'] = int(t.timestamp())
-                if (dt.datetime.now(dt.timezone.utc) - t) > stats.get('longest', 0):
+                if (int((dt.datetime.now(dt.timezone.utc) - t).total_seconds())) > stats.get('longest', 0):
                     stats['longest'] = int((dt.datetime.now(dt.timezone.utc) - t).total_seconds())
                 t = dt.datetime.now(dt.timezone.utc)
                 food.save(t, stats)
