@@ -119,10 +119,10 @@ class quests:
                         tag = quests.removeQuestFromPlayer(message.author.id, message_id)
                         if tag in basetags:
                             r = random.choice(questsData["rewards"])
-                            quests.addRewardToPlayer(message, r, tag="random", reward=r)
+                            quests.addRewardToPlayer(message.author.id, r, tag="random", reward=r)
                         else:
                             r = questsData["rewards"][random.choice(questsData["tags"][tag]["rewards"])]
-                            quests.addRewardToPlayer(message, r, tag=tag, reward=r)
+                            quests.addRewardToPlayer(message.author.id, r, tag=tag, reward=r)
                         
                         await message.channel.send(r)
                     else:
@@ -130,7 +130,7 @@ class quests:
                         if tag in questsData["tags"].keys() and len(questsData["tags"][tag]["rewards"]) > 0:
                             quests.removeQuestFromPlayer(message.author.id, message_id)
                             r = questsData["rewards"][random.choice(questsData["tags"][tag]["rewards"])]
-                            quests.addRewardToPlayer(message, r, tag=tag, reward=r)
+                            quests.addRewardToPlayer(message.author.id, r, tag=tag, reward=r)
                             await message.channel.send(r)
                         elif tag in basetags:
                             r = random.choice(questsData["rewards"])
@@ -223,11 +223,11 @@ class quests:
                         if tag in basetags:
                             r = random.choice(questsData["rewards"])
                             i = (await message.channel.send(r)).id
-                            quests.addRewardToPlayer(message, i, tag="random", reward=r)
+                            quests.addRewardToPlayer(message.author.id, i, tag="random", reward=r)
                         else:
                             r = questsData["rewards"][random.choice(questsData["tags"][tag]["rewards"])]
                             i = (await message.channel.send(r)).id
-                            quests.addRewardToPlayer(message, i, tag=tag, reward=r)
+                            quests.addRewardToPlayer(message.author.id, i, tag=tag, reward=r)
                 else:
                     await message.channel.send(f"you gotta reply to the quest you want to reroll")
 
@@ -494,8 +494,7 @@ class quests:
                 return tag
         return "random"
 
-    def addRewardToPlayer(message, message_id, tag, reward):
-        player_id = message.author.id
+    def addRewardToPlayer(player_id, message_id, tag, reward):
         if str(player_id) not in questsData["players"]:
             questsData["players"][str(player_id)] = {"quests": [], "inventory": []}
         if "inventory" not in questsData["players"][str(player_id)]:
