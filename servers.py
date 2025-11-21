@@ -168,13 +168,7 @@ class servers:
                     "i'll keep hosting " + servers.runningServer() + " instead ok"
                 ]))
         elif message.content == "!mcip":
-            if servers.runningServer():
-                config = jproperties.Properties()
-                with open('/home/william/minecraft/' + 'server.properties', 'rb') as file:
-                    config.load(file)
-                await message.channel.send(config.get("server-ip").data + ":" + config.get("server-port").data)
-            else:
-                await message.channel.send("im not hosting anything rn")
+            await message.channel.send(mcIP if mcIP else "i don't know")
         elif message.content == "!mclog":
             with open('/home/william/minecraft/logs/latest.log', 'r') as file:
                 lines = file.readlines()[-10:]
@@ -211,6 +205,12 @@ class servers:
             if servers.runningServer():
                 r = requests.get('https://ipecho.net/plain')
                 await message.channel.send(r.text)
+        elif message.content == "!updatesven":
+            if not servers.runningServer():
+                subprocess.Popen(['steamcmd', '+login', 'anonymous', '+app_update', '276060', 'validate', '+quit'], cwd=r'/home/william', stdin=subprocess.PIPE)
+                await message.channel.send("ok i'll update the sven server")
+            else:
+                await message.channel.send("i'm hosting something right now, i don't want to update im scared to do it")
 
         # tf2
         elif message.content == "!hosttf2" and permissions.allowed(message.author.id, "blue"):
@@ -247,6 +247,12 @@ class servers:
             if servers.runningServer():
                 r = requests.get('https://ipecho.net/plain')
                 await message.channel.send(r.text)
+        elif message.content == "!updatetf2":
+            if not servers.runningServer():
+                subprocess.Popen(['steamcmd', '+login', 'anonymous', '+app_update', '440', 'validate', '+quit'], cwd=r'/home/william', stdin=subprocess.PIPE)
+                await message.channel.send("ok i'll update the tf2 server")
+            else:
+                await message.channel.send("i'm hosting something right now, i don't want to update im scared to do it")
 
         # css
         elif message.content == "!hostcss" and permissions.allowed(message.author.id, "blue"):
@@ -283,6 +289,12 @@ class servers:
             if servers.runningServer():
                 r = requests.get('https://ipecho.net/plain')
                 await message.channel.send(r.text)
+        elif message.content == "!updatecss":
+            if not servers.runningServer():
+                subprocess.Popen(['steamcmd', '+login', 'anonymous', '+app_update', '232330', 'validate', '+quit'], cwd=r'/home/william', stdin=subprocess.PIPE)
+                await message.channel.send("ok i'll update the css server")
+            else:
+                await message.channel.send("i'm hosting something right now, i don't want to update im scared to do it")
 
         # ttt
         elif message.content.startswith("!hostttt") and permissions.allowed(message.author.id, "blue"):
