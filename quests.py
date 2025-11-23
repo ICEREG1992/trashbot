@@ -249,6 +249,7 @@ class quests:
                             except ValueError:
                                 await message.channel.send("something terrible happened")
                         elif tag in basetags:
+                            if not bulk: await message.channel.send(f"added quest to basetag")
                             quests.save()
                         else:
                             questsData["tags"][tag] = {"quests": [ind], "rewards": []}
