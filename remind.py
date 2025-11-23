@@ -1,5 +1,6 @@
 import json
 import random
+import re
 import helperfunctions
 import logcommand, logging
 import datetime as dt
@@ -13,12 +14,31 @@ reminders = []
 
 multipliers = {
     's': 1/60,
+    'sec': 1/60,
+    'second': 1/60,
+    'seconds': 1/60,
     'm': 1,
+    'min': 1,
+    "minute": 1,
+    'minutes': 1,
     'h': 60,
+    'hr': 60,
+    'hour': 60,
+    'hours': 60,
     'd': 1440,
+    'day': 1440,
+    'days': 1440,
     'w': 10080,
+    'wk': 10080,
+    'week': 10080,
+    'weeks': 10080,
     'M': 43200,
-    'y': 525600
+    'mon': 43200,
+    'month': 43200,
+    'months': 43200,
+    'y': 525600,
+    'year': 525600,
+    'years': 525600
 }
 
 class remind:
@@ -35,10 +55,13 @@ class remind:
                 await message.channel.send("try telling me a time and a message")
                 return
             try:
-                t = parts[1]
-                if t[-1] in multipliers:
-                    duration = float(t[:-1]) * multipliers[t[-1]]
+                match = re.match(r"([0-9]*\.?[0-9]+)([A-Za-z]+)", s)
+                if match:
+                    number = float(match.group(1))
+                    letters = match.group(2)
+                    duration = float(number) * multipliers[letters]
                 else:
+                    t = parts[1]
                     await message.channel.send(f"{t} what")
                     return
             except ValueError:
