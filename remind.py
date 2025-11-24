@@ -97,7 +97,7 @@ class remind:
                         "dont worry about it",
                         "tick tock on the clock"
                     ]))
-                logcommand.log_globally(logging.INFO, f"set reminder for {message.author.name} in {t}: {reminder_msg}")
+                logcommand.log_globally(logging.INFO, f"set reminder for {message.author.name} in {parts[1]}: {reminder_msg}")
         
         # if message is reply and is !cancel
         elif message.content.startswith("!cancel") and message.reference is not None:
@@ -110,6 +110,7 @@ class remind:
                 return
             to_remove = []
             for i, (user_id, channel_id, reminder_msg, duration, timestamp) in enumerate(reminders):
+                print(f"checking reminder for user {user_id} in channel {channel_id} with msg {reminder_msg}")
                 if user_id == ref_message.author.id and channel_id == ref_message.channel.id and reminder_msg in ref_message.content:
                     to_remove.append(i)
             if to_remove:
