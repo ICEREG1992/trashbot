@@ -7,12 +7,12 @@ class witscord:
     async def run(self, message):
         parts = message.content.split(' ', 1)
         if parts[0] == "witsco!random":
-            await message.channel.send(self.witsco_random())
+            await message.channel.send(witscord.witsco_random())
         elif parts[0] == "witsco!search":
             if len(parts) < 2:
                 await message.channel.send("search what")
                 return
-            await message.channel.send(self.witsco_search(parts[1]))
+            await message.channel.send(witscord.witsco_search(parts[1]))
 
     def witsco_random():
         random_url = 'http://witscord.net/~staz/w/api.php?action=query&list=random&rnnamespace=0&format=json'
