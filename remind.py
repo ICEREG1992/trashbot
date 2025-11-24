@@ -55,7 +55,7 @@ class remind:
                 await message.channel.send("try telling me a time and a message")
                 return
             try:
-                match = re.match(r"([0-9]*\.?[0-9]+)([A-Za-z]+)", s)
+                match = re.match(r"([0-9]*\.?[0-9]+)([A-Za-z]+)", parts[1])
                 if match:
                     number = float(match.group(1))
                     letters = match.group(2)
