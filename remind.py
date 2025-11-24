@@ -103,6 +103,8 @@ class remind:
         elif message.content.startswith("!cancel") and message.reference is not None:
             try:
                 ref_message = await message.channel.fetch_message(message.reference.message_id)
+                if ref_message.author.id == self.user.id:
+                    ref_message = await message.channel.fetch_message(ref_message.reference.message_id)
             except:
                 await message.channel.send("weird i cant find that message")
                 return
