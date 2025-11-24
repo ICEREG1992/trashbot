@@ -24,6 +24,7 @@ from qat import qat
 from remind import remind
 from quests import quests
 from witscord import witscord
+from jpegdirt import jpegdirt
 import logcommand, logging
 logging.basicConfig(level=logging.INFO)
 
@@ -84,6 +85,7 @@ class MyClient(discord.Client):
                 await remind.run(self, message)
                 await quests.run(self, message)
                 await witscord.run(self, message)
+                await jpegdirt.run(self, message)
                 
                 if message.content.startswith("!ban "):
                     await message.channel.send(message.content[5:] + " has been banned.")
