@@ -43,7 +43,7 @@ class permissions:
                 log_globally(logging.INFO, message.mentions[0].name + " revoked " + color + " keycard by " + message.author.name)
             else:
                 await message.channel.send("You need a blue keycard to do that, " + message.author.name + ".")
-        elif (message.content.startswith("!keycard ") and len(message.mentions) == 0):
+        elif (message.content.startswith(("!keycard ", "!keycards ")) and len(message.mentions) == 0):
             color = message.content[9:]
             await message.channel.send(
                 pick_string([
@@ -55,7 +55,7 @@ class permissions:
                 ]) + str(permissions.get_users(color))
             )
             return
-        elif (message.content.startswith("!keycard ")):
+        elif (message.content.startswith(("!keycard ", "!keycards "))):
             user = message.mentions[0].id
             await message.channel.send(
                 pick_string([
