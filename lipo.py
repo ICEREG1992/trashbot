@@ -57,7 +57,7 @@ class lipo:
                 participants[uid]['best'] = ""
                 if c.isdigit():
                     await message.channel.send(message.author.mention + ", you have started a lipogram challenge for words with `" + c + "` letters or fewer. Have fun!")
-                if c == 'qat':
+                elif c == 'qat':
                     await message.channel.send(message.author.mention + ", you have started a lipogram challenge for sentences in [qat](https://www.quinapalus.com/qat.html) order. Have fun!")
                 elif len(c) > 1:
                     await message.channel.send(message.author.mention + ", you have started a lipogram challenge for the letters in `" + c + "`. Have fun!")
