@@ -65,6 +65,7 @@ class permissions:
         elif (message.content.startswith("!addallowedchannel ")):
             if (permissions.allowed(message.author.id, "blue")):
                 channel_id = message.content[19:]
+                channel_id = channel_id.strip("<#>")
                 permissions.add_allowed_channel(channel_id)
                 await message.channel.send("Channel <#" + channel_id + "> added to allowed channels.")
             else:
@@ -72,6 +73,7 @@ class permissions:
         elif (message.content.startswith("!removeallowedchannel ")):
             if (permissions.allowed(message.author.id, "blue")):
                 channel_id = message.content[22:]
+                channel_id = channel_id.strip("<#>")
                 permissions.remove_allowed_channel(channel_id)
                 await message.channel.send("Channel <#" + channel_id + "> removed from allowed channels.")
             else:
