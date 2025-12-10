@@ -127,7 +127,7 @@ class permissions:
     
     def allowed_channel(channel_id):
         if "allowed_channels" in perms:
-            return channel_id in perms["allowed_channels"]
+            return str(channel_id) in perms["allowed_channels"]
         return False
 
     def save():
