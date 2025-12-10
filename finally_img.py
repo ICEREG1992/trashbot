@@ -8,6 +8,7 @@ import base64
 import discord
 import requests
 import os
+from permissions import permissions
 from urllib.parse import quote
 
 global c
@@ -25,7 +26,7 @@ class finally_img:
         global t
         global c
         google_image_request = None
-        if (message.channel.id == 555540666776813568 or isinstance(message.channel, discord.channel.DMChannel)):
+        if (permissions.allowed_channel(message.channel.id) or isinstance(message.channel, discord.channel.DMChannel)):
             if (message.content.startswith("!finally ")):
                 # reset c if it's time
                 if (dt.datetime.utcnow() > c[0] + dt.timedelta(days=1)):

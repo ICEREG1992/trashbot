@@ -22,7 +22,7 @@ class todo:
         uid = str(message.author.id)
         dm = isinstance(message.channel, type(message.author.dm_channel))
 
-        if message.content.startswith("!todo ") and permissions.allowed(uid, "blue", "red"):
+        if message.content.startswith("!todo "):
             t = message.content[6:]
             if uid not in todos:
                 todos[uid] = []
@@ -39,8 +39,8 @@ class todo:
             todo.save()
             return
 
-        if message.content.startswith("!todoclear ") and permissions.allowed(uid, "blue"):
-            if not dm:
+        if message.content.startswith("!todoclear "):
+            if not dm and not permissions.allowed_channel(message.channel.id):
                 await message.add_reaction("❌")
                 return
 
@@ -70,7 +70,7 @@ class todo:
             return
 
         if message.content == "!todo":
-            if not dm:
+            if not dm and not permissions.allowed_channel(message.channel.id):
                 await message.add_reaction("❌")
                 return
 

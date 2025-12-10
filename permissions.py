@@ -62,6 +62,20 @@ class permissions:
                     "**here's all the keycards " + message.mentions[0].name + " has:**\n"
                 ]) + str(permissions.get_colors(user))
             )
+        elif (message.content.startswith("!addallowedchannel ")):
+            if (permissions.allowed(message.author.id, "blue")):
+                channel_id = message.content[19:]
+                permissions.add_allowed_channel(channel_id)
+                await message.channel.send("Channel <#" + channel_id + "> added to allowed channels.")
+            else:
+                await message.channel.send("You need a blue keycard to do that, " + message.author.name + ".")
+        elif (message.content.startswith("!removeallowedchannel ")):
+            if (permissions.allowed(message.author.id, "blue")):
+                channel_id = message.content[22:]
+                permissions.remove_allowed_channel(channel_id)
+                await message.channel.send("Channel <#" + channel_id + "> removed from allowed channels.")
+            else:
+                await message.channel.send("You need a blue keycard to do that, " + message.author.name + ".")
             
         return
 
@@ -79,6 +93,19 @@ class permissions:
                 perms.pop(color, None)
         permissions.save()
 
+    def add_allowed_channel(channel_id):
+        if "allowed_channels" not in perms:
+            perms["allowed_channels"] = []
+        if channel_id not in perms["allowed_channels"]:
+            perms["allowed_channels"].append(channel_id)
+        permissions.save()
+
+    def remove_allowed_channel(channel_id):
+        if "allowed_channels" in perms:
+            if channel_id in perms["allowed_channels"]:
+                perms["allowed_channels"].remove(channel_id)
+        permissions.save()
+
     def get_users(color):
         if color in perms:
             return perms[color]
@@ -94,6 +121,11 @@ class permissions:
         for color in colors:
             if color in perms and str(id) in perms[color]:
                 return True
+        return False
+    
+    def allowed_channel(channel_id):
+        if "allowed_channels" in perms:
+            return channel_id in perms["allowed_channels"]
         return False
 
     def save():
