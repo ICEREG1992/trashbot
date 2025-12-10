@@ -47,11 +47,5 @@ class humor_contains:
                 if phrase.lower() in message.content.lower():
                     await message.channel.send(humor_escape(message, pick_string(keyphrases[phrase])))
 
-            '''
-            if "black" in message.content:
-                if helperfunctions.chance(10):
-                    await message.channel.send("why you gotta make it a race thing")
-            '''
-
     def save():
         db.put_item(TableName="trashbot", Item={'name':{'S':'contains_phrases'}, 'data':{'S':json.dumps(keyphrases)}})
