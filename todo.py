@@ -1,5 +1,6 @@
 import os
 import json
+import discord
 import helperfunctions
 from helperfunctions import pick_string
 from permissions import permissions
@@ -20,7 +21,7 @@ class todo:
 
     async def run(self, message):
         uid = str(message.author.id)
-        dm = isinstance(message.channel, type(message.author.dm_channel))
+        dm = message.channel.type is discord.ChannelType.private
 
         if message.content.startswith("!todo "):
             t = message.content[6:]
