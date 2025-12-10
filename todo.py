@@ -92,7 +92,7 @@ class todo:
             ]))
 
             if len(items) == 0:
-                await message.channel.send("uuuhhhhh.... nothing! nice, man. get some sleep.")
+                await message.channel.send("uuuhhhhh.... nothing! nice, dude. get some sleep.")
                 return
 
             s = ""
