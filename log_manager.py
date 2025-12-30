@@ -32,7 +32,7 @@ class logging_manager:
                 "howbow you tell me what u want to do"]))
                 return
             if logcommand.get_level_num(parts[1].upper()) in logcommand.levelLogs:
-                cur_log = logcommand.levelLogs[logcommand.get_level_num(parts[1])]
+                cur_log = logcommand.levelLogs[logcommand.get_level_num(parts[1].upper())]
             elif parts[1] == "global":
                 cur_log = logcommand.globalLog
             else:
