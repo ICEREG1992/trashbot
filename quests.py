@@ -144,7 +144,7 @@ class quests:
             elif message.content.startswith("!award ") or message.content == "!award":
                 if message.type == MessageType.reply:
                     parts = message.content.split(' ')
-                    if len(parts) > 1:
+                    if len(parts) < 1:
                         await message.channel.send(f"pick someone to award this quest to")
                     else:
                         # get message to check it's from bot
@@ -165,6 +165,8 @@ class quests:
                         if message_id not in [q["quest"] for q in questsData["players"].get(str(message.author.id), {}).get("quests", [])]:
                             await message.channel.send("you can't award that quest")
                             return
+                        if len(parts) > 2:
+                            await message.channel.send(f"you don't get to pick, sorry")
                         tag = quests.removeQuestFromPlayer(message.author.id, message_id)
                         if tag in basetags:
                             r = random.choice(questsData["rewards"])
@@ -315,12 +317,21 @@ class quests:
                     if reward in questsData["rewards"]:
                         i = questsData["rewards"].index(reward)
                         questsData["rewards"].remove(reward)
-                        for t in questsData["tags"].keys():
-                            if i in questsData["tags"][t]["rewards"]:
-                                questsData["tags"][t]["rewards"].remove(i)
-                        # if tag has no quests and no rewards, remove it
+                        # update every tag's reward index list
+                        for t in questsData["tags"]:
+                            updated = []
+                            for idx in questsData["tags"][t]["rewards"]:
+                                if idx == i:
+                                    continue                # removed reward
+                                elif idx > i:
+                                    updated.append(idx - 1) # shift index left
+                                else:
+                                    updated.append(idx)
+                            questsData["tags"][t]["rewards"] = updated
+
+                        # remove empty tags
                         for t in list(questsData["tags"].keys()):
-                            if len(questsData["tags"][t]["quests"]) == 0 and len(questsData["tags"][t]["rewards"]) == 0:
+                            if (len(questsData["tags"][t]["quests"]) == 0 and len(questsData["tags"][t]["rewards"]) == 0):
                                 del questsData["tags"][t]
                         quests.save()
                         if not bulk: await message.channel.send(f"removed reward")
