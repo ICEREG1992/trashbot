@@ -121,7 +121,11 @@ class quests:
                             r = random.choice(questsData["rewards"])
                             quests.addRewardToPlayer(message.author.id, r, tag="random", reward=r)
                         else:
-                            r = questsData["rewards"][random.choice(questsData["tags"][tag]["rewards"])]
+                            if tag not in questsData["tags"].keys() or len(questsData["tags"][tag]["rewards"]) == 0:
+                                message.channel.send("i don't know anythingg about tag " + tag)
+                                r = random.choice(questsData["rewards"])
+                            else:
+                                r = questsData["rewards"][random.choice(questsData["tags"][tag]["rewards"])]
                             quests.addRewardToPlayer(message.author.id, r, tag=tag, reward=r)
                         
                         await message.channel.send(r)
