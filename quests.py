@@ -272,13 +272,23 @@ class quests:
                     quest = quest.replace(' // ', '\n')
                     if quest in questsData["quests"]:
                         i = questsData["quests"].index(quest)
-                        questsData["quests"].remove(quest)
-                        for t in questsData["tags"].keys():
-                            if i in questsData["tags"][t]["quests"]:
-                                questsData["tags"][t]["quests"].remove(i)
-                        # if tag has no quests and no rewards, remove it
+                        questsData["quests"].pop(i)
+                        # update quest indices inside each tag
+                        for t in questsData["tags"]:
+                            updated = []
+                            for idx in questsData["tags"][t]["quests"]:
+                                if idx == i:
+                                    continue                # removed quest
+                                elif idx > i:
+                                    updated.append(idx - 1) # shift left
+                                else:
+                                    updated.append(idx)
+                            questsData["tags"][t]["quests"] = updated
+
+                        # remove empty tags
                         for t in list(questsData["tags"].keys()):
-                            if len(questsData["tags"][t]["quests"]) == 0 and len(questsData["tags"][t]["rewards"]) == 0:
+                            if (len(questsData["tags"][t]["quests"]) == 0 and
+                                len(questsData["tags"][t]["rewards"]) == 0):
                                 del questsData["tags"][t]
                         quests.save()
                         if not bulk: await message.channel.send(f"removed quest")
@@ -316,7 +326,7 @@ class quests:
                     reward = reward.replace(' // ', '\n')
                     if reward in questsData["rewards"]:
                         i = questsData["rewards"].index(reward)
-                        questsData["rewards"].remove(reward)
+                        questsData["rewards"].pop(i)
                         # update every tag's reward index list
                         for t in questsData["tags"]:
                             updated = []
