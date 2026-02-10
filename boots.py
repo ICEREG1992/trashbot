@@ -26,7 +26,9 @@ class boots:
         global t
         if (message.content.startswith("!swampyboots")):
             new_t = dt.datetime.now(dt.timezone.utc)
-            await message.channel.send("Days since last swampy boots: ~~" + str((new_t.date() - t.date()).days) + "~~ 0")
+            calendar_days = str((new_t.date() - t.date()).days)
+            await message.channel.send("Days since last swampy boots: ~~" + calendar_days + "~~ 0")
+            logcommand.log_globally(logging.INFO, "!swampyboots triggered by " + message.author.name + ", " + calendar_days + " days since last swampy boots")
             t = new_t
             boots.save(t)
 
