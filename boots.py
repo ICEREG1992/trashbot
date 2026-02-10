@@ -18,6 +18,7 @@ class boots:
             data = json.loads(d['Item']['data']['S'])
             if data == "0":
                 t = dt.datetime.now(dt.timezone.utc)
+                boots.save()
             else:
                 t = dt.datetime.fromtimestamp(float(data), tz=dt.timezone.utc)
 
