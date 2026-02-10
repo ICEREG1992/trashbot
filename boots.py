@@ -16,8 +16,7 @@ class boots:
         global t
         if ('data' in d['Item']):
             data = json.loads(d['Item']['data']['S'])
-            if "t" in data:
-                t = dt.datetime.fromtimestamp(float(data['t']), tz=dt.timezone.utc)
+            t = dt.datetime.fromtimestamp(float(data), tz=dt.timezone.utc)
 
     async def run(self, message):
         global t
@@ -29,4 +28,4 @@ class boots:
 
     def save():
         global t
-        db.put_item(TableName="trashbot", Item={'name':{'S':'boots'}, 'data':{'S':json.dumps({'t': t.timestamp()})}})
+        db.put_item(TableName="trashbot", Item={'name':{'S':'boots'}, 'data':{'S':json.dumps(t.timestamp())}})
