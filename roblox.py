@@ -2,7 +2,6 @@ from helperfunctions import pick_string
 import discord
 
 count = 0
-ANNOUNCEMENT_CHANNEL_ID = 1234567890  # 🔧 replace with your public channel ID
 
 class roblox:
     bday_server = 1480091673005658114
