@@ -35,7 +35,7 @@ class food:
         # send messages if fed
         if (message.content.startswith("!feed ")):
             if (t > dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)):
-                if message.content[message.content.index(' ')+1:] is "cheeseburger":
+                if message.content[message.content.index(' ')+1:] == "cheeseburger":
                     await message.channel.send(pick_string([
                         "actually nevermind i dont want anything"
                     ]))
