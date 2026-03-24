@@ -7,7 +7,6 @@ from humor_contains import humor_contains
 from humor_equals import humor_equals
 from humor_regex import humor_regex
 from permissions import permissions
-from roblox import roblox
 from uptime import uptime
 from todo import todo
 from food import food
@@ -90,7 +89,6 @@ class MyClient(discord.Client):
                 await witscord.run(self, message)
                 await jpegdirt.run(self, message)
                 await boots.run(self, message)
-                await roblox.run(self, message)
                 
                 if message.content.startswith("!ban "):
                     await message.channel.send(message.content[5:] + " has been banned.")
