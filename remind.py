@@ -120,6 +120,22 @@ class remind:
                 await message.channel.send("cancelled that reminder for you")
                 logcommand.log_globally(logging.INFO, f"cancelled reminder for {ref_message.author.name}: {reminder_msg}")
 
+        # if message is reply and is !confirm
+        elif (message.content.startswith("!confirm") or message.content.startswith("!check")) and message.reference is not None:
+            try:
+                ref_message = await message.channel.fetch_message(message.reference.message_id)
+                if ref_message.author.id == self.user.id:
+                    ref_message = await message.channel.fetch_message(ref_message.reference.message_id)
+            except:
+                await message.channel.send("weird i cant find that message")
+                return
+            for i, (user_id, channel_id, reminder_msg, duration, timestamp) in enumerate(reminders):
+                print(f"checking reminder for user {user_id} in channel {channel_id} with msg {reminder_msg}")
+                temp_t = ""
+                if user_id == ref_message.author.id and channel_id == ref_message.channel.id and reminder_msg in ref_message.content:
+                    temp_t = timestamp + duration
+                await message.channel.send(f"<t:{temp_t}:f>")
+
         # Check for due reminders
         to_remove = []
         for i, (user_id, channel_id, reminder_msg, duration, timestamp) in enumerate(reminders):
