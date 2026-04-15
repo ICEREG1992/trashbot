@@ -133,8 +133,8 @@ class remind:
                 print(f"checking reminder for user {user_id} in channel {channel_id} with msg {reminder_msg}")
                 if user_id == ref_message.author.id and channel_id == ref_message.channel.id and reminder_msg in ref_message.content:
                     found = True
-                    temp_t = timestamp + duration
-                    await message.channel.send(f"<t:{temp_t}:f>")
+                    temp_t = timestamp + (duration * 60)
+                    await message.channel.send(f"<t:{int(temp_t)}:f>")
             if not found:
                 await message.channel.send("weird i cant find that message")
 
