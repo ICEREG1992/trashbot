@@ -136,7 +136,7 @@ class remind:
                     temp_t = timestamp + (duration * 60)
                     await message.channel.send(f"<t:{int(temp_t)}:f>")
             if not found:
-                await message.channel.send("weird i cant find that message")
+                await message.channel.send("that's not a reminder doo-doo head >:(")
 
         # Check for due reminders
         to_remove = []
