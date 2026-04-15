@@ -131,10 +131,12 @@ class remind:
                 return
             for i, (user_id, channel_id, reminder_msg, duration, timestamp) in enumerate(reminders):
                 print(f"checking reminder for user {user_id} in channel {channel_id} with msg {reminder_msg}")
-                temp_t = ""
                 if user_id == ref_message.author.id and channel_id == ref_message.channel.id and reminder_msg in ref_message.content:
+                    found = True
                     temp_t = timestamp + duration
-                await message.channel.send(f"<t:{temp_t}:f>")
+                    await message.channel.send(f"<t:{temp_t}:f>")
+            if not found:
+                await message.channel.send("weird i cant find that message")
 
         # Check for due reminders
         to_remove = []
