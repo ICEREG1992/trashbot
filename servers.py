@@ -90,19 +90,48 @@ class servers:
                 if len(message.content) > 7:
                     map = message.content[8:]
                     map = helperfunctions.sanitize(map)
-                    try:
-                        subprocess.check_output(['test', '-d', '/home/william/minecraft/worlds/' + map])
-                    except subprocess.CalledProcessError as e:
-                        await message.channel.send("i was not able to find a map called that")
-                        return
-                    await message.channel.send("i was able to find a map called that")
+                    
+                    seed = None
+                    version = None
+
+                    if map.startswith("seed:"):
+                        parts = map[5:].split(":")
+                        seed = parts[0]
+                        version = parts[1] if len(parts) > 1 else None
+                        from datetime import datetime
+                        map = datetime.now().strftime("%m%d%Y")
+                        await message.channel.send(f"set up new world with seed `{seed}` at worlds/{map}" + (f" using {version}" if version else ""))
+                    elif map.startswith("new:"):
+                        parts = map[4:].split(":")
+                        map = parts[0]
+                        version = parts[1] if len(parts) > 1 else None
+                        await message.channel.send(f"set up new world at worlds/{map}" + (f" using {version}" if version else ""))
+                    else:
+                        try:
+                            subprocess.check_output(['test', '-d', '/home/william/minecraft/worlds/' + map])
+                        except subprocess.CalledProcessError as e:
+                            await message.channel.send("i was not able to find a map called that")
+                            return
+                        await message.channel.send("i was able to find a map called that")
+
+                    # Create world folder and version.txt for new worlds
+                    if seed is not None or map.startswith("new:"):
+                        world_path = f"/home/william/minecraft/worlds/{map}"
+                        os.makedirs(world_path, exist_ok=True)
+                        if version:
+                            with open(f"{world_path}/jar.txt", "w") as f:
+                                f.write(version)
+
                     config = jproperties.Properties()
                     with open('/home/william/minecraft/' + 'server.properties', 'r+b') as file:
                         config.load(file, "utf-8")
                         config["level-name"] = "worlds/" + map
+                        if seed is not None:
+                            config["level-seed"] = seed
                         file.seek(0)
                         file.truncate(0)
                         config.store(file, encoding="utf-8")
+
                     jar_path = f"/home/william/minecraft/worlds/{map}/jar.txt"
                     if os.path.isfile(jar_path):
                         with open(jar_path, "r") as f:
