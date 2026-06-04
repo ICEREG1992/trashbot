@@ -27,6 +27,7 @@ from quests import quests
 from witscord import witscord
 from jpegdirt import jpegdirt
 from boots import boots
+from dailies import dailies
 import logcommand, logging
 logging.basicConfig(level=logging.INFO)
 
