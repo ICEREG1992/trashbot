@@ -24,7 +24,9 @@ from pan import pan
 from qat import qat
 from remind import remind
 from quests import quests
-from heathcliff import heathcliff
+from witscord import witscord
+from jpegdirt import jpegdirt
+from boots import boots
 import logcommand, logging
 logging.basicConfig(level=logging.INFO)
 
@@ -54,6 +56,7 @@ class MyClient(discord.Client):
         pan.init()
         remind.init()
         quests.init()
+        boots.init()
         await powerswitch.init(self)
 
     async def on_message(self, message):
@@ -84,7 +87,9 @@ class MyClient(discord.Client):
                 await numerology.run(self, message)
                 await remind.run(self, message)
                 await quests.run(self, message)
-                await heathcliff.run(self, message)
+                await witscord.run(self, message)
+                await jpegdirt.run(self, message)
+                await boots.run(self, message)
                 await dailies.run(self, message)
                 
                 if message.content.startswith("!ban "):
@@ -112,6 +117,16 @@ class MyClient(discord.Client):
 
                 if message.content == "!version":
                     await message.channel.send("u last pushed to me _DATE_")
+
+                if message.content == "!semoji":
+                    emojis = sorted(message.guild.emojis, key=lambda e: e.name.lower())
+                    rows = []
+                    for i in range(0, len(emojis), 9):
+                        row = ''.join(str(e) for e in emojis[i:i+9])
+                        rows.append(row)
+
+                    out = '\n'.join(rows)
+                    await message.channel.send(out)
 
                 if message.content == "!join":
                     vcs = self.voice_clients
@@ -155,28 +170,6 @@ class MyClient(discord.Client):
                         log = log[0:60]
                     logcommand.log_globally(logging.INFO, "tbot message deleted by " + user.name + ": `" + log + "`")
                     await reaction.message.delete(delay=0.5)
-            # elephant logic
-            if user != self.user and reaction.emoji == "🐘":
-                ok = True
-                for r in reaction.message.reactions:
-                    if r.emoji == "🚫":
-                        ok = False
-                if ok and reaction.message.author == self.user:
-                    log = reaction.message.content.replace('`', '')
-                    if len(log) > 60 :
-                        log = log[0:60]
-                    logcommand.log_globally(logging.INFO, "tbot adding elephant and mamoth to own message: `" + log + "`")
-                    await reaction.message.add_reaction("🐘")
-                    await reaction.message.add_reaction("🦣")
-            elif user != self.user and reaction.emoji == "🚫":
-                for r in reaction.message.reactions:
-                    users = [user async for user in r.users()]
-                    if self.user in users and (r.emoji == "🐘" or r.emoji == "🦣"):
-                        log = reaction.message.content.replace('`', '')
-                        if len(log) > 60 :
-                            log = log[0:60]
-                        logcommand.log_globally(logging.INFO, "tbot removing " + r.emoji + " from own message: `" + log + "`")
-                        await r.remove(self.user)
             # n-[emoji] logic
             # if user != self.user and reaction.count == 5 :
             #     if helperfunctions.chance(10):

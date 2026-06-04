@@ -11,8 +11,8 @@ logging.basicConfig(level=logging.INFO)
 def pick_string(set):
     return random.choice(set)
 
-async def bot_wait():
-    await asyncio.sleep(1.5)
+async def bot_wait(time=None):
+    await asyncio.sleep(1.5 if time is None else time)
 
 async def bot_wait_medium():
     await asyncio.sleep(10)
@@ -91,8 +91,8 @@ def ensure_table():
 
 def fill_defaults(db):
     # fill empty required values with defaults
-    keynames = ["contains_phrases", "equals_phrases", "regex_phrases", "hunger", "lyrics", "mc_ip", "permissions", "uptime", "todo", "wordplay_keywords", "on", "lipo", "pan", "reminders", "quests"]
-    defaults = ["{}", "{}", "{}", "0", "•", "", "{}", "0", "[]", "{}", "True", "{}", "{}", "[]", "{}"]
+    keynames = ["contains_phrases", "equals_phrases", "regex_phrases", "hunger", "lyrics", "mc_ip", "permissions", "uptime", "todo", "wordplay_keywords", "on", "lipo", "pan", "reminders", "quests", "boots"]
+    defaults = ["{}", "{}", "{}", "{}", "•", "", "{}", "0", "{}", "{}", "True", "{}", "{}", "[]", "{}", "0"]
     for i in range(len(keynames)):
         n = db.get_item(TableName="trashbot", Key={'name':{'S':keynames[i]}})
         if ('Item' not in n):

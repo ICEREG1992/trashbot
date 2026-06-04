@@ -43,8 +43,9 @@ class lipo:
             if ' ' not in message.content:
                 az = list(map(chr, range(97, 123)))
                 c = pick_string(az)
-            elif message.content[6:].isdigit() and int(message.content[6:]) > 2000:
+            elif message.content[6:].isdigit() and int(message.content[6:]) > 1999:
                 await message.channel.send('please try a lower character limit please')
+                return
             elif len(message.content[6:]) >= 1:
                 c = message.content[6:].lower()
             if uid not in participants:
@@ -56,6 +57,8 @@ class lipo:
                 participants[uid]['best'] = ""
                 if c.isdigit():
                     await message.channel.send(message.author.mention + ", you have started a lipogram challenge for words with `" + c + "` letters or fewer. Have fun!")
+                elif c == 'qat':
+                    await message.channel.send(message.author.mention + ", you have started a lipogram challenge for sentences in [qat](https://www.quinapalus.com/qat.html) order. Have fun!")
                 elif len(c) > 1:
                     await message.channel.send(message.author.mention + ", you have started a lipogram challenge for the letters in `" + c + "`. Have fun!")
                 else:
@@ -66,6 +69,8 @@ class lipo:
                 c = participants[uid]['c']
                 if c.isdigit():
                     await message.channel.send("you're doing a lipo challenge for words with `" + c + "` letters or fewer with `" + str(participants[uid]['points']) + " points`")
+                if c == 'qat':
+                    await message.channel.send("you're doing a lipo challenge for sentences in [qat](https://www.quinapalus.com/qat.html) order with `" + str(participants[uid]['points']) + " points`")
                 elif len(c) > 1:
                     await message.channel.send("you're doing a lipo challenge for the letters in `" + c + "` with `" + str(participants[uid]['points']) + " points`")
                 else:
@@ -86,6 +91,17 @@ class lipo:
                     matches = [[a for a in words if len(a) > int(participants[uid]['c'])], 'word longer than ' + participants[uid]['c'] + ' letters']
                     if len(matches[0]) == 0:
                         matches = None
+                elif participants[uid]['c'] == 'qat':
+                    # extract all of the character words found in the string, allowing for apostrophes
+                    words = re.split(r"[^\w'-]+", st)
+                    # make sure words are in order by word length followed by alphabetical order
+                    sorted_words = sorted(words, key=lambda w: (lipo.qat_length(w), w))
+                    if words != sorted_words:
+                        # matches is an array with the first word that is out of order in index 0 followed by the reason in index 1
+                        for i in range(min(len(words), len(sorted_words))):
+                            if words[i] != sorted_words[i]:
+                                matches = [[sorted_words[i]], 'word out of qat order']
+                                break
                 else:
                     for n in participants[uid]['c']:
                         if n in st:
@@ -124,3 +140,7 @@ class lipo:
         global participants
         # we have to do shenanigans here to be able to serialize our dict with tuple keys
         db.put_item(TableName="trashbot", Item={'name':{'S':'lipo'}, 'data':{'S':json.dumps(participants)}})
+
+    def qat_length(w):
+        length = len(re.sub(r"[-']", '', w))
+        return (length)

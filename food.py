@@ -1,3 +1,4 @@
+import json
 from helperfunctions import pick_string,chance
 import logcommand, logging
 import datetime as dt
@@ -13,20 +14,28 @@ db = boto3.client('dynamodb', region_name='us-east-2')
 global t
 t = dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)
 
+global stats
+stats = {}
+
 class food:
     
     def init():
         d = db.get_item(TableName="trashbot", Key={'name':{'S':'hunger'}})
         global t
+        global stats
         if ('data' in d['Item']):
-            t = dt.datetime.fromtimestamp(float(d['Item']['data']['S']), tz=dt.timezone.utc)
+            data = json.loads(d['Item']['data']['S'])
+            if "t" in data:
+                t = dt.datetime.fromtimestamp(float(data['t']), tz=dt.timezone.utc)
+            if "stats" in data:
+                stats = data['stats']
 
     async def run(self, message, switch):
         global t
         # send messages if fed
-        if (message.content.startswith("!feed")):
+        if (message.content.startswith("!feed ")):
             if (t > dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)):
-                if message.content[message.content.index(' ')+1:] is "cheeseburger":
+                if message.content[message.content.index(' ')+1:] == "cheeseburger":
                     await message.channel.send(pick_string([
                         "actually nevermind i dont want anything"
                     ]))
@@ -54,10 +63,14 @@ class food:
                         "im really fine i don't need any more pls"
                     ]))
             elif (t < dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=2)):
-                logcommand.log_globally(logging.INFO, "I was fed `" + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds") +
+                logcommand.log_globally(logcommand.FEED_LEVEL_NUM, "I was fed `" + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds") +
                 "` by user " + message.author.name + " after starving for " + str(humanize.precisedelta((dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6) - t), suppress=['milliseconds','microseconds'])) )
+                stats['starved'] = stats.get('starved', 0) + 1
+                if (int((dt.datetime.now(dt.timezone.utc) - t).total_seconds())) > stats.get('longest', 0):
+                    stats['longest'] = int((dt.datetime.now(dt.timezone.utc) - t).total_seconds())
                 t = dt.datetime.now(dt.timezone.utc)
-                food.save(t)
+                stats['last_starved'] = int(t.timestamp())
+                food.save(t, stats)
                 await message.channel.send(pick_string([
                     "that looks reeeeaallllyyy good hand that over nomnomnom",
                     "holy shit is that a " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds for me") + " that's gonna hit the spot",
@@ -70,10 +83,12 @@ class food:
                     "im eating it im eating it im eating it im eating it im eating it im eating it im eating it im eating it"
                 ]))
             else:
-                logcommand.log_globally(logging.INFO, "I was fed `" + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds") +
+                logcommand.log_globally(logcommand.FEED_LEVEL_NUM, "I was fed `" + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "bowl of seeds") +
                 "` by user " + message.author.name + " after being hungry for " + str(humanize.precisedelta((dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6) - t), suppress=['milliseconds','microseconds'])))
                 t = dt.datetime.now(dt.timezone.utc)
-                food.save(t)
+                if (int((dt.datetime.now(dt.timezone.utc) - t).total_seconds())) > stats.get('longest', 0):
+                    stats['longest'] = int((dt.datetime.now(dt.timezone.utc) - t).total_seconds())
+                food.save(t, stats)
                 if chance(90): # regular response
                     await message.channel.send(pick_string([
                         "Oh fuck yes it's a " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds") + " for me",
@@ -125,19 +140,38 @@ class food:
                         "PLEASE FEED ME ONLY THIS FROM NOW ON IT IS SO GOOD",
                         "this " + (message.content[message.content.index(' ')+1:] if len(message.content) > 6 else "little bowl of seeds") + " making me go freaky mode hdnghmhnioinnf dewnauiontg kjgm f gng ng n wdaiodnagd skjghnjksnfnfnjgnsfesmfkesm\ndnwoianf ka rfaijji fwanijoufnijeanjih fd iongiorfdmngiordiomgfd gjk\n\ndwiaonftgoiaweniodwajfeionfgeoiuiongrsno  fes oifenisnofnnhhnnhn hnnhhhnh \n\n\njdiwoaon fg8omiesajnuigko noiegnio ungio geigejiinoghrdsnioh f sifjnbiuoasndGOGOD THATS GOOD\nndiuowa nioasftenoi ne ioA NTOI JITY JOI JTIOE ONIAnsfangtnjoda\nNDAWUIONFOIAW MJIDFOwmnjasdf sagtjgNGNSJURE OIBGFUIOES NBOFNUIJES NIOFE NOIS fngoie n"
                     ]))
-        # elif (message.content == "!unfeed" and (permissions.allowed(message.author.id, "blue") or (permissions.allowed(message.author.id, "red")))):
-        #     if (t > dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)):
-        #         t = dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)
-        #         food.save(t)
-        #     await message.channel.send(pick_string([
-        #         "What's your problem?",
-        #         "fuck is your issue?",
-        #         "uncool, man",
-        #         "totally NOT chill. not chill",
-        #         "bruh",
-        #         "bruh moment",
-        #         "omg i was gonna eat that wtf"
-        #     ]))
+            
+        elif (message.content == "!unfeed" and (permissions.allowed(message.author.id, "blue") or (permissions.allowed(message.author.id, "red")))):
+            if (t > dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)):
+                t = dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)
+                food.save(t)
+            await message.channel.send(pick_string([
+                "What's your problem?",
+                "fuck is your issue?",
+                "uncool, man",
+                "totally NOT chill. not chill",
+                "bruh",
+                "bruh moment",
+                "omg i was gonna eat that wtf"
+            ]))
+
+        elif (message.content == "!feedstats"):
+            last_time = stats.get('last_starved')
+            last_str = f"<t:{last_time}>" if last_time else "never"
+            longest = stats.get('longest', 0)
+            human_longest = humanize.precisedelta(dt.timedelta(seconds=longest), format="%.0f")
+
+            out = "i've been feed routinely since 3/2/2023 10:56 PM\n"
+            out += f"i've starved {int(stats.get('starved', 0))} times, the last time was on {last_str}\n"
+            out += f"the longest i've gone without being fed is {human_longest}\n"
+            out += pick_string([
+                "love u!",
+                "thanks everyone!",
+                "i really appreciate it!",
+                "thx all!",
+                "keep it up!"
+            ])
+            await message.channel.send(out)
         
         # update status on message receive
         if (t > dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)):
@@ -151,5 +185,5 @@ class food:
         else:
             await self.change_presence(status=None, activity=discord.Game(name='Hungry for ' + humanize.naturaldelta((dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=6)) - t)))
     
-    def save(t):
-        db.put_item(TableName="trashbot", Item={'name':{'S':'hunger'}, 'data':{'S':str(t.timestamp())}})
+    def save(t, stats):
+        db.put_item(TableName="trashbot", Item={'name':{'S':'hunger'}, 'data': {'S': json.dumps({'t': t.timestamp(), 'stats': stats})}})

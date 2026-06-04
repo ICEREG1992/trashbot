@@ -37,7 +37,7 @@ class humor_equals:
                 await message.channel.send("hold up there buddy, only a keyword can be deleted with this command")
                 return
             else:
-                keyword = message.content[14:]
+                keyword = message.content[14:].lower()
                 if keyword in keyphrases:
                     keyphrases.pop(keyword, None)
                     logcommand.log_globally(logging.INFO, "humor_contains keyword deleted by " + message.author.name + ", ``" + keyword + "``")
