@@ -27,7 +27,6 @@ class dailies:
 
             # todo guess the rot shows picture of wood rot or crop rot
             # todo word ladder shows picture of ladder
-            # todo make words deterministic
 
             match result:
                 case 1:
@@ -118,7 +117,7 @@ class dailies:
                     objective = random.choice(objectives)
                     img = dailies.base_daily_image(objective)
                     draw = ImageDraw.Draw(img)
-                    word = RandomWord().word(word_min_length=4, word_max_length=12)
+                    word = RandomWord(rng=random).word(word_min_length=4, word_max_length=12)
                     msg = "!hostmc seed:" + word
 
                     font = ImageFont.truetype("ARLRDBD.TTF", 40)
@@ -244,7 +243,7 @@ class dailies:
             return chars, -1  # -1 signals garbage
 
         # Pick a random word 5-10 letters
-        rw = RandomWord()
+        rw = RandomWord(rng=random)
         word = rw.word(word_min_length=5, word_max_length=10).upper()
 
         # Random ROT 1-25
@@ -275,7 +274,7 @@ class dailies:
         return img
 
     def draw_word_ladder(img, draw):
-        rw = RandomWord()
+        rw = RandomWord(rng=random)
 
         # 3% chance to just say "LADDER"
         if random.random() < 0.03:
