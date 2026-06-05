@@ -98,18 +98,27 @@ class dailies:
                     await dailies.send_image(img, message.channel, "Word ladder")
 
                 case 6:
-                    # Hot dog eating contest
-                    img = dailies.base_daily_image("Hot dog eating contest!")
+                    # Activity day
+                    activities = [("Hot dog eating contest!", "u1f32d"),
+                                  ("High jump!", "u1f574"),
+                                  ("Ping pong!", "u1f3d3"),
+                                  ("Let's go gambling!", "u1f3b0"),
+                                  ("Let's sing the song of your life.", "u1f3b6"),
+                                  ("Eat a cheeseburger!", "u1f354"),
+                                  ("Eat a butter!", "u1f9c8"),
+                                  ("Go silly mode!", "u1f92a")]
+                    activity = random.choice(activities)
+                    img = dailies.base_daily_image(activity[0])
                     draw = ImageDraw.Draw(img)
                     # Fetch and paste hotdog emoji
-                    url = "https://raw.githubusercontent.com/googlefonts/noto-emoji/main/png/512/emoji_u1f32d.png"
+                    url = f"https://raw.githubusercontent.com/googlefonts/noto-emoji/main/png/512/emoji_{activity[1]}.png"
                     r = requests.get(url)
                     size = random.randint(100, 400)
                     hotdog = Image.open(BytesIO(r.content)).convert("RGBA")
-                    hotdog = hotdog.resize((size, size), Image.LANCZOS)
+                    hotdog = hotdog.thumbnail((size, size), Image.LANCZOS)
                     img.paste(hotdog, ((512 - size) // 2, (512 - size) // 2 + 20), hotdog)
 
-                    await dailies.send_image(img, message.channel, "Hot dog eating contest")
+                    await dailies.send_image(img, message.channel, activity[0])
                 
                 case 7:
                     # Find diamonds
@@ -175,7 +184,7 @@ class dailies:
             puzzle[r][c] = 0
 
         # hehe
-        if random.random() < 0.1:
+        if random.random() < 0.12:
             empty_cells = [(r, c) for r in range(9) for c in range(9) if puzzle[r][c] == 0]
             if empty_cells:
                 r, c = random.choice(empty_cells)
@@ -194,7 +203,11 @@ class dailies:
         # hehehe
         if random.random() < 0.03:
             num = random.randint(0, 9)
-            return [[num] * 9 for _ in range(9)]
+            puzzle = [[num] * 9 for _ in range(9)]
+        
+        # hehehehe
+        if random.random() < 0.03:
+            puzzle = [[random.randint(1, 9) if cell != 0 else 0 for cell in row] for row in puzzle]
 
         return puzzle
 
@@ -256,21 +269,33 @@ class dailies:
 
     def draw_rot_puzzle(img, draw):
         word, rot = dailies.generate_rot_puzzle()
-
         font_large = ImageFont.truetype("ARLRDBD.TTF", 48)
         font_small = ImageFont.truetype("ARLRDBD.TTF", 16)
+
+        # 3% chance to just be a rotting image
+        if random.random() < 0.03:
+            url = random.choice(["https://upload.wikimedia.org/wikipedia/commons/7/7f/Bitter_rot_on_a_Honeycrisp_apple.jpg",
+                                 "https://www.weatherall.com/cdn/shop/articles/Weatherall_-_3_Types_of_Log_Rot_and_How_to_Treat_Each_One_1.jpg?v=1489279005",
+                                 "https://www.southernliving.com/thmb/Zuog5BduX0BtWXBFYF84UGUTn4c=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-1192872187-412ebeba29884406837f3fe52a4a810a.jpg"])
+            r = requests.get(url)
+            rot_img = Image.open(BytesIO(r.content)).convert("RGBA")
+            size = random.randint(100, 400)
+            rot_img = rot_img.thumbnail((size, size), Image.LANCZOS)
+            if rot_img.mode == "RGBA":
+                img.paste(rot_img, ((512 - size) // 2, (512 - size) // 2 + 20), rot_img)
+            else:
+                img.paste(rot_img, ((512 - size) // 2, (512 - size) // 2 + 20))
+            return img
 
         # Draw the rotated word centered
         bbox = draw.textbbox((0, 0), word, font=font_large)
         tw = bbox[2] - bbox[0]
         draw.text(((512 - tw) // 2, 200), word, font=font_large, fill="black")
-
         # Draw hint
         hint = "ROT-?"
         bbox2 = draw.textbbox((0, 0), hint, font=font_small)
         tw2 = bbox2[2] - bbox2[0]
         draw.text(((512 - tw2) // 2, 280), hint, font=font_small, fill="grey")
-
         return img
 
     def draw_word_ladder(img, draw):
@@ -282,6 +307,23 @@ class dailies:
             bbox = draw.textbbox((0, 0), "LADDER", font=font)
             tw = bbox[2] - bbox[0]
             draw.text(((512 - tw) // 2, 220), "LADDER", font=font, fill="black")
+            return img
+        
+        # 3% chance to just be a ladder
+        if random.random() < 0.03:
+            # Fetch and paste ladder
+            if random.random() < 0.5:
+                url = "https://raw.githubusercontent.com/googlefonts/noto-emoji/main/png/512/emoji_u1fa9c.png"
+            else:
+                url = "https://wg-assets-s3.s3.eu-west-2.amazonaws.com/wp-content/uploads/2023/05/27120109/1200-026.webp"
+            r = requests.get(url)
+            size = random.randint(100, 400)
+            ladder = Image.open(BytesIO(r.content)).convert("RGBA")
+            ladder = ladder.thumbnail((size, size), Image.LANCZOS)
+            if ladder.mode == "RGBA":
+                img.paste(ladder, ((512 - size) // 2, (512 - size) // 2 + 20), ladder)
+            else:
+                img.paste(ladder, ((512 - size) // 2, (512 - size) // 2 + 20))
             return img
 
         # 10% chance for different lengths, otherwise same
