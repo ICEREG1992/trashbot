@@ -1,12 +1,21 @@
 import datetime as dt
 import io
 from io import BytesIO
+import string
 import requests
 from PIL import Image, ImageDraw, ImageFont, ImageSequence, ImageColor
 import random
+import helperfunctions
 from wonderwords import RandomWord
-
 import discord
+import boto3
+import json
+
+global db
+db = boto3.client('dynamodb', region_name='us-east-2')
+
+global stats
+stats = {}
 
 class dailies:
 
@@ -15,9 +24,18 @@ class dailies:
         "#A3C4F3", "#90DBF4", "#8EECF5", "#98F5E1", "#B9FBC0"
     ]
 
+    def init():
+        d = db.get_item(TableName="trashbot", Key={'name':{'S':'dailies'}})
+        global stats
+        if ('data' in d['Item']):
+            data = json.loads(d['Item']['data']['S'])
+            stats = data
+
     async def run(self, message):
+        global stats
         if message.content == "!daily" or message.content == "!dailies":
             seed = dt.datetime.now().strftime("%Y%m%d")
+            random.seed(seed)
 
             number_of_games = 7
             result = random.randint(1, number_of_games)
@@ -109,7 +127,7 @@ class dailies:
                     r = requests.get(url)
                     size = random.randint(100, 400)
                     hotdog = Image.open(BytesIO(r.content)).convert("RGBA")
-                    hotdog = hotdog.thumbnail((size, size), Image.LANCZOS)
+                    hotdog.thumbnail((size, size), Image.LANCZOS)
                     img.paste(hotdog, ((512 - size) // 2, (512 - size) // 2 + 20), hotdog)
 
                     await dailies.send_image(img, message.channel, activity[0])
@@ -135,6 +153,68 @@ class dailies:
 
                 case _:
                     await message.channel.send("Error: No daily game found")
+        
+        # Handle !claim on a !daily image
+        if message.content.lower() in ["!claim", "!clum", "!clam"]:
+            ref = message.reference
+            if ref:
+                referenced = await message.channel.fetch_message(ref.message_id)
+                is_daily = (
+                    referenced.author == message.guild.me
+                    and any(a.filename == "daily.png" for a in referenced.attachments)
+                )
+                if is_daily:
+                    daily_date = referenced.created_at.strftime("%Y-%m-%d")
+                    claim_date = message.created_at.strftime("%Y-%m-%d")
+                    if daily_date != claim_date:
+                        await message.channel.send(helperfunctions.pick_string(["neener neener neener", "cold mold on a slate plate", "wrong", "you are NOT affirmed."]))
+                    else:
+                        uid = str(message.author.id)
+                        if uid not in stats:
+                            stats[uid] = []
+                        if daily_date not in stats[uid]:
+                            stats[uid].append(daily_date)
+                        else:
+                            await message.channel.send("yes SO true for you that's so amazing")
+                            return
+                        await message.channel.send(helperfunctions.pick_string(["so true bestie", "you are SO affirmed", "facts", "so proud of you girl", "so happy for u", "this is ur \"popping off\" era"]))
+                        dailies.save(stats)
+            return
+        
+        if message.content.lower() == "!dailyboard":
+            # Build leaderboard entries
+            entries = []
+            for uid, dates in stats.items():
+                count = len(dates)
+                streak = dailies.get_streak(dates)
+                entries.append((uid, count, streak))
+            entries.sort(key=lambda x: x[1], reverse=True)
+
+            embed = discord.Embed(title="Dailies Leaderboard")
+            for uid, count, streak in entries[:5]:
+                embed.add_field(
+                    name=f"<@{uid}>",
+                    value=f"**{count}** claims" + (f" | 🔥 {streak} day streak" if streak >= 3 else ""),
+                    inline=False
+                )
+            await message.channel.send(embed=embed)
+            return
+            
+    def get_streak(dates):
+        if not dates:
+            return 0
+        parsed = sorted(set(dt.date.fromisoformat(d) for d in dates), reverse=True)
+        today = dt.date.today()
+        # streak must include today or yesterday to be active
+        if parsed[0] < today - dt.timedelta(days=1):
+            return 0
+        streak = 1
+        for i in range(1, len(parsed)):
+            if parsed[i - 1] - parsed[i] == dt.timedelta(days=1):
+                streak += 1
+            else:
+                break
+        return streak
 
     def generate_sudoku():
         """Generate a random valid solved sudoku board, then remove numbers to create a puzzle."""
@@ -274,11 +354,8 @@ class dailies:
             r = requests.get(url)
             rot_img = Image.open(BytesIO(r.content)).convert("RGBA")
             size = random.randint(100, 400)
-            rot_img = rot_img.thumbnail((size, size), Image.LANCZOS)
-            if rot_img.mode == "RGBA":
-                img.paste(rot_img, ((512 - size) // 2, (512 - size) // 2 + 20), rot_img)
-            else:
-                img.paste(rot_img, ((512 - size) // 2, (512 - size) // 2 + 20))
+            rot_img.thumbnail((size, size), Image.LANCZOS)
+            img.paste(rot_img, ((512 - size) // 2, (512 - size) // 2 + 20), rot_img)
             return img
 
         # Draw the rotated word centered
@@ -313,11 +390,8 @@ class dailies:
             r = requests.get(url)
             size = random.randint(100, 400)
             ladder = Image.open(BytesIO(r.content)).convert("RGBA")
-            ladder = ladder.thumbnail((size, size), Image.LANCZOS)
-            if ladder.mode == "RGBA":
-                img.paste(ladder, ((512 - size) // 2, (512 - size) // 2 + 20), ladder)
-            else:
-                img.paste(ladder, ((512 - size) // 2, (512 - size) // 2 + 20))
+            ladder.thumbnail((size, size), Image.LANCZOS)
+            img.paste(ladder, ((512 - size) // 2, (512 - size) // 2 + 20), ladder)
             return img
 
         # 10% chance for different lengths, otherwise same
@@ -365,7 +439,17 @@ class dailies:
 
         # Draw date in top left corner
         date_str = dt.datetime.today().strftime('%Y-%m-%d')
-        draw.text((10, 8), date_str, font=date_font, fill="black")
+        draw.text((10, 6), date_str, font=date_font, fill="black")
+
+        # Add !claim
+        if random.random() < 0.33:
+            claim_word = random.choices(["!CLAIM", "!CLUM", "!CLAM"], weights=[50, 25, 25])[0]
+            claim_text = f"REPLY {claim_word} TO AFFIRM"
+            claim_font = ImageFont.truetype("ARLRDBD.TTF", 18)
+            claim_bbox = draw.textbbox((0, 0), claim_text, font=claim_font)
+            claim_width = claim_bbox[2] - claim_bbox[0]
+            claim_height = claim_bbox[3] - claim_bbox[1]
+            draw.text(((512 - claim_width) // 2, 512 - claim_height - 2), claim_text, font=claim_font, fill="grey")
 
         # Get text size
         text_bbox = draw.textbbox((0, 0), title, font=font)
@@ -387,3 +471,7 @@ class dailies:
             out.seek(0)
             f = discord.File(fp=out, filename="daily.png", description=f"Trashbot daily game for {dt.datetime.now().strftime('%Y-%m-%d')}: {text}")
             await channel.send(file=f)
+    
+    def save(stats):
+        db.put_item(TableName="trashbot", Item={'name':{'S':'dailies'}, 'data': {'S': json.dumps(stats)}})
+        
