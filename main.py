@@ -58,6 +58,7 @@ class MyClient(discord.Client):
         remind.init()
         quests.init()
         boots.init()
+        dailies.init()
         await powerswitch.init(self)
 
     async def on_message(self, message):

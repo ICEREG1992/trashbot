@@ -155,12 +155,12 @@ class dailies:
                     await message.channel.send("Error: No daily game found")
         
         # Handle !claim on a !daily image
-        if message.content.lower() in ["!claim", "!clum", "!clam"]:
+        if message.content.lower() in ["!claim", "!clum", "!clam", "!clom", "!clamb", "!clab", "!clem", "!clym"]:
             ref = message.reference
             if ref:
                 referenced = await message.channel.fetch_message(ref.message_id)
                 is_daily = (
-                    referenced.author == message.guild.me
+                    referenced.author == self.user
                     and any(a.filename == "daily.png" for a in referenced.attachments)
                 )
                 if is_daily:
@@ -182,7 +182,6 @@ class dailies:
             return
         
         if message.content.lower() == "!dailyboard":
-            # Build leaderboard entries
             entries = []
             for uid, dates in stats.items():
                 count = len(dates)
@@ -190,10 +189,12 @@ class dailies:
                 entries.append((uid, count, streak))
             entries.sort(key=lambda x: x[1], reverse=True)
 
-            embed = discord.Embed(title="Dailies Leaderboard")
+            embed = discord.Embed(title=helperfunctions.pick_string(["da Dailyboard", "Dailies Leaderboard", "Daily daily daily", "Daileaderboard", "Dailyboard"]))
             for uid, count, streak in entries[:5]:
+                user = await self.fetch_user(int(uid))
+                name = user.display_name if user else uid
                 embed.add_field(
-                    name=f"<@{uid}>",
+                    name=name,
                     value=f"**{count}** claims" + (f" | 🔥 {streak} day streak" if streak >= 3 else ""),
                     inline=False
                 )
