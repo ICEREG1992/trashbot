@@ -6,6 +6,7 @@ import requests
 from PIL import Image, ImageDraw, ImageFont, ImageSequence, ImageColor
 import random
 import helperfunctions
+from permissions import permissions
 from wonderwords import RandomWord
 import discord
 import boto3
@@ -200,6 +201,11 @@ class dailies:
                 )
             await message.channel.send(embed=embed)
             return
+        
+        if message.content.lower() == "!cleardailies" and permissions.allowed(message.author.id, "blue"):
+            await message.channel.send("wiped clean baby")
+            stats = {}
+            dailies.save(stats)
             
     def get_streak(dates):
         if not dates:
