@@ -18,12 +18,9 @@ class dailies:
     async def run(self, message):
         if message.content == "!daily" or message.content == "!dailies":
             seed = dt.datetime.now().strftime("%Y%m%d")
-            # seed the RNG
-            random.seed(seed)
 
             number_of_games = 7
             result = random.randint(1, number_of_games)
-            result = 7
 
             match result:
                 case 1:
