@@ -58,7 +58,7 @@ class dailies:
                             [(53, 345), (74, 179), (54, 233), (90, 345), (127, 203), (102, 238), (129, 344), (162, 273), (144, 285), (162, 335), (185, 271), (206, 340), (242, 272), (216, 280), (241, 338), (266, 272), (266, 342), (295, 272), (313, 342), (339, 275), (356, 345), (370, 274), (385, 347), (405, 346), (418, 272), (420, 348), (441, 275), (451, 343), (471, 274), (485, 345)] # minimum
                             ])
                     else:
-                        points = [(random.randint(20, 492), random.randint(50, 492)) for _ in range(random.randint(8,13))]
+                        points = [(random.randint(20, 492), random.randint(70, 492)) for _ in range(random.randint(8,13))]
                     
                     for idx, point in enumerate(points):
                         draw.ellipse((point[0]-5, point[1]-5, point[0]+5, point[1]+5), fill="blue")
@@ -456,7 +456,7 @@ class dailies:
             claim_bbox = draw.textbbox((0, 0), claim_text, font=claim_font)
             claim_width = claim_bbox[2] - claim_bbox[0]
             claim_height = claim_bbox[3] - claim_bbox[1]
-            draw.text(((512 - claim_width) // 2, 512 - claim_height - 2), claim_text, font=claim_font, fill="grey")
+            draw.text(((512 - claim_width) // 2, 512 - claim_height - 12), claim_text, font=claim_font, fill="grey")
 
         # Get text size
         text_bbox = draw.textbbox((0, 0), title, font=font)
