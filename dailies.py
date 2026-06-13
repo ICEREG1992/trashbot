@@ -41,7 +41,7 @@ class dailies:
             seed = dt.datetime.now().strftime("%Y%m%d")
             random.seed(seed)
 
-            number_of_games = 8
+            number_of_games = 7
             result = random.randint(1, number_of_games)
 
             match result:
