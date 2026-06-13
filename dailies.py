@@ -11,6 +11,9 @@ from wonderwords import RandomWord
 import discord
 import boto3
 import json
+from zoneinfo import ZoneInfo
+
+CENTRAL = ZoneInfo("America/Chicago")
 
 global db
 db = boto3.client('dynamodb', region_name='us-east-2')
@@ -38,7 +41,7 @@ class dailies:
             seed = dt.datetime.now().strftime("%Y%m%d")
             random.seed(seed)
 
-            number_of_games = 7
+            number_of_games = 8
             result = random.randint(1, number_of_games)
 
             match result:
@@ -112,29 +115,47 @@ class dailies:
 
                 case 6:
                     # Activity day
-                    activities = [("Hot dog eating contest!", "u1f32d"),
-                                  ("High jump!", "u1f574"),
-                                  ("Ping pong!", "u1f3d3"),
-                                  ("Let's go gambling!", "u1f3b0"),
-                                  ("Let's sing the song of your life.", "u1f3b6"),
-                                  ("Eat a cheeseburger!", "u1f354"),
-                                  ("Eat a butter!", "u1f9c8"),
-                                  ("Go silly mode!", "u1f92a")]
-                    activity = random.choice(activities)
-                    img = dailies.base_daily_image(activity[0])
-                    draw = ImageDraw.Draw(img)
-                    # Fetch and paste hotdog emoji
-                    url = f"https://raw.githubusercontent.com/googlefonts/noto-emoji/main/png/512/emoji_{activity[1]}.png"
-                    r = requests.get(url)
-                    size = random.randint(100, 400)
-                    hotdog = Image.open(BytesIO(r.content)).convert("RGBA")
-                    hotdog.thumbnail((size, size), Image.LANCZOS)
-                    img.paste(hotdog, ((512 - size) // 2, (512 - size) // 2 + 20), hotdog)
+                    if random.random() < 0.1:
+                        # Not a daily
+                        options = 2
+                        result = random.randint(1, options)
 
-                    await dailies.send_image(img, message.channel, activity[0])
-                
+                        match result:
+                            case 1:
+                                # random noise
+                                pixels = [random.randint(0, 255) for _ in range(512 * 512)]
+                                img = Image.new('L', (512, 512))
+                                img.putdata(pixels)
+                                await dailies.send_image(img, message.channel, "Randomly generated daily")
+
+                            case 2:
+                                # no daily today
+                                img = dailies.base_daily_image("No daily today")
+                                await dailies.send_image(img, message.channel, "No daily today")
+                    else:
+                        activities = [("Hot dog eating contest!", "u1f32d"),
+                                    ("High jump!", "u1f574"),
+                                    ("Ping pong!", "u1f3d3"),
+                                    ("Let's go gambling!", "u1f3b0"),
+                                    ("Let's sing the song of your life.", "u1f3b6"),
+                                    ("Eat a cheeseburger!", "u1f354"),
+                                    ("Eat a butter!", "u1f9c8"),
+                                    ("Go silly mode!", "u1f92a")]
+                        activity = random.choice(activities)
+                        img = dailies.base_daily_image(activity[0])
+                        draw = ImageDraw.Draw(img)
+                        # Fetch and paste emoji
+                        url = f"https://raw.githubusercontent.com/googlefonts/noto-emoji/main/png/512/emoji_{activity[1]}.png"
+                        r = requests.get(url)
+                        size = random.randint(100, 400)
+                        emoji = Image.open(BytesIO(r.content)).convert("RGBA")
+                        emoji.thumbnail((size, size), Image.LANCZOS)
+                        img.paste(emoji, ((512 - size) // 2, (512 - size) // 2 + 20), emoji)
+
+                        await dailies.send_image(img, message.channel, activity[0])
+                    
                 case 7:
-                    # Find diamonds
+                    # mc challenge
                     objectives = ["Find diamonds!", "Get wood!", "Build a house!", "Find iron!", "Reach bedrock!", "Reach build limit!", "Die!", "Make stone tools!", "Sleep in a bed!", "Kill a creeper!"]
                     objective = random.choice(objectives)
                     img = dailies.base_daily_image(objective)
@@ -151,7 +172,7 @@ class dailies:
                     draw.text((x, y), msg, font=font, fill="black")
 
                     await dailies.send_image(img, message.channel, objective)
-
+                
                 case _:
                     await message.channel.send("Error: No daily game found")
         
@@ -165,8 +186,8 @@ class dailies:
                     and any(a.filename == "daily.png" for a in referenced.attachments)
                 )
                 if is_daily:
-                    daily_date = referenced.created_at.strftime("%Y-%m-%d")
-                    claim_date = message.created_at.strftime("%Y-%m-%d")
+                    daily_date = referenced.created_at.astimezone(CENTRAL).strftime("%Y-%m-%d")
+                    claim_date = message.created_at.astimezone(CENTRAL).strftime("%Y-%m-%d")
                     if daily_date != claim_date:
                         await message.channel.send(helperfunctions.pick_string(["neener neener neener", "cold mold on a slate plate", "wrong", "you are NOT affirmed."]))
                     else:
@@ -176,7 +197,7 @@ class dailies:
                         if daily_date not in stats[uid]:
                             stats[uid].append(daily_date)
                         else:
-                            await message.channel.send("yes SO true for you that's so amazing")
+                            await message.channel.send("yessssssss more more more keep claiming keep claiming")
                             return
                         await message.channel.send(helperfunctions.pick_string(["so true bestie", "you are SO affirmed", "facts", "so proud of you girl", "so happy for u", "this is ur \"popping off\" era"]))
                         dailies.save(stats)
