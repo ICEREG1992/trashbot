@@ -352,16 +352,17 @@ class dailies:
     
     def generate_rot_puzzle():
         if random.random() < 0.1:
-            # 10% chance: random characters
-            length = random.randint(5, 10)
+            length = random.randint(5, 8)
             chars = ''.join(random.choice(string.ascii_uppercase) for _ in range(length))
-            return chars, -1  # -1 signals garbage
+            return chars, -1
 
-        # Pick a random word 5-10 letters
         rw = RandomWord(rng=random)
-        word = rw.word(word_min_length=5, word_max_length=10).upper()
+        word = rw.word(
+            word_min_length=5,
+            word_max_length=10,
+            word_filter=lambda w: any(w.count(c) >= 3 for c in w)
+        ).upper()
 
-        # Random ROT 1-25
         rot = random.randint(1, 25)
         rotated = ''.join(
             chr((ord(c) - ord('A') + rot) % 26 + ord('A')) if c.isalpha() else c
@@ -429,7 +430,12 @@ class dailies:
             length1 = length2 = random.choice([4, 5])
 
         word1 = rw.word(word_min_length=length1, word_max_length=length1).upper()
-        word2 = rw.word(word_min_length=length2, word_max_length=length2).upper()
+
+        # Regenerate word2 until it shares at least one letter with word1
+        while True:
+            word2 = rw.word(word_min_length=length2, word_max_length=length2).upper()
+            if set(word1) & set(word2):  # intersection: any shared characters?
+                break
 
         font = ImageFont.truetype("ARLRDBD.TTF", 64)
 
