@@ -357,11 +357,14 @@ class dailies:
             return chars, -1
 
         rw = RandomWord(rng=random)
-        word = rw.word(
-            word_min_length=5,
-            word_max_length=10,
-            word_filter=lambda w: any(w.count(c) >= 3 for c in w)
-        ).upper()
+        word = None
+        for _ in range(200):  # safety cap in case no word ever matches
+            candidate = rw.word(word_min_length=5, word_max_length=10).upper()
+            if any(candidate.count(c) >= 3 for c in candidate):
+                word = candidate
+                break
+        if word is None:
+            word = candidate  # fall back to whatever we last got
 
         rot = random.randint(1, 25)
         rotated = ''.join(
