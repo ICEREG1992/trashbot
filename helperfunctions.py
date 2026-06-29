@@ -100,4 +100,4 @@ def fill_defaults(db):
             db.put_item(TableName="trashbot", Item={'name':{'S':keynames[i]}, 'data':{'S':defaults[i]}})
 
 def sanitize(str):
-    return re.sub(r'[^a-zA-Z0-9]', '', str)
+    return re.sub(r'[^a-zA-Z0-9:]', '', str)
