@@ -177,7 +177,7 @@ class dailies:
                     await message.channel.send("Error: No daily game found")
         
         # Handle !claim on a !daily image
-        if message.content.lower() in ["!claim", "!clum", "!clam", "!clom", "!clamb", "!clab", "!clem", "!clym"]:
+        if message.content.lower().startswith("!cl") and "m" in message.content.lower():
             ref = message.reference
             if ref:
                 referenced = await message.channel.fetch_message(ref.message_id)
