@@ -442,8 +442,13 @@ class servers:
 
         for pattern, name in processes:
             try:
-                subprocess.check_output(["pgrep", "-f", pattern])
-                return name
+                output = subprocess.check_output(["pgrep", "-af", pattern])
+                lines = output.decode().splitlines()
+
+                # keep only lines that aren't zombie/defunct processes
+                if any("<defunct>" not in line for line in lines):
+                    return name
+
             except subprocess.CalledProcessError:
                 continue
 
