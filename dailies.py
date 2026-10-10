@@ -12,6 +12,7 @@ import discord
 import boto3
 import json
 from zoneinfo import ZoneInfo
+import sudoku
 
 CENTRAL = ZoneInfo("America/Chicago")
 
@@ -97,8 +98,8 @@ class dailies:
                 case 3:
                     # Sudoku
                     img = dailies.base_daily_image("Solve sudoku!")
-                    board = dailies.generate_sudoku()
-                    img = dailies.draw_sudoku(img, board)
+                    (board, h, w) = dailies.generate_sudoku()
+                    img = dailies.draw_sudoku(img, board, h, w)
                     await dailies.send_image(img, message.channel, "Solve sudoku")
 
                 case 4:
@@ -249,24 +250,33 @@ class dailies:
         return streak
 
     def generate_sudoku():
-        """Generate a random valid solved sudoku board, then remove numbers to create a puzzle."""
+        # 50% chance of 6x6, otherwise 9x9
+        if random.random() < 0.5:
+            size = 6
+            if random.random() < 0.25:
+                box_h, box_w = 3, 2   # flipped: boxes 3 tall x 2 wide
+            else:
+                box_h, box_w = 2, 3   # standard: boxes 2 tall x 3 wide
+        else:
+            size, box_h, box_w = 9, 3, 3
+
         def is_valid(board, row, col, num):
             if num in board[row]:
                 return False
-            if num in [board[r][col] for r in range(9)]:
+            if num in [board[r][col] for r in range(size)]:
                 return False
-            box_r, box_c = 3 * (row // 3), 3 * (col // 3)
-            for r in range(box_r, box_r + 3):
-                for c in range(box_c, box_c + 3):
+            box_r, box_c = box_h * (row // box_h), box_w * (col // box_w)
+            for r in range(box_r, box_r + box_h):
+                for c in range(box_c, box_c + box_w):
                     if board[r][c] == num:
                         return False
             return True
 
         def solve(board):
-            for row in range(9):
-                for col in range(9):
+            for row in range(size):
+                for col in range(size):
                     if board[row][col] == 0:
-                        nums = list(range(1, 10))
+                        nums = list(range(1, size + 1))
                         random.shuffle(nums)
                         for num in nums:
                             if is_valid(board, row, col, num):
@@ -278,79 +288,99 @@ class dailies:
             return True
 
         # Generate solved board
-        board = [[0] * 9 for _ in range(9)]
+        board = [[0] * size for _ in range(size)]
         solve(board)
 
-        # Remove numbers to create puzzle (remove ~50 cells)
+        # Number of blanks: 30-50 on a 9x9, scaled down proportionally for 6x6
+        blanks = round(random.randint(35, 50) * size * size / 81)
+
+        # Remove numbers to create puzzle
         puzzle = [row[:] for row in board]
-        cells = [(r, c) for r in range(9) for c in range(9)]
+        cells = [(r, c) for r in range(size) for c in range(size)]
         random.shuffle(cells)
-        difficulty = random.randint(35,60)
-        for r, c in cells[:difficulty]:
-            puzzle[r][c] = 0
+
+        if random.random() < 0.33:
+            # Remove randomly
+            for r, c in cells[:blanks]:
+                puzzle[r][c] = 0
+        else:
+            # Remove only numbers that keep the solution unique. If the puzzle
+            # can't lose that many, it just finishes early.
+            removed = 0
+            for r, c in cells:
+                if removed >= blanks:
+                    break
+                keep = puzzle[r][c]
+                puzzle[r][c] = 0
+                # py-sudoku treats 0 as a blank
+                if sudoku.Sudoku(box_w, box_h, board=puzzle).has_multiple_solutions():
+                    puzzle[r][c] = keep  # no longer unique, put it back
+                else:
+                    removed += 1
 
         # hehe
         if random.random() < 0.2:
-            empty_cells = [(r, c) for r in range(9) for c in range(9) if puzzle[r][c] == 0]
+            empty_cells = [(r, c) for r in range(size) for c in range(size) if puzzle[r][c] == 0]
             if empty_cells:
                 r, c = random.choice(empty_cells)
                 rule = random.choice(['row', 'col', 'box'])
                 if rule == 'row':
-                    conflicts = [puzzle[r][cc] for cc in range(9) if puzzle[r][cc] != 0]
+                    conflicts = [puzzle[r][cc] for cc in range(size) if puzzle[r][cc] != 0]
                 elif rule == 'col':
-                    conflicts = [puzzle[rr][c] for rr in range(9) if puzzle[rr][c] != 0]
+                    conflicts = [puzzle[rr][c] for rr in range(size) if puzzle[rr][c] != 0]
                 else:
-                    box_r, box_c = 3 * (r // 3), 3 * (c // 3)
-                    conflicts = [puzzle[rr][cc] for rr in range(box_r, box_r + 3)
-                                for cc in range(box_c, box_c + 3) if puzzle[rr][cc] != 0]
+                    box_r, box_c = box_h * (r // box_h), box_w * (c // box_w)
+                    conflicts = [puzzle[rr][cc] for rr in range(box_r, box_r + box_h)
+                                for cc in range(box_c, box_c + box_w) if puzzle[rr][cc] != 0]
                 if conflicts:
                     puzzle[r][c] = random.choice(conflicts)
-        
+
         # hehehe
         if random.random() < 0.05:
-            num = random.randint(0, 9)
-            puzzle = [[num] * 9 for _ in range(9)]
-        
+            num = random.randint(0, size)
+            puzzle = [[num] * size for _ in range(size)]
+
         # hehehehe
         if random.random() < 0.05:
-            puzzle = [[random.randint(1, 9) if cell != 0 else 0 for cell in row] for row in puzzle]
+            puzzle = [[random.randint(1, size) if cell != 0 else 0 for cell in row] for row in puzzle]
 
-        return puzzle
+        return puzzle, box_h, box_w
 
-    def draw_sudoku(img, board):
+    def draw_sudoku(img, board, box_h, box_w):
         draw = ImageDraw.Draw(img)
-        font = ImageFont.truetype("ARLRDBD.TTF", 18)
+        n = len(board)              # 6 or 9
 
         # Push grid down to clear the title, and tighten the right/bottom margins
         margin_left = 40
-        margin_top = 80   # was 40 — gives room for title
-        grid_size = 424   # divisible by 9 = 47.1px per cell, fits within 512 - 40 - ~48 margin
-        cell_size = grid_size // 9  # 47
+        margin_top = 80   # gives room for title
+        cell_size = 424 // n        # 47 for 9x9, 70 for 6x6
+        font_size = round(cell_size * 18 / 47)   # 18 for 9x9, 27 for 6x6
+        pad = round(8 * font_size / 18)          # vertical centering fudge, 8 for 9x9
+        font = ImageFont.truetype("ARLRDBD.TTF", font_size)
 
         # Draw filled cells
-        for row in range(9):
-            for col in range(9):
+        for row in range(n):
+            for col in range(n):
                 num = board[row][col]
                 if num != 0:
                     x = margin_left + col * cell_size
                     y = margin_top + row * cell_size
                     bbox = draw.textbbox((0, 0), str(num), font=font)
                     tw = bbox[2] - bbox[0]
-                    th = bbox[3] - bbox[1] + 8
+                    th = bbox[3] - bbox[1] + pad
                     draw.text(
                         (x + (cell_size - tw) // 2, y + (cell_size - th) // 2),
                         str(num), font=font, fill="black"
                     )
 
-        # Draw grid lines
-        for i in range(10):
-            thickness = 3 if i % 3 == 0 else 2
+        # Draw grid lines (thick on box borders: every box_w cols, every box_h rows)
+        for i in range(n + 1):
             x = margin_left + i * cell_size
             y = margin_top + i * cell_size
-            # Vertical lines: from margin_top to margin_top + grid_size exactly
-            draw.line([(x, margin_top), (x, margin_top + cell_size * 9)], fill="black", width=thickness)
-            # Horizontal lines: from margin_left to margin_left + grid_size exactly
-            draw.line([(margin_left, y), (margin_left + cell_size * 9, y)], fill="black", width=thickness)
+            v_thickness = 3 if i % box_w == 0 else 2
+            h_thickness = 3 if i % box_h == 0 else 2
+            draw.line([(x, margin_top), (x, margin_top + cell_size * n)], fill="black", width=v_thickness)
+            draw.line([(margin_left, y), (margin_left + cell_size * n, y)], fill="black", width=h_thickness)
 
         return img
     

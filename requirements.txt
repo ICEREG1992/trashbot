@@ -8,3 +8,4 @@ Pillow >= 9.4.0
 jproperties >= 2.1.1
 comics >= 0.8.0
 wonderwords >= 3.0.1
+py-sudoku >= 2.0.0
