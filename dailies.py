@@ -133,19 +133,21 @@ class dailies:
                                 img = dailies.base_daily_image("No daily today")
                                 await dailies.send_image(img, message.channel, "No daily today")
                     else:
-                        activities = [("Hot dog eating contest!", "u1f32d"),
-                                    ("High jump!", "u1f574"),
-                                    ("Ping pong!", "u1f3d3"),
-                                    ("Let's go gambling!", "u1f3b0"),
-                                    ("Let's sing the song of your life.", "u1f3b6"),
-                                    ("Eat a cheeseburger!", "u1f354"),
-                                    ("Eat a butter!", "u1f9c8"),
-                                    ("Go silly mode!", "u1f92a")]
+                        activities = [("Hot dog eating contest!", "🌭"),
+                                    ("High jump!", "🕴"),
+                                    ("Ping pong!", "🏓"),
+                                    ("Let's go gambling!", "🎰"),
+                                    ("Let's sing the song of your life.", "🎶"),
+                                    ("Eat a cheeseburger!", "🍔"),
+                                    ("Eat a butter!", "🧈"),
+                                    ("Go silly mode!", "🤪")]
                         activity = random.choice(activities)
                         img = dailies.base_daily_image(activity[0])
                         draw = ImageDraw.Draw(img)
                         # Fetch and paste emoji
-                        url = f"https://raw.githubusercontent.com/googlefonts/noto-emoji/main/png/512/emoji_{activity[1]}.png"
+                        styles = ["apple", "google", "twitter", "facebook", "huawei"]
+                        style = random.choice(styles)
+                        url = f"https://emoji-cdn.mqrio.dev/{activity[1]}?style={style}"
                         r = requests.get(url)
                         size = random.randint(100, 400)
                         emoji = Image.open(BytesIO(r.content)).convert("RGBA")
@@ -156,7 +158,7 @@ class dailies:
                     
                 case 7:
                     # mc challenge
-                    objectives = ["Find diamonds!", "Get wood!", "Build a house!", "Find iron!", "Reach bedrock!", "Reach build limit!", "Die!", "Make stone tools!", "Sleep in a bed!", "Kill a creeper!"]
+                    objectives = ["Find diamonds!", "Get wood!", "Build a house!", "Find iron!", "Reach bedrock!", "Reach build limit!", "Die!", "Make stone tools!", "Sleep in a bed!", "Kill a creeper!", "Don't build worldman!", "Glass box glass box", "24 million wheat"]
                     objective = random.choice(objectives)
                     img = dailies.base_daily_image(objective)
                     draw = ImageDraw.Draw(img)
