@@ -25,7 +25,9 @@ class dailies:
 
     pastels = [
         "#FBF8CC", "#FDE4CF", "#FFCFD2", "#F1C0E8", "#CFBAF0",
-        "#A3C4F3", "#90DBF4", "#8EECF5", "#98F5E1", "#B9FBC0"
+        "#A3C4F3", "#90DBF4", "#8EECF5", "#98F5E1", "#B9FBC0",
+        "#FFD6A5", "#FFADAD", "#FDFFB6", "#CAFFBF", "#9BF6FF",
+        "#BDB2FF", "#FFC6FF", "#E4C1F9", "#D0F4DE", "#FCF6BD"
     ]
 
     def init():
