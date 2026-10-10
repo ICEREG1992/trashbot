@@ -201,7 +201,7 @@ class dailies:
                         else:
                             await message.channel.send("yessssssss more more more keep claiming keep claiming")
                             return
-                        await message.channel.send(helperfunctions.pick_string(["so true bestie", "you are SO affirmed", "facts", "so proud of you girl", "so happy for u", "this is ur \"popping off\" era"]))
+                        await message.channel.send(helperfunctions.pick_string(["so true bestie", "you are SO affirmed", "facts", "so proud of you girl", "so happy for u", "this is ur \"popping off\" era", "yea that's right", "i always knew you could do it", "affirmed ! ! affirmed !", "keep claiming keep claiming"]))
                         dailies.save(stats)
             return
         
