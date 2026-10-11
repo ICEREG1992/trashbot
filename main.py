@@ -29,6 +29,8 @@ from jpegdirt import jpegdirt
 from boots import boots
 from dailies import dailies
 import logcommand, logging
+import traceback
+
 logging.basicConfig(level=logging.INFO)
 
 if os.path.exists("key.txt"):
@@ -176,6 +178,21 @@ class MyClient(discord.Client):
             # if user != self.user and reaction.count == 5 :
             #     if helperfunctions.chance(10):
             #         await reaction.message.reply("#n-" + reaction.emoji.name.lower().replace(" ","-"))
+
+    async def on_error(self, event_method, *args, **kwargs):
+        exc_type, exc, tb = sys.exc_info()
+        logging.error(f"Unhandled exception in {event_method}", exc_info=(exc_type, exc, tb))
+
+        if event_method == "on_message":
+            message = args[0]
+            last = traceback.extract_tb(tb)[-1]
+            detail = f"{exc_type.__name__}: {exc} ({os.path.basename(last.filename)}:{last.lineno})"
+            detail = detail.replace('"', "'").replace("\n", " ")[:150]
+            msg = helperfunctions.pick_string(["i don't feel so good", "ouchie", "i'm gonna vom", "wee woo wee woo", "ILLEGAL USER BEHAVIOR DETECTED. CEASE FURTHER ACTIVITY AT ONCE", "OOPSIE WOOPSIE!! Uwu We made a fucky wucky!! A wittle fucko boingo! The code monkeys at our headquarters are working VEWY HAWD to fix this!"])
+            try:
+                await message.channel.send(f'[{msg}](<{message.jump_url}> "{detail}")')
+            except Exception:
+                pass
                 
 
 intents = discord.Intents.default()
