@@ -1,3 +1,4 @@
+import json
 import shutil
 import requests
 import helperfunctions
@@ -413,7 +414,33 @@ class servers:
                 r = requests.get('https://ipecho.net/plain')
                 await message.channel.send(r.text + ":4534")
 
-
+        # hytale
+        elif message.content == "!hosthytale" and permissions.allowed(message.author.id, "blue"):
+            if not servers.runningServer():
+                await message.channel.send(helperfunctions.pick_string([
+                    "hhhhnnnnnnngggggg...",
+                    "\\*inhales\\*",
+                    "ok one sec"
+                ]))
+                subprocess.Popen(['java', '-XX:AOTCache=HytaleServer.aot', '-jar', 'HytaleServer.jar', '--assets', 'Assets.zip'], cwd=r'/home/william/hytale', stdin=subprocess.PIPE)
+                await helperfunctions.bot_wait_medium()
+                await message.channel.send(helperfunctions.pick_string([
+                    "ok im runnin",
+                    "epic hytale",
+                    "high tail"
+                ]))
+            else:
+                await message.channel.send(helperfunctions.pick_string([
+                    "looks like i'm already running " + servers.runningServer(),
+                    "it's already " + servers.runningServer(),
+                    "it's actually " + servers.runningServer() + " time rn baybee",
+                    "i'll keep hosting " + servers.runningServer() + " instead ok"
+                ]))
+        elif message.content == "!hytaleip":
+            if servers.runningServer():
+                ip = json.loads('/home/william/hytale/config.json')['IP']
+                await message.channel.send(ip)
+        
         # poweroff                
         elif message.content == "!stophost" and permissions.allowed(message.author.id, "blue"):
             if servers.runningServer():
