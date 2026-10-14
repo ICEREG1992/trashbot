@@ -32,7 +32,7 @@ class Feed:
         self.lim = random.choice([2, 3])
 
     def proc(self, msg):
-        if self.mem.content.lower() == msg.content.lower():
+        if msg.content and self.mem.content.lower() == msg.content.lower():
             self.count += 1
             if self.count > self.lim: # strictly greater as we don't want this happening on first trigger
                 self.active = True
