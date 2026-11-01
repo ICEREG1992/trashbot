@@ -21,49 +21,60 @@ class quests:
     def init():
         d = db.get_item(TableName="trashbot", Key={'name':{'S':'quests'}})
         global questsData
-        if ('data' in d['Item']):
-            questsData = json.loads(d['Item']['data']['S'])
-            # if no quests, rewards, punishments, and tags keys, create them
-            if 'quests' not in questsData:
-                questsData['quests'] = []
-            if 'rewards' not in questsData:
-                questsData['rewards'] = []
-            if 'punishments' not in questsData:
-                questsData['punishments'] = []
-            if 'tags' not in questsData:
-                questsData['tags'] = {}
-            if 'enabled' not in questsData:
-                questsData['enabled'] = True
-            if 'messages' not in questsData:
-                questsData['messages'] = {}
-            if 'players' not in questsData:
-                questsData['players'] = {}
-            quests.save()
-    
+        # the item (or its data) may not exist yet, so don't assume it does
+        item = d.get('Item')
+        if item and 'data' in item:
+            questsData = json.loads(item['data']['S'])
+        else:
+            questsData = {}
+        # if no quests, rewards, punishments, and tags keys, create them
+        if 'quests' not in questsData:
+            questsData['quests'] = []
+        if 'rewards' not in questsData:
+            questsData['rewards'] = []
+        if 'punishments' not in questsData:
+            questsData['punishments'] = []
+        if 'tags' not in questsData:
+            questsData['tags'] = {}
+        if 'enabled' not in questsData:
+            questsData['enabled'] = True
+        if 'messages' not in questsData:
+            questsData['messages'] = {}
+        if 'players' not in questsData:
+            questsData['players'] = {}
+        quests.save()
+
     async def run(self, message, bulk = False):
         if questsData["enabled"] == True:
             if message.content.startswith("!quest ") or message.content == "!quest":
-                parts = message.content.split(' ')
-                if quests.playerQuests(message.author.id) and parts[1] not in questsData["messages"].keys():
-                    await message.channel.send(f"watch out! you already have a quest active.")
-                if len(parts) > 1:
-                    if parts[1] in questsData["tags"].keys():
-                        q = questsData["quests"][random.choice(questsData["tags"][parts[1]]["quests"])]
-                        i = (await message.channel.send(q)).id
-                        quests.addQuestToPlayer(message, i, tag=parts[1])
-                    elif parts[1] in basetags:
-                        q = random.choice(questsData["quests"])
-                        i = (await message.channel.send(q)).id
-                        quests.addQuestToPlayer(message, i, tag="random")
-                    elif parts[1] in questsData["messages"].keys():
-                        await message.channel.send(questsData["messages"][parts[1]])
-                    else:
-                        await message.channel.send(f"that's not a tag i know")
+                parts = message.content.split()
+                arg = parts[1] if len(parts) > 1 else None
+
+                if arg in questsData["messages"]:
+                    if questsData["messages"][arg]:          # "" = disabled, can't send empty msg
+                        await message.channel.send(questsData["messages"][arg])
+                    return
+
+                if arg is None or arg in basetags:
+                    pool, tag = questsData["quests"], "random"
+                    text = random.choice(pool) if pool else None
+                elif arg in questsData["tags"]:
+                    idxs = questsData["tags"][arg]["quests"]
+                    tag = arg
+                    text = questsData["quests"][random.choice(idxs)] if idxs else None
                 else:
-                    q = random.choice(questsData["quests"])
-                    i = (await message.channel.send(q)).id
-                    quests.addQuestToPlayer(message, i, tag="random")
-            
+                    await message.channel.send("that's not a tag i know")
+                    return
+
+                if text is None:
+                    await message.channel.send("no quests there yet")
+                    return
+                if quests.playerQuests(message.author.id):
+                    await message.channel.send("watch out! you already have a quest active.")
+
+                i = (await message.channel.send(text)).id
+                quests.addQuestToPlayer(message, i, tag=tag)
+
             elif message.content.startswith("!quests ") or message.content == "!quests":
                 parts = message.content.split(' ')
                 if len(parts) > 1:
@@ -87,7 +98,15 @@ class quests:
                                         continue
 
                                     out += f"\n- https://discord.com/channels/{guild}/{channel}/{quest} ({tag})"
-                                await message.channel.send(out)
+                                # discord rejects messages over 2000 chars, so send in chunks
+                                chunk = ""
+                                for line in out.split("\n"):
+                                    if chunk and len(chunk) + len(line) + 1 > 2000:
+                                        await message.channel.send(chunk)
+                                        chunk = line
+                                    else:
+                                        chunk += ("\n" if chunk else "") + line
+                                await message.channel.send(chunk)
                             else:
                                 await message.channel.send(f"<@{player_id}> has no current quests")
                         else:
@@ -95,11 +114,11 @@ class quests:
                     else:
                         await message.channel.send(f"<@{player_id}> has no current quests")
                 else:
-                    await message.channel.send(f"that's not a valid user") 
-            
+                    await message.channel.send(f"that's not a valid user")
+
             elif message.content.startswith("!reward ") or message.content == "!reward":
                 if message.type == MessageType.reply:
-                    parts = message.content.split(' ')
+                    parts = message.content.split()
                     # get message to check it's from bot
                     channel_id = message.reference.channel_id
                     message_id = message.reference.message_id
@@ -114,73 +133,86 @@ class quests:
                     if message_id not in [q["quest"] for q in questsData["players"].get(str(message.author.id), {}).get("quests", [])]:
                         await message.channel.send("you can't claim a reward for that quest")
                         return
+                    if len(questsData["rewards"]) == 0:
+                        await message.channel.send("no rewards yet")
+                        return
                     if len(parts) == 1:
                         # no tag specified, just give random reward
                         tag = quests.removeQuestFromPlayer(message.author.id, message_id)
                         if tag in basetags:
                             r = random.choice(questsData["rewards"])
-                            quests.addRewardToPlayer(message.author.id, r, tag="random", reward=r)
+                            tag = "random"
                         else:
                             if tag not in questsData["tags"].keys() or len(questsData["tags"][tag]["rewards"]) == 0:
-                                message.channel.send("i don't know anythingg about tag " + tag)
+                                await message.channel.send("i don't know anythingg about tag " + tag)
                                 r = random.choice(questsData["rewards"])
                             else:
                                 r = questsData["rewards"][random.choice(questsData["tags"][tag]["rewards"])]
-                            quests.addRewardToPlayer(message.author.id, r, tag=tag, reward=r)
-                        
-                        await message.channel.send(r)
+                        # reward is stored by the id of the message the bot sends it in, so send first
+                        i = (await message.channel.send(r)).id
+                        quests.addRewardToPlayer(message.author.id, i, tag=tag, reward=r)
                     else:
                         tag = parts[1]
                         if tag in questsData["tags"].keys() and len(questsData["tags"][tag]["rewards"]) > 0:
                             quests.removeQuestFromPlayer(message.author.id, message_id)
                             r = questsData["rewards"][random.choice(questsData["tags"][tag]["rewards"])]
-                            quests.addRewardToPlayer(message.author.id, r, tag=tag, reward=r)
-                            await message.channel.send(r)
+                            i = (await message.channel.send(r)).id
+                            quests.addRewardToPlayer(message.author.id, i, tag=tag, reward=r)
                         elif tag in basetags:
+                            quests.removeQuestFromPlayer(message.author.id, message_id)
                             r = random.choice(questsData["rewards"])
+                            i = (await message.channel.send(r)).id
+                            quests.addRewardToPlayer(message.author.id, i, tag="random", reward=r)
                         else:
                             await message.channel.send("i dont know about that tag")
-                    
+                else:
+                    await message.channel.send("you gotta reply to the quest you want a reward for")
+
             elif message.content.startswith("!award ") or message.content == "!award":
                 if message.type == MessageType.reply:
-                    parts = message.content.split(' ')
-                    if len(parts) < 1:
-                        await message.channel.send(f"pick someone to award this quest to")
+                    parts = message.content.split()
+                    # get message to check it's from bot
+                    channel_id = message.reference.channel_id
+                    message_id = message.reference.message_id
+                    c = await self.fetch_channel(channel_id)
+                    m = await c.fetch_message(message_id)
+                    # replying to the bot pings it, so the bot is usually in mentions. ignore it
+                    mentions = [u for u in message.mentions if u != self.user]
+                    if len(mentions) == 0:
+                        await message.channel.send(f"you need to @mention them")
+                        return
+                    mention = mentions[0]
+                    if m.author != self.user:
+                        await message.channel.send(f"that ain't me foo")
+                        return
+                    if m.content not in questsData["quests"]:
+                        await message.channel.send("thats not a quest man")
+                        return
+                    if message_id not in [q["quest"] for q in questsData["players"].get(str(message.author.id), {}).get("quests", [])]:
+                        await message.channel.send("you can't award that quest")
+                        return
+                    if len(parts) > 2:
+                        await message.channel.send(f"you don't get to pick, sorry")
+                        return
+                    if len(questsData["rewards"]) == 0:
+                        await message.channel.send("no rewards yet")
+                        return
+                    tag = quests.removeQuestFromPlayer(message.author.id, message_id)
+                    if tag in basetags:
+                        r = random.choice(questsData["rewards"])
+                        i = (await message.channel.send(r)).id
+                        quests.addRewardToPlayer(mention.id, i, tag="random", reward=r)
                     else:
-                        # get message to check it's from bot
-                        channel_id = message.reference.channel_id
-                        message_id = message.reference.message_id
-                        c = await self.fetch_channel(channel_id)
-                        m = await c.fetch_message(message_id)
-                        mention = message.mentions.first()
-                        if mention is None:
-                            await message.channel.send(f"you need to @mention them")
-                            return
-                        if m.author != self.user:
-                            await message.channel.send(f"that ain't me foo")
-                            return
-                        if m.content not in questsData["quests"]:
-                            await message.channel.send("thats not a quest man")
-                            return
-                        if message_id not in [q["quest"] for q in questsData["players"].get(str(message.author.id), {}).get("quests", [])]:
-                            await message.channel.send("you can't award that quest")
-                            return
-                        if len(parts) > 2:
-                            await message.channel.send(f"you don't get to pick, sorry")
-                        tag = quests.removeQuestFromPlayer(message.author.id, message_id)
-                        if tag in basetags:
-                            r = random.choice(questsData["rewards"])
-                            i = (await message.channel.send(r)).id
-                            quests.addRewardToPlayer(mention.id, i, tag="random", reward=r)
-                        else:
-                            r = random.choice(questsData["rewards"])
-                            i = (await message.channel.send(r)).id
-                            quests.addRewardToPlayer(mention.id, i, tag=tag, reward=r)
-                        await message.channel.send(f"awarded that quest's reward to <@{mention.id}> :)")
-            
+                        r = random.choice(questsData["rewards"])
+                        i = (await message.channel.send(r)).id
+                        quests.addRewardToPlayer(mention.id, i, tag=tag, reward=r)
+                    await message.channel.send(f"awarded that quest's reward to <@{mention.id}> :)")
+                else:
+                    await message.channel.send("you gotta reply to the quest you want to award, and @mention who gets it")
+
             elif message.content.startswith("!punishment ") or message.content == "!punishment":
                 if message.type == MessageType.reply:
-                    parts = message.content.split(' ')
+                    parts = message.content.split()
                     if len(parts) > 1:
                         await message.channel.send(f"no tags for punishments")
                     else:
@@ -198,8 +230,13 @@ class quests:
                         if message_id not in [q["quest"] for q in questsData["players"].get(str(message.author.id), {}).get("quests", [])]:
                             await message.channel.send("that's not your punishment to bear")
                             return
+                        if len(questsData["punishments"]) == 0:
+                            await message.channel.send("no punishments yet, lucky you")
+                            return
                         quests.removeQuestFromPlayer(message.author.id, message_id)
                         await message.channel.send(random.choice(questsData["punishments"]))
+                else:
+                    await message.channel.send("you gotta reply to the quest you want to give up on")
 
             elif message.content == "!reroll":
                 if message.type == MessageType.reply:
@@ -211,29 +248,34 @@ class quests:
                     if m.author != self.user:
                         await message.channel.send(f"that ain't me foo")
                         return
-                    if message_id not in [q["quest"] for q in questsData["players"].get(str(message.author.id), {}).get("quests", [])] or message_id not in [r["reward"] for r in questsData["players"].get(str(message.author.id), {}).get("inventory", [])]:
+                    # has to be one of your quests OR one of your rewards
+                    if message_id not in [q["quest"] for q in questsData["players"].get(str(message.author.id), {}).get("quests", [])] and message_id not in [r.get("reward") for r in questsData["players"].get(str(message.author.id), {}).get("inventory", [])]:
                         await message.channel.send("that's not your quest or reward to reroll")
                         return
                     if m.content in questsData["quests"]:
+                        if len(questsData["quests"]) == 0:
+                            await message.channel.send("no quests to roll")
+                            return
                         tag = quests.removeQuestFromPlayer(message.author.id, message_id)
-                        if tag in basetags:
+                        # if the tag was deleted or is empty now, fall back to any quest
+                        if tag in basetags or tag not in questsData["tags"] or len(questsData["tags"][tag]["quests"]) == 0:
                             q = random.choice(questsData["quests"])
-                            i = (await message.channel.send(q)).id
-                            quests.addQuestToPlayer(message, i, tag="random")
+                            tag = "random"
                         else:
                             q = questsData["quests"][random.choice(questsData["tags"][tag]["quests"])]
-                            i = (await message.channel.send(q)).id
-                            quests.addQuestToPlayer(message, i, tag=tag)
+                        i = (await message.channel.send(q)).id
+                        quests.addQuestToPlayer(message, i, tag=tag)
                     elif m.content in questsData["rewards"]:
                         tag = quests.removeRewardFromPlayer(message.author.id, message_id)
-                        if tag in basetags:
+                        if tag in basetags or tag not in questsData["tags"] or len(questsData["tags"][tag]["rewards"]) == 0:
                             r = random.choice(questsData["rewards"])
-                            i = (await message.channel.send(r)).id
-                            quests.addRewardToPlayer(message.author.id, i, tag="random", reward=r)
+                            tag = "random"
                         else:
                             r = questsData["rewards"][random.choice(questsData["tags"][tag]["rewards"])]
-                            i = (await message.channel.send(r)).id
-                            quests.addRewardToPlayer(message.author.id, i, tag=tag, reward=r)
+                        i = (await message.channel.send(r)).id
+                        quests.addRewardToPlayer(message.author.id, i, tag=tag, reward=r)
+                    else:
+                        await message.channel.send("that's not a quest or reward anymore")
                 else:
                     await message.channel.send(f"you gotta reply to the quest you want to reroll")
 
@@ -244,16 +286,14 @@ class quests:
                     quest = quest.replace(' // ', '\n')
                     questsData["quests"].append(quest)
                     tag = parts[1]
-                    tags = tag.split(',')
-                    ind = questsData["quests"].index(quest)
+                    tags = [t for t in tag.split(',') if t]
+                    # the quest we just appended is last, .index() would find an older duplicate
+                    ind = len(questsData["quests"]) - 1
                     for tag in tags:
                         if tag in questsData["tags"].keys():
-                            try:
-                                questsData["tags"][tag]["quests"].append(ind)
-                                quests.save()
-                                if not bulk: await message.channel.send(f"added quest to tag {tag}")
-                            except ValueError:
-                                await message.channel.send("something terrible happened")
+                            questsData["tags"][tag]["quests"].append(ind)
+                            quests.save()
+                            if not bulk: await message.channel.send(f"added quest to tag {tag}")
                         elif tag in basetags:
                             if not bulk: await message.channel.send(f"added quest to basetag")
                             quests.save()
@@ -301,7 +341,7 @@ class quests:
                     tag = parts[1]
                     reward = ' '.join(parts[2:])
                     reward = reward.replace(' // ', '\n')
-                    tags = tag.split(',')
+                    tags = [t for t in tag.split(',') if t]
                     ind = len(questsData["rewards"])
                     questsData["rewards"].append(reward)
                     for tag in tags:
@@ -311,6 +351,7 @@ class quests:
                             if not bulk: await message.channel.send(f"added reward to tag {tag}")
                         elif tag in basetags:
                             quests.save()
+                            if not bulk: await message.channel.send(f"added reward to basetag")
                         else:
                             questsData["tags"][tag] = {"quests": [], "rewards": [ind]}
                             quests.save()
@@ -348,7 +389,7 @@ class quests:
                     else:
                         await message.channel.send(f"that reward over there is NOT real")
 
-            elif message.content.startswith("!addpunishment") and permissions.allowed(message.author.id, "blue"):
+            elif (message.content.startswith("!addpunishment ") or message.content == "!addpunishment") and permissions.allowed(message.author.id, "blue"):
                 parts = message.content.split(' ')
                 if len(parts) >= 2:
                     punishment = ' '.join(parts[1:])
@@ -387,13 +428,14 @@ class quests:
                         quests.save()
                         if not bulk: await message.channel.send(f"added message for `!quest {tag}`")
                 elif len(parts) == 2:
+                    tag = parts[1]
                     questsData["messages"][tag] = ""
                     quests.save()
                     if not bulk: await message.channel.send(f"disabled response for `!quest {tag}`")
                 else:
                     await message.channel.send("try giving me a tag and a message")
                     return
-                
+
             elif message.content.startswith("!removemessage ") and permissions.allowed(message.author.id, "blue"):
                 parts = message.content.split(' ')
                 if len(parts) > 1:
@@ -413,7 +455,9 @@ class quests:
                     await message.channel.send("bulk add what")
                     return
                 content = message.content[len("!bulkadd "):]
-                lines = content.split('\n')
+                # only add/remove lines make sense here. anything else (like !quest) would
+                # run as a player command on a fake message that has no guild/type
+                lines = [l for l in content.split('\n') if l.startswith(("!add", "!remove"))]
                 await message.channel.send(f"adding {len(lines)} quests/rewards/punishments")
                 for line in lines:
                     await quests.run(self, SimpleNamespace(content=line, author=message.author, channel=message.channel), bulk=True)
@@ -428,7 +472,15 @@ class quests:
                     for t in tags:
                         msg += f"**{t}**: {len(questsData['tags'][t]['quests'])} quests, {len(questsData['tags'][t]['rewards'])} rewards\n"
                 msg += f"{len(questsData['punishments'])} punishments\n"
-                await message.channel.send(msg)
+                # discord rejects messages over 2000 chars, so send in chunks
+                chunk = ""
+                for line in msg.rstrip("\n").split("\n"):
+                    if chunk and len(chunk) + len(line) + 1 > 2000:
+                        await message.channel.send(chunk)
+                        chunk = line
+                    else:
+                        chunk += ("\n" if chunk else "") + line
+                await message.channel.send(chunk)
 
             elif message.content == "!clearquests" and permissions.allowed(message.author.id, "blue"):
                 questsData['quests'] = []
@@ -460,7 +512,7 @@ class quests:
                         del questsData["tags"][t]
                 quests.save()
                 await message.channel.send("cleared all punishments")
-            
+
             elif message.content == "!clearmessages" and permissions.allowed(message.author.id, "blue"):
                 questsData['messages'] = {}
                 quests.save()
@@ -477,7 +529,7 @@ class quests:
                 questsData["enabled"] = False
                 quests.save()
                 await message.channel.send("no more fun !!!")
-        
+
         if message.content == "!enablequests" and permissions.allowed(message.author.id, "blue"):
             questsData["enabled"] = True
             quests.save()
@@ -497,7 +549,7 @@ class quests:
                 # this is a base tag quest
                 return "random"
         return None
-    
+
     def addQuestToPlayer(message, message_id, tag):
         player_id = message.author.id
         if str(player_id) not in questsData["players"]:
@@ -514,7 +566,8 @@ class quests:
     def removeQuestFromPlayer(player_id, message_id):
         if str(player_id) in questsData["players"]:
             if "quests" in questsData["players"][str(player_id)]:
-                tag = [q["tag"] for q in questsData["players"][str(player_id)]["quests"] if q["quest"] == message_id][0]
+                # next() with a default so a missing id doesn't raise IndexError
+                tag = next((q.get("tag", "random") for q in questsData["players"][str(player_id)]["quests"] if q["quest"] == message_id), "random")
                 questsData["players"][str(player_id)]["quests"] = [q for q in questsData["players"][str(player_id)]["quests"] if q["quest"] != message_id]
                 quests.save()
                 return tag
@@ -531,8 +584,8 @@ class quests:
     def removeRewardFromPlayer(player_id, message_id):
         if str(player_id) in questsData["players"]:
             if "inventory" in questsData["players"][str(player_id)]:
-                tag = [r.get("tag", "random") for r in questsData["players"][str(player_id)]["inventory"] if r["reward"] == message_id][0]
-                questsData["players"][str(player_id)]["inventory"] = [r for r in questsData["players"][str(player_id)]["inventory"] if r["reward"] != message_id]
+                tag = next((r.get("tag", "random") for r in questsData["players"][str(player_id)]["inventory"] if r.get("reward") == message_id), "random")
+                questsData["players"][str(player_id)]["inventory"] = [r for r in questsData["players"][str(player_id)]["inventory"] if r.get("reward") != message_id]
                 quests.save()
                 return tag
         return "random"
